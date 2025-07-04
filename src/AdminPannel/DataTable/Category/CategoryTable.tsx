@@ -15,7 +15,6 @@ import {
   getSingleProductData,
 } from "../../../services/ProductService";
 import EditCategory from "./EditCategory";
-import ViewCategory from "./ViewCategory";
 import { deleteMultipleProductData } from "../../../services/ProductService";
 import { fetchAllCategory } from "../../../ReduxToolkit/Slices/CategorySlice";
 import { deleteCategoryData, deleteMultipleCategoryData, getFilterCategoryData, getSingleCategoryData } from "../../../services/CategoryService";
@@ -24,7 +23,6 @@ const CategoryTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [showAddCategoryModal, setshowAddCategoryModal] = useState(false);
   const [showEditCategoryModal, setshowEditCategoryModal] = useState(false);
-  const [showCategoryDetailModal, setshowCategoryDetailModal] = useState(false);
   const [singleCategory, setSingleCategory] = useState();
   const [editData, setEditData] = useState();
   const [query, setQuery] = useState("");
@@ -51,7 +49,7 @@ const CategoryTable = () => {
   };
 
   useEffect(() => {
-    if (showAddCategoryModal || showEditCategoryModal || showCategoryDetailModal) {
+    if (showAddCategoryModal || showEditCategoryModal ) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
@@ -60,7 +58,7 @@ const CategoryTable = () => {
     return () => {
       document.body.classList.remove("overflow-hidden");
     };
-  }, [showAddCategoryModal, showEditCategoryModal, showCategoryDetailModal]);
+  }, [showAddCategoryModal, showEditCategoryModal]);
 
   const handleDelete = async (categoryID) => {
     console.log("categoryID", categoryID);
@@ -107,17 +105,6 @@ const CategoryTable = () => {
     }
   };
 
-  const handleView = async (categoryID) => {
-    try {
-      const res = await getSingleCategoryData(categoryID);
-      if (res) {
-        setSingleCategory(res); // ✅ set product data first
-        setshowCategoryDetailModal(true); // ✅ then open modal
-      }
-    } catch (error) {
-      console.error("Error fetching product for edit:", error);
-    }
-  };
 
   const columns = [
     {
@@ -182,13 +169,7 @@ const CategoryTable = () => {
           >
             <MdDelete />
           </button>
-           <button
-            onClick={() => handleView(row._id)}
-            className="btn bg-green-500 text-white p-1 rounded"
-            title="View"
-          >
-            <FaEye />
-          </button>
+          
         </div>
       ),
       width: "160px", // increase slightly to fit all three icons
@@ -203,9 +184,7 @@ const CategoryTable = () => {
     setshowEditCategoryModal(false);
   };
 
-  const closeCategoryDetailModal = () => {
-    setshowCategoryDetailModal(false);
-  };
+  
 
   const handleSearch = async (query) => {
   setQuery(query);
@@ -320,16 +299,7 @@ const CategoryTable = () => {
         </div>
       )}
 
-      {showCategoryDetailModal && singleCategory && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 px-4">
-          <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
-            <ViewCategory
-              closeCategoryDetailModal={closeCategoryDetailModal}
-              singleCategory={singleCategory}
-            />
-          </div>
-        </div>
-      )}
+  
     </>
   );
 };

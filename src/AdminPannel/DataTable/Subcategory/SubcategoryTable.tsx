@@ -15,20 +15,27 @@ import {
 } from "../../../services/ProductService";
 import { deleteMultipleProductData } from "../../../services/ProductService";
 import { fetchAllCategory } from "../../../ReduxToolkit/Slices/CategorySlice";
-import { deleteCategoryData, deleteMultipleCategoryData, getFilterCategoryData, getSingleCategoryData } from "../../../services/CategoryService";
+import {
+  deleteCategoryData,
+  deleteMultipleCategoryData,
+  getFilterCategoryData,
+  getSingleCategoryData,
+} from "../../../services/CategoryService";
 import { fetchSubcategories } from "../../../ReduxToolkit/Slices/SubcategorySlice";
 import AddSubcategory from "./AddSubcategory";
-import ViewSubcategory from "./ViewSubcategory";
 import EditSubcategory from "./EditSubcategory";
-import { deleteMultipleSubCategoryData, deleteSubcategoryData, getFilterSubCategoryData } from "../../../services/SubcategoryService";
+import {
+  deleteMultipleSubCategoryData,
+  deleteSubcategoryData,
+  getFilterSubCategoryData,
+} from "../../../services/SubcategoryService";
 import { getSingleSubcategoryData } from "../../../services/SubcategoryService";
 
 const SubcategoryTable = () => {
-
   const dispatch = useDispatch<AppDispatch>();
   const [showAddSubcategoryModal, setshowAddSubcategoryModal] = useState(false);
-  const [showEditSubcategoryModal, setshowEditSubcategoryModal] = useState(false);
-  const [showCategoryDetailModal, setshowCategoryDetailModal] = useState(false);
+  const [showEditSubcategoryModal, setshowEditSubcategoryModal] =
+    useState(false);
   const [singleSubcategory, setSingleSubcategory] = useState();
   const [editData, setEditData] = useState();
   const [query, setQuery] = useState("");
@@ -39,16 +46,15 @@ const SubcategoryTable = () => {
 
   console.log("editData", editData);
 
-const {
+  const {
     subcategories,
     loading: subcategoryLoading,
     error: subcategoryError,
   } = useSelector((state: RootState) => state.subcategory);
 
- useEffect(() => {
-      dispatch(fetchSubcategories());
-    }, [dispatch]);
- 
+  useEffect(() => {
+    dispatch(fetchSubcategories());
+  }, [dispatch]);
 
   const handleChange = ({ selectedRows }) => {
     console.log("Selected Rows: ", selectedRows);
@@ -56,7 +62,7 @@ const {
   };
 
   useEffect(() => {
-    if (showAddSubcategoryModal || showEditSubcategoryModal || showCategoryDetailModal) {
+    if (showAddSubcategoryModal || showEditSubcategoryModal) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
@@ -65,7 +71,7 @@ const {
     return () => {
       document.body.classList.remove("overflow-hidden");
     };
-  }, [showAddSubcategoryModal, showEditSubcategoryModal, showCategoryDetailModal]);
+  }, [showAddSubcategoryModal, showEditSubcategoryModal]);
 
   const handleDelete = async (subcategoryID) => {
     console.log("subcategoryID", subcategoryID);
@@ -92,7 +98,7 @@ const {
       if (res) {
         alert("Selected Subactegory Deleted Successfully");
         dispatch(fetchSubcategories());
-        setSelectedRows([]); 
+        setSelectedRows([]);
       }
     } catch (error) {
       console.error("Multiple delete failed:", error);
@@ -112,18 +118,6 @@ const {
     }
   };
 
-  const handleView = async (categoryID) => {
-    // try {
-    //   const res = await getSingleCategoryData(categoryID);
-    //   if (res) {
-    //     setSingleSubcategory(res); // ✅ set product data first
-    //     setshowCategoryDetailModal(true); // ✅ then open modal
-    //   }
-    // } catch (error) {
-    //   console.error("Error fetching product for edit:", error);
-    // }
-  };
-
   const columns = [
     {
       name: "S.No.",
@@ -131,7 +125,7 @@ const {
       grow: 0,
       width: "70px", // ✅ narrow
     },
-     {
+    {
       name: "category",
       selector: (row) => row.category?.name,
       width: "140px",
@@ -141,28 +135,27 @@ const {
       selector: (row) => row.name,
       width: "140px",
     },
-    
-  
-    {
-  name: "Active",
-  cell: (row) => (
-    <span
-      className={`px-2 py-1 rounded-xl text-xs font-medium ${
-        row.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-      }`}
-    >
-      {row.isActive ? "Active" : "Inactive"}
-    </span>
-  ),
-  width: "140px",
-},
 
-    
+    {
+      name: "Active",
+      cell: (row) => (
+        <span
+          className={`px-2 py-1 rounded-xl text-xs font-medium ${
+            row.isActive
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {row.isActive ? "Active" : "Inactive"}
+        </span>
+      ),
+      width: "140px",
+    },
+
     {
       name: "ACTIONS",
       cell: (row) => (
         <div className="flex gap-1">
-         
           <button
             onClick={() => handleEdit(row._id)}
             className="btn bg-blue-600 text-white p-1 rounded"
@@ -176,13 +169,6 @@ const {
             title="Delete"
           >
             <MdDelete />
-          </button>
-           <button
-            onClick={() => handleView(row._id)}
-            className="btn bg-green-500 text-white p-1 rounded"
-            title="View"
-          >
-            <FaEye />
           </button>
         </div>
       ),
@@ -198,28 +184,22 @@ const {
     setshowEditSubcategoryModal(false);
   };
 
-  const closeCategoryDetailModal = () => {
-    setshowCategoryDetailModal(false);
-  };
-
   const handleSearch = async (query) => {
-  setQuery(query);
+    setQuery(query);
 
-  if (query.trim() === "") {
-    dispatch(fetchSubcategories()); // ✅ Original list wapas laane ke liye
-    setFilteredSubcategories([]);   // ✅ Filtered list ko clear karna
-    return;
-  }
+    if (query.trim() === "") {
+      dispatch(fetchSubcategories()); // ✅ Original list wapas laane ke liye
+      setFilteredSubcategories([]); // ✅ Filtered list ko clear karna
+      return;
+    }
 
-  try {
-    const res = await getFilterSubCategoryData({ q: query });
-    setFilteredSubcategories(res);
-  } catch (err) {
-    console.error("Error searching categories", err);
-  }
-};
-
-
+    try {
+      const res = await getFilterSubCategoryData({ q: query });
+      setFilteredSubcategories(res);
+    } catch (err) {
+      console.error("Error searching categories", err);
+    }
+  };
 
   return (
     <>
@@ -281,7 +261,9 @@ const {
           <DataTable
             columns={columns}
             data={
-              filteredSubcategories.length > 0 || query ? filteredSubcategories : subcategories
+              filteredSubcategories.length > 0 || query
+                ? filteredSubcategories
+                : subcategories
             }
             fixedHeader
             fixedHeaderScrollHeight="60vh"
@@ -301,7 +283,9 @@ const {
    bg-black bg-opacity-50 z-50 px-4"
         >
           <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
-            < AddSubcategory closeAddSubcategoryModal={closeAddSubcategoryModal} />
+            <AddSubcategory
+              closeAddSubcategoryModal={closeAddSubcategoryModal}
+            />
           </div>
         </div>
       )}
@@ -316,21 +300,8 @@ const {
           </div>
         </div>
       )}
-
-      {showCategoryDetailModal && singleSubcategory && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 px-4">
-          <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
-            <ViewSubcategory
-              closeCategoryDetailModal={closeCategoryDetailModal}
-              singleSubcategory={singleSubcategory}
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 };
 
 export default SubcategoryTable;
-
-

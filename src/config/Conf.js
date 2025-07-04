@@ -49,7 +49,13 @@ const conf = {
   getFilteredSubategoriesurl:"/subcategory/getFilteredSubategories",
   createSubcategoryUrl:"/subcategory/createSubcategory",
   getSingleSubcategoryUrl:"/subcategory/getSingleSubcategory",
-  editSubcategoryUrl:"/subcategory/updatedSubcategory"
+  editSubcategoryUrl:"/subcategory/updatedSubcategory",
+  deleteBrandUrl:"/brand/deleteBrand",
+  getFilteredBrandUrl:"/brand/getFilteredBrand",
+  createBrandUrl:"/brand/createBrand",
+  singleBrandUrl:"/brand/getSingleBrand",
+  editBrandUrl:"/brand/updatedBrand",
+  deleteMultipleBrandUrl:"/brand/deleteMultipleBrand"
 };
 
 export default conf;

@@ -67,7 +67,7 @@ const EditProduct: React.FC<EditProductProps> = ({
 
   const dispatch = useDispatch<AppDispatch>();
   const [formKey, setFormKey] = useState(0);
-  console.log("one", editData.brand.name);
+  // console.log("one", editData.brand.name);
 
   const { category } = useSelector((state: RootState) => state.allcategory);
   const { subcategories } = useSelector(

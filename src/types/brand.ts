@@ -12,3 +12,12 @@ export interface BrandDTO {
   loading: boolean;
   error: string | null;
 }
+
+export interface BrandFormDTO {
+  _id: string;
+  name: string;
+  slug: string;
+  isActive: boolean;
+  category: string;
+  subcategory:string
+}
