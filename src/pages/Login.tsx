@@ -1,0 +1,149 @@
+import React from "react";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
+import { LoginDTO, SignupDTO } from "../types/auth";
+import { loginValidationSchema } from "../Validations/authValidations";
+import FormikControl from "../components/ReusableFormField/Input";
+import conf from "../config/Conf";
+import axios from "axios";
+import { LoginUserData, SignUpUserData } from "../services/authService";
+
+type LoginProps = {
+  setLoggedIn: (value: boolean) => void;
+};
+
+const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
+  const navigate = useNavigate();
+
+  const initialValues: LoginDTO = {
+    email: "",
+    password: "",
+  };
+
+  const handleLogin = () => {
+    setLoggedIn(true);
+  };
+
+  const onSubmit = async (
+    values: LoginDTO,
+    onSubmitProps: FormikHelpers<LoginDTO>
+  ) => {
+    try {
+      const response = await LoginUserData(values);
+
+      if (response && response.message) {
+        alert(response.message);
+
+        if (response.message === "Login successfully") {
+          if (response.token) {
+            localStorage.setItem("token", response.token);
+            console.log("Token saved:", response.token);
+          } else {
+            console.warn("No token found in response");
+          }
+          onSubmitProps.resetForm();
+          navigate("/");
+        }
+      } else {
+        alert("Unexpected response format.");
+      }
+    } catch (error: any) {
+      console.error("Login error:", error);
+      alert(error?.message || "An unexpected error occurred.");
+    } finally {
+      onSubmitProps.setSubmitting(false);
+    }
+  };
+
+  return (
+    <>
+      <div className=" flex flex-col py-10 gap-4 w-7/12 m-auto">
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-semibold font-heading">Login now</h1>
+          <span className="text-gray-500 font-heading text-[13px]">
+            Login your account
+          </span>
+        </div>
+        <div className="flex gap-2 justify-center items-center border border-black/10 rounded-sm p-3">
+          <img
+            className="w-6"
+            src="https://cdn.iconscout.com/icon/free/png-256/free-google-logo-icon-download-in-svg-png-gif-file-formats--brands-pack-logos-icons-189824.png?f=webp&w=256"
+          />
+          <span className="text-gray-500 font-heading text-[14px]">
+            Sign up with Google
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-full h-[1px] bg-black/15"></div>
+          <span className="text-sm font-body px-1 text-gray-600">or</span>
+          <div className="w-full h-[1px] bg-black/10"></div>
+        </div>
+        <div className="w-full ">
+          <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            validationSchema={loginValidationSchema}
+          >
+            {(formik) => {
+              console.log("Formik", formik);
+              return (
+                <Form
+                  className=" w-full  space-y-2
+                 
+                     "
+                >
+                  <div className="grid grid-cols-1 gap-4">
+                    {/* Email */}
+                    <FormikControl
+                      control="input"
+                      type="email"
+                      label="Email"
+                      name="email"
+                      placeholder="Enter email"
+                      valid={formik.errors.email && formik.touched.email}
+                    />
+
+                    {/* Password */}
+                    <FormikControl
+                      control="password"
+                      type="password"
+                      label="Password"
+                      name="password"
+                      placeholder="Enter password"
+                      valid={formik.errors.password && formik.touched.password}
+                    />
+                  </div>
+                  <div className="py-2 flex justify-center items-center">
+                    <button
+                      className="px-4 py-2 rounded bg-black text-white w-full font-body
+                              active:text-white disabled:bg-red-500 disabled:cursor-not-allowed"
+                      disabled={!formik.isValid || formik.isSubmitting}
+                      type="submit"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </Form>
+              );
+            }}
+          </Formik>
+          <div className="flex justify-center items-center py-3 gap-2">
+            <span className="text-gray-900 text-sm font-body">
+              You have no account?{" "}
+            </span>
+            <span
+              onClick={handleLogin}
+              className="text-skin-primary text-sm  font-body font-semibold hover:underline
+                 hover:scale-105 duration-500 hover:text-orange-600 cursor-pointer"
+            >
+              SignUp{" "}
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Login;
