@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PriceRange, FiltersState } from "../../types/filter";
+import { BrandDTO } from "../../types/brand";
 
 const initialState: FiltersState = {
   categories: "",
@@ -8,8 +9,9 @@ const initialState: FiltersState = {
   brands: [],
   priceRange: { min: "", max: "" },
   size: [],
-  colors:[],
-  availability: null,
+  colors: [],
+  inStock: null,
+  discount:[]
 };
 
 const filterSlice = createSlice({
@@ -25,18 +27,30 @@ const filterSlice = createSlice({
     setGender: (state, action: PayloadAction<string[]>) => {
       state.gender = action.payload;
     },
-    setBrands: (state, action: PayloadAction<string[]>) => {
-    state.brands = action.payload;
-    console.log("state.brands",state.brands);
+    // setBrands: (state, action: PayloadAction<string[]>) => {
+    // state.brands = action.payload;
+    // console.log("state.brands",state.brands);
+    // },
+    setBrands: (state, action: PayloadAction<BrandDTO[]>) => {
+      state.brands = action.payload;
+      console.log("state.brands", state.brands);
     },
+
     setPriceRange: (state, action: PayloadAction<PriceRange>) => {
       state.priceRange = action.payload;
+    },
+    setDiscount: (state, action: PayloadAction<string[]>) => {
+      console.log("action.payload....",action.payload);
+      
+      state.discount = action.payload;
     },
     setSize: (state, action: PayloadAction<string[]>) => {
       state.size = action.payload;
     },
     setAvailability(state, action) {
-      state.availability = action.payload;
+      console.log("action",action.payload);
+      
+      state.inStock = action.payload;
     },
     clearFilters: () => initialState,
   },
@@ -51,6 +65,7 @@ export const {
   setSize,
   setAvailability,
   clearFilters,
+  setDiscount
 } = filterSlice.actions;
 
 export default filterSlice.reducer;

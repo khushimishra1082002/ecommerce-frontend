@@ -25,7 +25,11 @@ const SearchResult = () => {
     (state: RootState) => state.allcategory
   );
   console.log("categoryiiiii", category);
-  const selectedCategory = category.find((cat) => cat._id === query);
+  // const selectedCategory = category.find((cat) => cat._id === query);
+  const selectedCategory = category.find(
+  (cat) => cat._id === query || cat.name.toLowerCase() === query?.toLowerCase()
+);
+
   const categoryName = selectedCategory?.name || "";
 
   useEffect(() => {
@@ -57,12 +61,26 @@ const SearchResult = () => {
 
   const fetchFilteredProducts = async () => {
     // Clone current filters
+    // const updatedFilters = { ...filters };
+
+    // // Inject category filter from the URL param if not already present
+    // if (!updatedFilters.categories || updatedFilters.categories.length === 0) {
+    //   updatedFilters.categories = [query];
+    // }
+
     const updatedFilters = { ...filters };
 
-    // Inject category filter from the URL param if not already present
-    if (!updatedFilters.categories || updatedFilters.categories.length === 0) {
-      updatedFilters.categories = [query];
-    }
+// Check if query matches a known category ID or name
+const matchedCategory = category.find(
+  (cat) => cat._id === query || cat.name.toLowerCase() === query?.toLowerCase()
+);
+
+if (matchedCategory) {
+  updatedFilters.category = matchedCategory._id;
+} else {
+  updatedFilters.q = query; // It's a keyword search
+}
+
 
     try {
       const data = await getFilterProductsData(updatedFilters); // pass filters object, not query string
@@ -72,9 +90,14 @@ const SearchResult = () => {
     }
   };
 
+  // useEffect(() => {
+  //   fetchFilteredProducts();
+  // }, [filters]);
+
   useEffect(() => {
-    fetchFilteredProducts();
-  }, [filters]);
+  fetchFilteredProducts();
+}, [filters, query, category]);
+
 
   const sortedProducts = [...filterProducts];
 
@@ -90,7 +113,9 @@ const SearchResult = () => {
     <>
       <div className=" bg-gray-100 gap-4 p-3 flex">
         <div className="w-[28%] shadow">
-          <Filter categoryID={query} categoryName={categoryName} />
+        <Filter categoryID={selectedCategory?._id || ""} categoryName={categoryName} />
+
+
         </div>
         <div className="bg-white shadow-sm w-full p-4 ">
           <div className="flex gap-1 items-center text-[12px]">

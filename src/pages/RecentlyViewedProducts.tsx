@@ -7,27 +7,41 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { getRecentlyViewedProductData } from "../services/ProductService";
 import { decodeToken } from "../utils/decodeToken";
+import { Link } from "react-router-dom";
+import SwiperButtonThree from "../components/SwiperButtonThree";
+
+interface RecentlyViewedItem {
+  _id: string;
+  productId: {
+    _id: string;
+    image: string[];
+    name: string;
+    price: number;
+  };
+}
+
 
 const RecentlyViewedProducts = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<RecentlyViewedItem[]>([]); // ✅ Apply the type here
+
+  console.log("bbhhh",data);
+  
 
   const decoded = decodeToken();
   const userId = decoded?.id;
-
-  console.log("decodeUser", userId);
-
-  console.log("gggg", data);
 
   useEffect(() => {
     const fetchRecentlyViewedProduct = async () => {
       try {
         const res = await getRecentlyViewedProductData(userId);
-        setData(res);
+        setData(res); // res should be typed correctly
       } catch (err) {
         console.error("Error fetching product:", err);
       }
     };
-    fetchRecentlyViewedProduct();
+    if (userId) {
+      fetchRecentlyViewedProduct();
+    }
   }, [userId]);
 
   return (
@@ -49,25 +63,34 @@ const RecentlyViewedProducts = () => {
           slidesPerView={5}
           className=""
         >
-          {data.map((v) => (
-            <SwiperSlide >
-              <div
-                className="border rounded-lg p-4 flex flex-col gap-3
+           <span slot="container-start"
+              className="w-full absolute top-1/2 -translate-y-1/2 z-10 duration-200">
+              <SwiperButtonThree/>
+              </span>
+          {data?.map((v) => (
+            <SwiperSlide key={v._id}>
+              <Link to={`/${v.productId?._id}`}>
+                <div
+                  className="border rounded-lg p-4 flex flex-col gap-3
                   shadow-sm hover:shadow-md transition duration-200 "
-              >
-                <div className="h-52">
-                  <img
-                  className="w-44 object-contain h-full"
-                  src={`http://localhost:5000/api/upload/${v.productId.image}`}
-                  alt="banner"
-                />
+                >
+                  <div className="h-52">
+                    <img
+                      className="w-44 object-contain h-full"
+                      src={`http://localhost:5000/api/upload/${v?.productId?.image?.[0]}`}
+                      alt="product"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-body line-clamp-2">
+                      {v?.productId?.name}
+                    </p>
+                    <p className="text-base font-body line-clamp-2">
+                      Rs {v?.productId?.price}
+                    </p>
+                  </div>
                 </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-body line-clamp-2 ">{v.productId.name}</p>
-                  <p className="text-base font-body line-clamp-2  ">Rs {v.productId.price}</p>
-
-                </div>
-              </div>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>

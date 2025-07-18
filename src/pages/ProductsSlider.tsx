@@ -13,23 +13,19 @@ import { FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa6";
 import { AddProductInWishlistData } from "../services/wishlistService";
 import { decodeToken } from "../utils/decodeToken";
+import { getFilterProductsData } from "../services/ProductService";
+import SwiperButton from "../components/SwiperButton";
 
-const ProductSlider = () => {
+const ProductSlider = ({ title, filterQuery }) => {
+  console.log("dddrrrfilterQuery", filterQuery);
+
   const dispatch = useDispatch<AppDispatch>();
   const [wishlisted, setWishlisted] = useState(false);
-
-  const { products, loading, error } = useSelector(
-    (state: RootState) => state.allproducts
-  );
-  console.log("products", products);
-
-  useEffect(() => {
-    dispatch(fetchAllProducts());
-  }, [dispatch]);
+  const [products, setProducts] = useState([]);
+  console.log("jjjooo", products);
 
   const [data, setData] = useState([]);
   const [wishlistedProducts, setWishlistedProducts] = useState<string[]>([]);
-
 
   console.log("data", data);
 
@@ -49,70 +45,87 @@ const ProductSlider = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("🔍 Incoming filterQuery in ProductSlider:", filterQuery);
+    const fetchFilteredProducts = async () => {
+      try {
+        const data = await getFilterProductsData(filterQuery);
+        console.log("dot", data);
+
+        setProducts(data);
+      } catch (err) {
+        console.error(" Failed to fetch filtered products", err);
+      }
+    };
+
+    fetchFilteredProducts();
+  }, [filterQuery]);
+
   return (
     <>
-      <div className=" bg-white space-y-4 px-4 py-6 m-3  ">
-        <h2 className="font-heading text-lg font-semibold ">
-          Top delas with great offer 20% off
-        </h2>
-
+      <div className="bg-white space-y-4 px-4 py-6 m-3">
+        {/* Swiper with slides + buttons */}
         <Swiper
           modules={[Navigation, Pagination, A11y]}
           spaceBetween={10}
           slidesPerView={6}
-          navigation
-          onSwiper={(swiper) => console.log(swiper)}
-          onSlideChange={() => console.log("slide change")}
-          className=""
+          className="space-y-5"
         >
-          {products.map((v, i) => {
-            return (
-              <SwiperSlide
-                className="flex flex-col gap-1 border border-black/10 px-[3px] py-1
-           rounded overflow-hidden"
-              >
-                <div>
-                  <div className="w-full aspect-square flex justify-center items-center">
-                    <img
-                      className="h-full w-full object-contain"
-                      src={`http://localhost:5000/api/upload/${v.image}`}
-                      alt="product"
-                    />
-                  </div>
-                  <Link to={`${v._id}`}>
-                    <div className="flex  flex-col gap-1 px-1 py-2 ">
-                      <span className=" font-heading text-sm line-clamp-2 ">
-                        {v.name}
-                      </span>
-                      <span className=" font-heading text-base ">
-                        {v.price}
-                      </span>
-                    </div>
-                  </Link>
+          <span
+            slot="container-start"
+            className="w-full flex justify-between gap-3"
+          >
+            <div className="flex justify-between items-center">
+              <h2 className="font-heading text-lg font-semibold">{title}</h2>
+            </div>
 
-                  <button
-                    onClick={() => handleWishlistProduct(v._id)}
-                    className={`absolute top-3 right-3 text-xl ${
-                      wishlistedProducts.includes(v._id)
-                        ? "text-red-600"
-                        : "text-gray-700"
-                    }`}
-                    title={
-                      wishlistedProducts.includes(v._id)
-                        ? "Remove from Wishlist"
-                        : "Add to Wishlist"
-                    }
-                  >
-                    {wishlistedProducts.includes(v._id) ? (
-                      <FaHeart />
-                    ) : (
-                      <FaRegHeart />
-                    )}
-                  </button>
+            <SwiperButton />
+          </span>
+          {/* Slide Items */}
+          {products.map((v, i) => (
+            <SwiperSlide
+              key={i}
+              className="flex flex-col gap-1 border border-black/10 px-[3px] py-1 rounded overflow-hidden"
+            >
+              <div className="relative">
+                <div className="w-full aspect-square flex justify-center items-center">
+                  <img
+                    className="h-40 m-auto w-full object-contain"
+                    src={`http://localhost:5000/api/upload/${v.image}`}
+                    alt="product"
+                  />
                 </div>
-              </SwiperSlide>
-            );
-          })}
+                <Link to={`${v._id}`}>
+                  <div className="flex flex-col gap-1 px-1 py-2">
+                    <span className="font-heading text-sm line-clamp-2">
+                      {v.name}
+                    </span>
+                    <span className="font-heading text-base">Rs {v.price}</span>
+                  </div>
+                </Link>
+
+                <button
+                  onClick={() => handleWishlistProduct(v._id)}
+                  className={`absolute top-3 right-3 text-xl ${
+                    wishlistedProducts.includes(v._id)
+                      ? "text-red-600"
+                      : "text-gray-700"
+                  }`}
+                  title={
+                    wishlistedProducts.includes(v._id)
+                      ? "Remove from Wishlist"
+                      : "Add to Wishlist"
+                  }
+                >
+                  {wishlistedProducts.includes(v._id) ? (
+                    <FaHeart />
+                  ) : (
+                    <FaRegHeart />
+                  )}
+                </button>
+              </div>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
     </>

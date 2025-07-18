@@ -9,11 +9,13 @@ const Password = (props) => {
   return (
     <>
       <div className="flex flex-col w-full gap-1">
-        <label className="font-semibold" htmlFor={name}>
+        <label className=" text-sm font-body text-gray-950 " htmlFor={name}>
           {label}
         </label>
         <div className="relative w-full">
-          <Field className="w-full" name={name} {...rest} />
+          <Field className="w-full  focus:border-none 
+            rounded-sm border border-black/15
+               font-heading text-gray-800 text-[13px] " name={name} {...rest} />
           {hide ? (
             <AiFillEye
               onClick={() => visible()}

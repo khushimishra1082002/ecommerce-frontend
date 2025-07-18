@@ -12,6 +12,7 @@ import RecentlyViewedProducts from "./RecentlyViewedProducts";
 import RecommendedProducts from "./RecommendedProducts";
 import PosterCarosoul from "../components/PosterCarosoul";
 import FeaturedProducts from "./FeaturedProducts";
+import AllProductSlider from "./AllProductSlider";
 
 const Home = () => {
   return (
@@ -19,18 +20,14 @@ const Home = () => {
       <div className=" bg-gray-100 space-y-2">
         <Categories />
         <HeroSection />
-        <FourGridProductLayout/>
-        <TrendingProducts/>
-        <BannerCarosoul/>
-        <ProductSlider />
-        <ProductSlider />
-        <ProductSlider />
-        <ProductSlider />
-        <NewArrivals/>
-        <PosterCarosoul/>
-        <FeaturedProducts/>
-        {/* <RecentlyViewedProducts/> */}
-        {/* <RecommendedProducts/> */}
+        <FourGridProductLayout />
+        <TrendingProducts />
+        <AllProductSlider />
+        <NewArrivals />
+        <PosterCarosoul />
+        <FeaturedProducts />
+        <RecentlyViewedProducts />
+        <RecommendedProducts />
       </div>
     </>
   );

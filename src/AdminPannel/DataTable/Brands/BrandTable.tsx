@@ -109,17 +109,7 @@ const BrandTable = () => {
     }
   };
 
-  const handleView = async (productID) => {
-    // try {
-    //   const res = await getSingleProductData(productID);
-    //   if (res) {
-    //     setSingleBrand(res); // ✅ set product data first
-    //     setshowBrandDetailModal(true); // ✅ then open modal
-    //   }
-    // } catch (error) {
-    //   console.error("Error fetching product for edit:", error);
-    // }
-  };
+ 
 
   const columns = [
     {
@@ -148,13 +138,7 @@ const BrandTable = () => {
       name: "ACTIONS",
       cell: (row) => (
         <div className="flex gap-1">
-          <button
-            onClick={() => handleView(row._id)}
-            className="btn bg-green-500 text-white p-1 rounded"
-            title="View"
-          >
-            <FaEye />
-          </button>
+         
           <button
             onClick={() => handleEdit(row._id)}
             className="btn bg-blue-600 text-white p-1 rounded"

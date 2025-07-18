@@ -17,10 +17,10 @@ const CartTotal: React.FC<CartTotalProps> = ({ showCheckoutButton = true }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { cart } = useSelector((state: RootState) => state.cart);
 
-  const totalPrice = cart?.summary?.totalPrice;
-  const totalDiscount = cart?.summary?.totalDiscount;
-  const totalTax = cart?.summary?.totalTax;
-  const finalTotal = cart?.summary?.finalTotal;
+  const totalPrice = cart?.summary?.totalPrice || 0;
+  const totalDiscount = cart?.summary?.totalDiscount || 0;
+  const totalTax = cart?.summary?.totalTax || 0;
+  const finalTotal = cart?.summary?.finalTotal || 0;
 
   const [showModal, setShowModal] = useState(false);
 
@@ -60,7 +60,9 @@ const CartTotal: React.FC<CartTotalProps> = ({ showCheckoutButton = true }) => {
           </div>
           <div className="flex justify-between">
             <span className="font-heading font-light">Total Discount</span>
-            <span className="text-md font-heading text-green-400">₹{totalDiscount}</span>
+            <span className="text-md font-heading text-green-400">
+              ₹{totalDiscount}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="font-heading font-light">TAX</span>

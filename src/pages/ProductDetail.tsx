@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { addToCart, updateQuantity } from "../ReduxToolkit/Slices/CartSlice";
 import { fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
+import { FaShoppingCart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -54,37 +56,55 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const postRecentlyViewProduct = async () => {
-      if (!userId) return;
+      if (!userId || !singleProduct?._id) return; // ✅ Ensure product is loaded
       try {
-        await postRecentlyViewedProductData({ productId, userId });
+        await postRecentlyViewedProductData({
+          productId: singleProduct._id, // ✅ Use actual product _id from fetched data
+          userId,
+        });
       } catch (err) {
         console.error("Error posting recently viewed product:", err);
       }
     };
     postRecentlyViewProduct();
-  }, [productId, userId]);
+  }, [singleProduct, userId]); // ✅ Depend on singleProduct
 
   const handleAddToCart = () => {
-    alert("Product added successfully in cart")
+    alert("Product added successfully in cart");
     dispatch(addToCart({ userId, productId, quantity: 1 }));
-     
   };
-
-  
 
   return (
     <>
-      <div className="bg-gray-50 pt-4">
-        <div className="bg-white shadow w-11/12 m-auto  p-8">
-          <div className=" grid grid-cols-3 gap-8">
-            <div className="flex justify-center items-center">
+      <div className=" p-2 bg-gray-50 shadow">
+        <div className="">
+          <div className=" grid grid-cols-3 gap-8  bg-white px-4 py-6 m-3 rounded ">
+            <div className="flex flex-col justify-center items-center">
               <img
                 className=""
                 src={`http://localhost:5000/api/upload/${singleProduct?.image}`}
                 alt="banner"
               />
+              <div className=" w-full grid grid-cols-2 gap-2">
+                <button
+                  onClick={handleAddToCart}
+                  className="bg-blue-500 text-white
+               px-4 py-2 rounded flex justify-center items-center gap-1 font-body"
+                >
+                  <FaShoppingCart />
+                  ADD TO CART
+                </button>
+
+                <button
+                  className="bg-orange-500 text-white px-4 py-2
+               rounded flex justify-center items-center gap-1 font-body"
+                >
+                  <FaHeart />
+                  ADD TO WISHLIST
+                </button>
+              </div>
             </div>
-            <div className="space-y-4 col-span-2 h-[60vh] overflow-y-auto">
+            <div className="space-y-4 col-span-2 h-[70vh] overflow-y-auto">
               <div className="space-y-1 flex flex-col">
                 {singleProduct?.brand && (
                   <span
@@ -185,11 +205,11 @@ const ProductDetail = () => {
                     Object.entries(singleProduct.attributes).map(
                       ([key, value]) => (
                         <div key={key} className="flex gap-4 items-start">
-                          <span className="text-sm text-gray-500 font-heading w-40 shrink-0">
-                            {key}
-                          </span>
+                        
                           <span className="font-body text-gray-700 text-sm">
-                            {value}
+                            {typeof value === "object" && value !== null
+                              ? `${value.key ?? ""}: ${value.value ?? ""}`
+                              : value}
                           </span>
                         </div>
                       )
@@ -323,19 +343,12 @@ const ProductDetail = () => {
                 </div>
               </div>
             </div>
-
-            <button
-              onClick={handleAddToCart}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Add To Cart
-            </button>
           </div>
-        </div>
 
-        <SimilorProduct productId={productId} />
-        {/* <RecentlyViewedProducts /> */}
-        {/* <RecommendedProducts /> */}
+          <SimilorProduct productId={productId} />
+
+          <RecommendedProducts />
+        </div>
       </div>
     </>
   );

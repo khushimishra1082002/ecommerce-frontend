@@ -5,8 +5,8 @@ const conf = {
   GetAllCategoryUrl: "/category/getAllCategory",
   GetImageUrl: "/upload",
   GetAllProductUrl: "/product/getAllProducts",
-  GetAllBanner: "/bannerRoutes/getAllBanner",
-  GetAllPoster: "/posterRoutes/getAllPoster",
+  GetAllBanner: "/banner/getAllBanner",
+  GetAllPoster: "/poster/getAllPoster",
   GetNewArrivalProduct: "/product/newArrivalsProduct",
   GetFeaturedProduct: "/product/featuredProducts",
   GetTrendingProduct: "/product/getTrendingProducts",
@@ -55,7 +55,20 @@ const conf = {
   createBrandUrl:"/brand/createBrand",
   singleBrandUrl:"/brand/getSingleBrand",
   editBrandUrl:"/brand/updatedBrand",
-  deleteMultipleBrandUrl:"/brand/deleteMultipleBrand"
+  deleteMultipleBrandUrl:"/brand/deleteMultipleBrand",
+  getAllSubcategoryByCategoryUrl:"/subcategory/getAllSubcategoryByCategory",
+  getAllBrandBySubcategoryUrl:"/brand/getAllBrandBySubcategory",
+  getAllBrandByCategoryUrl:"/brand/getAllBrandByCategory",
+  getAllBrandByMultipleSubcategoryUrl:"/brand/getAllBrandByMultipleSubcategory",
+ placeOrderUrl:"/order/placeOrder",
+ createUserUrl:"/users/createUser",
+ getSingleUserUrl:"/users/getSingleUser",
+ updateUserUrl:"/users/updateUser",
+ getUserOrdersUrl:"/order/getUserOrders",
+ createBannerUrl:"/banner/createBanner",
+ deleteBannerUrl:"/banner/deleteBanner",
+ updateBannerUrl:"/banner/updateBanner",
+ getSingleBannerUrl:"/banner/getSingleBanner"
 };
 
 export default conf;

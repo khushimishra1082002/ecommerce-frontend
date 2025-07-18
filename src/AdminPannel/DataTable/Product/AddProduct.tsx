@@ -11,6 +11,9 @@ import FormikControl from "../../../components/ReusableFormField/FormikControl";
 import { fetchSubcategories } from "../../../ReduxToolkit/Slices/SubcategorySlice";
 import { fetchBrands } from "../../../ReduxToolkit/Slices/BrandSlice";
 import { fetchAllProducts } from "../../../ReduxToolkit/Slices/ProductSlice";
+import { Field, FieldArray } from "formik";
+import { getAllSubcategoryByCategoryData } from "../../../services/SubcategoryService";
+import { getAllBrandBySubcategoryData } from "../../../services/BrandService";
 
 interface AddProductProps {
   closeAddProductModal: () => void;
@@ -30,8 +33,9 @@ const initialValues: ProductFormDTO = {
   subcategory: "",
   brand: "",
   isActive: true,
-  metaTitle: "",
-  metaDescription: "",
+  attributes: [],
+  // metaTitle: "",
+  // metaDescription: "",
   colors: [],
   gender: [],
   size: [],
@@ -57,14 +61,14 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
   const [formKey, setFormKey] = useState(0);
 
   const { category } = useSelector((state: RootState) => state.allcategory);
-  const { subcategories } = useSelector(
-    (state: RootState) => state.subcategory
-  );
-  const {
-    brands,
-    loading: brandLoading,
-    error: brandError,
-  } = useSelector((state: RootState) => state.brand);
+  // const { subcategories } = useSelector(
+  //   (state: RootState) => state.subcategory
+  // );
+  const [subcategory, setSubcategory] = useState();
+
+  const [brands, setBrands] = useState();
+
+  console.log("brandsdata", brands);
 
   // Fetch categories on mount
   useEffect(() => {
@@ -92,27 +96,51 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
       formData.append("subcategory", values.subcategory || "");
       formData.append("brand", values.brand || "");
       formData.append("isActive", String(values.isActive));
+      // Append arrays
+      values.gender?.forEach((g) =>
+        formData.append("gender", typeof g === "string" ? g : g.value)
+      );
 
-      // Append multi-select fields
-      values.gender?.forEach((g) => formData.append("gender", g));
-      values.size?.forEach((s) => formData.append("size", s));
+      values.size?.forEach((s) =>
+        formData.append("size", typeof s === "string" ? s : s.value)
+      );
 
-      // Append image (assuming single image upload)
+      // Color - safely handle string or array
+      formData.append(
+        "colors",
+        Array.isArray(values.colors) ? values.colors.join(",") : values.colors
+      );
+
+      // Attributes - send as JSON string
+      formData.append("attributes", JSON.stringify(values.attributes));
+
+      console.log("Attributes JSON:", JSON.stringify(values.attributes));
+      console.log("Colors:", values.colors);
+
       if (values.image && values.image.length > 0) {
-        formData.append("image", values.image[0]); // single file
+        values.image.forEach((file) => {
+          formData.append("image", file);
+        });
       }
+
+      console.log(values.image); // ✅ yahan FileList milna chahiye
 
       // 🔥 Call API
       const response = await CreateProductData(formData); // <-- send FormData
 
       console.log("API Response:", response);
 
+      console.log(
+        "Uploading images:",
+        values.image.map((f) => f.name)
+      );
+
       if (response.ok) {
         alert("Product added successfully");
         actions.resetForm();
         setFormKey((prevKey) => prevKey + 1);
         closeAddProductModal();
-        dispatch(fetchAllProducts())
+        dispatch(fetchAllProducts());
       } else {
         alert(response.message || "Something went wrong");
       }
@@ -121,6 +149,25 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
       alert(error.message || "An error occurred");
     } finally {
       actions.setSubmitting(false);
+    }
+  };
+
+  const fetchSubcategoryByCategory = async (categoryId: string) => {
+    try {
+      const res = await getAllSubcategoryByCategoryData(categoryId);
+      setSubcategory(res); // Store in local state
+    } catch (err) {
+      console.error("Failed to fetch subcategories by category", err);
+      setSubcategory([]);
+    }
+  };
+
+  const ftchBrandBySubcategory = async (subcategoryID: string) => {
+    try {
+      const res = await getAllBrandBySubcategoryData(subcategoryID);
+      setBrands(res); // Store in local state
+    } catch (err) {
+      console.error("Failed to fetch subcategories by category", err);
     }
   };
 
@@ -141,22 +188,28 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
       >
         {(formik) => {
           console.log(formik.values.category);
-
-          // ✅ This useEffect is now valid
           useEffect(() => {
             if (formik.values.category) {
-              dispatch(fetchSubcategories(formik.values.category));
-              dispatch(fetchBrands(formik.values.category));
-              console.log(
-                "Fetching subcategories for category:",
-                formik.values.category
-              );
+              fetchSubcategoryByCategory(formik.values.category); // 👈 Fetch subcategories
             }
           }, [formik.values.category]);
+          useEffect(() => {
+            if (formik.values.subcategory) {
+              ftchBrandBySubcategory(formik.values.subcategory);
+            }
+          }, [formik.values.subcategory]);
+
+          const selectedCategory = category.find(
+            (cat: any) => cat._id === formik.values.category
+          );
+
+          const isFashionOrFootwear =
+            selectedCategory?.name === "Fashion" ||
+            selectedCategory?.name === "Footwear";
 
           return (
             <Form className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <FormikControl
                   control="input"
                   type="text"
@@ -165,8 +218,8 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
                   placeholder="Enter product name"
                 />
                 <FormikControl
-                  control="image"
-                  label="Select Single Image"
+                  control="images"
+                  label="Select Images"
                   name="image"
                   key={formKey}
                   valid={formik.errors.image && formik.touched.image}
@@ -212,7 +265,7 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
                       label="Select a subcategory"
                       name="subcategory"
                       options={
-                        subcategories?.map((sub: any) => ({
+                        subcategory?.map((sub: any) => ({
                           label: sub.name,
                           value: sub._id,
                         })) || []
@@ -236,33 +289,38 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
                   </>
                 )}
 
-                <FormikControl
-                  control="reactmultiselect"
-                  label="Gender"
-                  name="gender"
-                  options={[
-                    { label: "Men", value: "Men" },
-                    { label: "Women", value: "Women" },
-                    { label: "Boy", value: "Boy" },
-                    { label: "Girl", value: "Girl" },
-                    { label: "Unisex", value: "Unisex" },
-                  ]}
-                />
+                {isFashionOrFootwear && (
+                  <>
+                    <FormikControl
+                      control="reactmultiselect"
+                      label="Gender"
+                      name="gender"
+                      options={[
+                        { label: "Men", value: "Men" },
+                        { label: "Women", value: "Women" },
+                        { label: "Boy", value: "Boy" },
+                        { label: "Girl", value: "Girl" },
+                        { label: "Unisex", value: "Unisex" },
+                      ]}
+                    />
 
-                <FormikControl
-                  control="reactmultiselect"
-                  label="Size"
-                  name="size"
-                  options={[
-                    { label: "XS", value: "XS" },
-                    { label: "S", value: "S" },
-                    { label: "M", value: "M" },
-                    { label: "L", value: "L" },
-                    { label: "XL", value: "XL" },
-                    { label: "XXL", value: "XXL" },
-                  ]}
-                />
+                    <FormikControl
+                      control="reactmultiselect"
+                      label="Size"
+                      name="size"
+                      options={[
+                        { label: "XS", value: "XS" },
+                        { label: "S", value: "S" },
+                        { label: "M", value: "M" },
+                        { label: "L", value: "L" },
+                        { label: "XL", value: "XL" },
+                        { label: "XXL", value: "XXL" },
+                      ]}
+                    />
+                  </>
+                )}
 
+                {/* Optional: color can be available for all */}
                 <FormikControl
                   control="input"
                   type="text"
@@ -304,6 +362,53 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
                 placeholder="Enter Product description"
                 rows="2"
               />
+
+              <div className="space-y-1">
+                <label className="block text-sm font-body text-gray-950 ">
+                  Attributes
+                </label>
+
+                <FieldArray name="attributes">
+                  {(fieldArrayHelpers) => (
+                    <div className="space-y-3">
+                      {formik.values.attributes.map((attr, index) => (
+                        <div key={index} className="flex gap-2 items-center">
+                          <Field
+                            name={`attributes[${index}].key`}
+                            placeholder="Attribute name (e.g., Material)"
+                            className="w-full focus:border-none 
+                            rounded-sm border  text-gray-800 text-[13px] font-body border-black/10
+                            "
+                          />
+                          <Field
+                            name={`attributes[${index}].value`}
+                            placeholder="Value (e.g., Synthetic)"
+                            className="w-full focus:border-none 
+                           rounded-sm border  text-gray-800 text-[13px] font-body border-black/10"
+                          />
+                          <button
+                            type="button"
+                            className="text-red-600 "
+                            onClick={() => fieldArrayHelpers.remove(index)}
+                          >
+                            <RxCross2 className=" text-xl" />
+                          </button>
+                        </div>
+                      ))}
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          fieldArrayHelpers.push({ key: "", value: "" })
+                        }
+                        className="border border-orange-600 text-orange-500 rounded text-sm p-2"
+                      >
+                        + Add Attribute
+                      </button>
+                    </div>
+                  )}
+                </FieldArray>
+              </div>
 
               <div>
                 <button

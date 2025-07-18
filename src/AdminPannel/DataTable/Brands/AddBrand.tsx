@@ -117,9 +117,9 @@ const AddBrand: React.FC<AddProductProps> = ({ closeAddBrandModal }) => {
                 <FormikControl
                   control="input"
                   type="text"
-                  label="Product Name"
+                  label="Brand"
                   name="name"
-                  placeholder="Enter product name"
+                  placeholder="Enter brand name"
                 />
 
                 <FormikControl

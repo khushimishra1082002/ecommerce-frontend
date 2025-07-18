@@ -6,6 +6,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { Link } from "react-router-dom";
+import SwiperButtonThree from "../components/SwiperButtonThree";
 
 const NewArrivals = () => {
   const [data, setData] = useState([]);
@@ -40,14 +42,18 @@ const NewArrivals = () => {
             modules={[Navigation, Pagination, Scrollbar, A11y]}
             spaceBetween={14}
             slidesPerView={5}
-            navigation
             onSlideChange={() => console.log("slide change")}
             onSwiper={(swiper) => console.log(swiper)}
             className=""
           >
+             <span slot="container-start"
+              className="w-full absolute top-1/2 -translate-y-1/2 z-10 duration-200">
+              <SwiperButtonThree/>
+              </span>
             {data.map((v, i) => {
               return (
                 <SwiperSlide>
+                 <Link to={`${v._id}`}>
                   <div className="flex flex-col  border border-black/10 rounded-md p-2 gap-4 ">
                     <div>
                       <span
@@ -63,8 +69,9 @@ const NewArrivals = () => {
                       src={`http://localhost:5000/api/upload/${v.image}`}
                     />
                     </div>
-                    <span className=" font-body text-sm line-clamp-3">{v.name}</span>
+                    <span className=" font-heading text-sm line-clamp-2">{v.name}</span>
                   </div>
+                 </Link>
                 </SwiperSlide>
               );
             })}

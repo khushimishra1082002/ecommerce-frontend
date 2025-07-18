@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { getTreandingProductData } from "../services/ProductService";
+import { Link } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import SwiperButtonTwo from "../components/SwiperButtonTwo";
+import SwiperButtonThree from "../components/SwiperButtonThree";
 
 const TrendingProducts = () => {
   const [data, setData] = useState([]);
 
-  console.log("data", data);
-
   useEffect(() => {
-    const fetchnewArivalsProduct = async () => {
+    const fetchTrendingProducts = async () => {
       try {
         const res = await getTreandingProductData();
         setData(res);
@@ -15,44 +21,53 @@ const TrendingProducts = () => {
         console.error("Error fetching product:", err);
       }
     };
-    fetchnewArivalsProduct();
+    fetchTrendingProducts();
   }, []);
+
   return (
-    <>
-      <div className="bg-white p-4 space-y-4 m-3">
-        <div className="flex flex-col">
-          <h2 className="font-heading text-lg font-semibold ">
-            Treanding Products
-          </h2>
+    <div className="bg-white p-4 m-3">
+      <h2 className="font-heading text-lg font-semibold mb-4">
+        Trending Products
+      </h2>
 
-          <div className="w-full bg-black/15 h-[1px] my-3"></div>
-
-          <div className=" grid grid-cols-6 gap-3 bg-gray-50 py-4">
-            {data.map((v, i) => {
-              return (
-                <div className=" bg-white shadow ">
-                  <div className=" h-52">
-                    <img
-                      className="w-44 object-contain h-full"
-                      src={`http://localhost:5000/api/upload/${v.image}`}
-                      alt="banner"
-                    />
-                  </div>
-                  <div className="p-2">
-                    <span className="text-gray-400 font-body text-xs font-medium">
-                      Great Deal
-                    </span>
-                    <p className=" font-body text-sm line-clamp-3">
-                      {v.name}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </>
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        spaceBetween={10}
+        slidesPerView={6}
+        
+        autoplay={{ delay: 3000 }}
+        breakpoints={{
+          1024: { slidesPerView: 6 },
+          768: { slidesPerView: 3 },
+          480: { slidesPerView: 2 },
+          0: { slidesPerView: 1 },
+        }}
+      >
+         <span slot="container-start"
+              className="w-full absolute top-1/2 -translate-y-1/2 z-10 duration-200">
+              <SwiperButtonThree/>
+              </span>
+        {data.map((v, i) => (
+          <SwiperSlide key={i}>
+            <Link to={`/${v._id}`} className="block bg-white border border-black/10">
+              <div className="h-52 flex justify-center items-center">
+                <img
+                  className="w-44 object-contain h-full"
+                  src={`http://localhost:5000/api/upload/${v.image}`}
+                  alt={v.name}
+                />
+              </div>
+              <div className="p-2">
+                <span className="text-gray-400 font-body text-xs font-medium">
+                  Great Deal
+                </span>
+                <p className="font-heading text-sm line-clamp-2 ">{v.name}</p>
+              </div>
+            </Link>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
 };
 

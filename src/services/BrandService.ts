@@ -94,3 +94,50 @@ export const deleteMultipleBrandData = async (ids) => {
     throw error;
   }
 };
+
+export const getAllBrandBySubcategoryData = async (subcategoryID: string) => {
+  if (!subcategoryID) return;
+
+  try {
+    const response = await api.get(
+      `${conf.getAllBrandBySubcategoryUrl}/${subcategoryID}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching subcategory",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+export const getAllBrandByCategoryData = async (categoryID: string) => {
+  if (!categoryID) return;
+
+  try {
+    const response = await api.get(
+      `${conf.getAllBrandByCategoryUrl}/${categoryID}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching subcategory",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+export const getAllBrandByMultipleSubcategoryData = async (ids) => {
+  try {
+    const response = await api.get(conf.getAllBrandByMultipleSubcategoryUrl, {
+      params: { ids: ids.join(",") }, // pass as query param ?ids=...
+    });
+    console.log("API Response multiple subcategory brands:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching brands by subcategories:", error.response?.data || error.message);
+    throw error;
+  }
+};

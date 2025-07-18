@@ -13,11 +13,12 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import axios from "axios";
 import { getBannerData } from "../services/BannerServices";
+import SwiperButtonThree from "./SwiperButtonThree";
 
 const HeroSection = () => {
   const [data, setData] = useState([]);
 
-  console.log("data", data);
+  console.log("herosdata", data);
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -36,7 +37,7 @@ const HeroSection = () => {
 
   return (
     <>
-      <div className="overflow-hidden">
+      <div className="overflow-hidden px-3 ">
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
           spaceBetween={50}
@@ -44,10 +45,14 @@ const HeroSection = () => {
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           className="overflow-hidden"
         >
+           <span slot="container-start"
+              className="w-full absolute top-1/2 -translate-y-1/2 z-10 duration-200">
+              <SwiperButtonThree/>
+              </span>
           {data.map((v, i) => {
             return (
               <SwiperSlide>
-                <div className="h-60">
+                <div className="h-64">
                   <img
                     className="w-full h-full object-cover"
                     src={`http://localhost:5000/api/upload/${v.image}`}

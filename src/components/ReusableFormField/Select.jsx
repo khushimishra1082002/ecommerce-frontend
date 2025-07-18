@@ -9,7 +9,7 @@ const Select = (props) => {
     <div className="flex flex-col gap-1 w-full">
       <label
         className={`text-sm font-body text-gray-950 after:content-['*'] ${
-          !valid ? "text-red-500" : ""
+          !valid ? "" : ""
         }`}
         htmlFor={name}
       >
@@ -20,8 +20,9 @@ const Select = (props) => {
         id={name}
         name={name}
         {...rest}
-        className={`w-full focus:border-none rounded-sm border font-heading text-gray-800 text-[13px] ${
-          !valid ? "border-red-500" : "border-black/15"
+        className={`w-full focus:border-none 
+          rounded-sm border font-heading text-gray-800 text-[13px] ${
+          !valid ? "border-black/10" : "border-black/10"
         } ${
           !valid
             ? "focus:ring-red-500 focus:ring-2"

@@ -1,5 +1,5 @@
 export interface ProductDTO {
-  _id: string;
+  // _id: string;
   name: string;
   slug: string;
   description: string;
@@ -9,18 +9,31 @@ export interface ProductDTO {
   inStock: boolean;
   discount: number;
   isFeatured: boolean;
-  category: null;
-  subcategory: null, // ✅
-brand: null,       // ✅
-
+  category: string;
+  subcategory: string;
+  brand: string;
   isActive: boolean;
-  metaTitle?: string;
-  metaDescription?: string;
+  // metaTitle?: string;
+  // metaDescription?: string;
   createdAt?: string;
   updatedAt?: string;
-  colors?:string[]
-  gender?:string[]
-  size?:string[]
+  // System-generated
+  rating?: number;
+  reviewsCount?: number;
+  views?: number;
+  sold?: number;
+  // Custom fields
+  colors: string[];
+  size: string[];
+  gender: string[];
+  // Optional backend fields
+  attributes: {
+    key: string;
+    value: string;
+  }[];
+
+  taxPercentage?: number;
+  taxRuppess?: number;
 }
 
 export interface ProductStateDTO {
@@ -28,11 +41,13 @@ export interface ProductStateDTO {
   loading: boolean;
   error: string | null;
 }
+
 export interface ProductFormDTO {
+  // _id: string;
   name: string;
-  slug?: string;
+  slug: string;
   description: string;
-  image: File[];          // single/multiple image files
+  image: string[];
   price: number;
   stock: number;
   inStock: boolean;
@@ -42,11 +57,25 @@ export interface ProductFormDTO {
   subcategory: string;
   brand: string;
   isActive: boolean;
-  metaTitle?: string;
-  metaDescription?: string;
+  // metaTitle?: string;
+  // metaDescription?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  // System-managed (read-only in UI)
+  rating?: number;
+  reviewsCount?: number;
+  views?: number;
+  sold?: number;
+  // Custom fields
+  colors: string[];
+  size: string[];
+  gender: string[];
+  // Optional backend fields
+  attributes: {
+    key: string;
+    value: string;
+  }[];
 
-  // ✅ Add these three fields
-  colors: string[];       // e.g. ['red', 'green']
-  gender: string[];       // e.g. ['men', 'women']
-  size: string[];         // e.g. ['xl', 'lg']
+  taxPercentage?: number;
+  taxRuppess?: number;
 }

@@ -8,8 +8,8 @@ const MultiImages = (props) => {
   return (
     <div className="flex flex-col gap-1 w-10/12">
       <label
-        className={` font-semibold after:content['*'] ${
-          !valid ? "text-green-500" : "text-red-500"
+        className={`text-sm font-body text-gray-950 ${
+          !valid ? "" : "text-red-500"
         }`}
         htmlFor={name}
       >
@@ -22,11 +22,11 @@ const MultiImages = (props) => {
           return (
             <input
               multiple
-              className="w-full border-b-4 rounded-lg appearance-none border-gray-300  shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 pl-4 "
+              className="w-full rounded-sm border border-black/15 font-heading text-gray-800 text-[13px] p-2"
               name={name}
               type="file"
               onChange={(val) => {
-                setFieldValue(name, val.currentTarget.files);
+                setFieldValue(name, Array.from(val.currentTarget.files));
               }}
             />
           );

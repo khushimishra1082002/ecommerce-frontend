@@ -11,5 +11,6 @@ export interface FiltersState {
   priceRange: PriceRange;
   size: string[]; 
   colors: string[];
-  availability: boolean | null;
+  inStock: boolean | null;
+  discount:[]
 }

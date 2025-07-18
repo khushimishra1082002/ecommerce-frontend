@@ -58,14 +58,15 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
 
   return (
     <>
-      <div className=" flex flex-col py-10 gap-4 w-7/12 m-auto">
+      <div className=" flex flex-col  gap-4 w-11/12 md:w-8/12 m-auto
+       border border-black/10 p-8 rounded-md ">
         <div className="flex flex-col">
           <h1 className="text-2xl font-semibold font-heading">Login now</h1>
           <span className="text-gray-500 font-heading text-[13px]">
             Login your account
           </span>
         </div>
-        <div className="flex gap-2 justify-center items-center border border-black/10 rounded-sm p-3">
+        {/* <div className="flex gap-2 justify-center items-center border border-black/10 rounded-sm p-3">
           <img
             className="w-6"
             src="https://cdn.iconscout.com/icon/free/png-256/free-google-logo-icon-download-in-svg-png-gif-file-formats--brands-pack-logos-icons-189824.png?f=webp&w=256"
@@ -78,7 +79,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
           <div className="w-full h-[1px] bg-black/15"></div>
           <span className="text-sm font-body px-1 text-gray-600">or</span>
           <div className="w-full h-[1px] bg-black/10"></div>
-        </div>
+        </div> */}
         <div className="w-full ">
           <Formik
             initialValues={initialValues}

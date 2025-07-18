@@ -1,135 +1,170 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { decodeToken } from "../utils/decodeToken";
-import { fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
-import CartTotal from "./CartTotal";
 import { useNavigate } from "react-router-dom";
+import { fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
 import { fetchDeliveryInfo } from "../ReduxToolkit/Slices/DeliveryInfoSlice";
+import OnlinePaymentForm from "./OnlinePaymentForm";
+import { placeOrderData } from "../services/OrderService";
 
-const OrderSummaryPage = () => {
+const PaymentPage = () => {
+  const [showPaymentModel, setShowPaymentModel] = useState(false);
   const decoded = decodeToken();
   const userId = decoded?.id;
   const navigate = useNavigate();
-
   const dispatch = useDispatch<AppDispatch>();
 
-  const { cart, loading } = useSelector((state: RootState) => state.cart);
+  const { cart } = useSelector((state: RootState) => state.cart);
+  const { deliveryInfo } = useSelector((state: RootState) => state.deliveryInfo);
 
-  const { deliveryInfo } = useSelector(
-    (state: RootState) => state.deliveryInfo
-  );
+  const [paymentMethod, setPaymentMethod] = useState("COD");
 
-  console.log("deliveryInfo", deliveryInfo);
-
-  console.log(deliveryInfo.fullname);
+  // ✅ Store payment form data here instead of using separate state
+  const [paymentFormData, setPaymentFormData] = useState({
+    upiId: "",
+    cardNumber: "",
+    expiry: "",
+    cvv: "",
+  });
 
   useEffect(() => {
     dispatch(fetchcartProduct(userId));
+    dispatch(fetchDeliveryInfo());
   }, [dispatch, userId]);
 
-  useEffect(() => {
-    dispatch(fetchDeliveryInfo());
-  }, [dispatch]);
+  const handlePlaceOrder = async () => {
+    if (paymentMethod === "Online") {
+      const { upiId, cardNumber, expiry, cvv } = paymentFormData;
 
-  const items = cart?.items || [];
+      if (!upiId && (!cardNumber || !expiry || !cvv)) {
+        alert("Please fill in UPI or card details.");
+        return;
+      }
+    }
 
-  const handleProceed = () => {
-    navigate("/paymentPage");
+    try {
+      const order = {
+        userId,
+        deliveryInfo,
+        items: cart.items,
+        summary: cart.summary,
+        paymentMethod,
+        paymentDetails: paymentMethod === "Online" ? paymentFormData : null,
+      };
+
+      const res = await placeOrderData(order);
+      console.log(res);
+
+      alert("Order placed successfully!");
+      navigate("/order-success");
+    } catch (err) {
+      console.error("Order failed", err);
+      alert("Order failed. Try again.");
+    }
   };
 
-  return (
-    <div className=" bg-gray-50 p-4 flex justify-center items-center">
-      <div className="grid grid-cols-4 gap-3 min-h-80">
-        <div className="col-span-2">
-          <div className="w-full max-w-4xl bg-white shadow-lg p-6">
-            <h2 className="text-xl font-medium mb-6 border-b pb-4 font-heading">
-              Your Orders
-            </h2>
+  useEffect(() => {
+    document.body.classList.toggle("overflow-hidden", showPaymentModel);
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [showPaymentModel]);
 
-            <div className="space-y-4">
-              {items.map((item) => (
-                <div
-                  key={item._id}
-                  className="flex items-center gap-4 border-b pb-4"
-                >
-                  <img
-                    src={`http://localhost:5000/api/upload/${item.productId.image}`}
-                    alt={item.productId.name}
-                    className="w-20 h-20 object-cover rounded-lg"
-                  />
-                  <div className="flex-1">
-                    <h4 className="text-sm font-heading line-clamp-2 ">
-                      {item.productId.name}
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      Qty: {item.quantity}
-                    </p>
-                  </div>
-                  <div className="text-right font-semibold">
-                    ₹{(item.productId.price * item.quantity).toFixed(2)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+  return (
+    <div className="max-w-4xl mx-auto p-4 space-y-3">
+      <h2 className="text-xl font-heading font-semibold">Payment</h2>
+
+      <div className="space-y-3 bg-white p-4 shadow rounded">
+        {/* Order Summary */}
         <div>
-          <CartTotal showCheckoutButton={false} />
-          <div className="mt-4">
-            <button
-              onClick={() => handleProceed()}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded font-medium"
+          <h3 className="font-heading text-lg font-medium">Order Summary</h3>
+          {cart?.items.map((item) => (
+            <div
+              key={item._id}
+              className="flex justify-between text-sm border-b py-2"
             >
-              Proceed to Payment
-            </button>
+              <span className="font-heading font-light">
+                {item.productId.name} (x{item.quantity})
+              </span>
+              <span>₹{item.productId.price * item.quantity}</span>
+            </div>
+          ))}
+          <div className="flex justify-between font-semibold font-heading pt-2">
+            <span>Total</span>
+            <span>₹{cart?.summary?.finalTotal}</span>
           </div>
         </div>
-        <div>
-          {deliveryInfo && (
-            <div className="w-full bg-white shadow-lg p-4 mb-4">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium font-subHeading">
-                  Delivery Information
-                </h2>
-              </div>
-              <div className="text-sm text-gray-700 space-y-1">
-                <p className="font-heading text-[13px]">
-                  {" "}
-                  <span className="font-body font-medium">Name : </span>
-                  {deliveryInfo.fullname}
-                </p>
-                <p className="font-heading text-[13px]">
-                  <span className="font-body font-medium">Email : </span>
-                  {deliveryInfo.email}
-                </p>
-                <p className="font-heading text-[13px]">
-                  <span className="font-body font-medium">Phone no. : </span>
-                  {deliveryInfo.phoneNo}
-                </p>
-                <p className="font-heading text-[13px]">
-                  <span className="font-body font-medium">Address : </span>
-                  {deliveryInfo.address1}, {deliveryInfo.address2}
-                </p>
-                <p className="font-heading text-[13px]">
-                  <span className="font-body font-medium">City : </span>
-                  {deliveryInfo.city}, {deliveryInfo.state} - {deliveryInfo.zip}
-                </p>
-              </div>
-              <div className="mt-4">
-                <button
-                  onClick={() => handleProceed()}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded font-medium"
-                >
-                  Edit
-                </button>
+
+        {/* Delivery Info */}
+        <div className="space-y-1">
+          <h3 className="font-heading text-sm font-medium">Delivery Info</h3>
+          <div>
+            <p className="font-heading font-light text-[14px]">
+              {deliveryInfo.fullname}, {deliveryInfo.phoneNo}
+            </p>
+            <p className="text-[14px] font-heading font-light">
+              {deliveryInfo.address1}, {deliveryInfo.address2}, {deliveryInfo.city},{" "}
+              {deliveryInfo.state} - {deliveryInfo.zip}
+            </p>
+          </div>
+        </div>
+
+        {/* Payment Method */}
+        <div className="space-y-2">
+          <h3 className="font-heading text-sm font-medium">Payment Method</h3>
+          <div className="flex flex-col">
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="payment"
+                value="COD"
+                checked={paymentMethod === "COD"}
+                onChange={() => {
+                  setPaymentMethod("COD");
+                  setShowPaymentModel(false);
+                }}
+              />
+              Cash on Delivery
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="payment"
+                value="Online"
+                checked={paymentMethod === "Online"}
+                onChange={() => {
+                  setPaymentMethod("Online");
+                  setShowPaymentModel(true);
+                }}
+              />
+              Online Payment
+            </label>
+          </div>
+
+          {showPaymentModel && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 px-4">
+              <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+                <OnlinePaymentForm
+                  onClose={() => setShowPaymentModel(false)}
+                  onSubmit={(data) => {
+                    setPaymentFormData(data);
+                    setShowPaymentModel(false);
+                  }}
+                />
               </div>
             </div>
           )}
         </div>
+
+        {/* Place Order Button */}
+        <button
+          onClick={handlePlaceOrder}
+          className="w-full bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded font-medium font-heading"
+        >
+          Place Order
+        </button>
       </div>
     </div>
   );
 };
 
-export default OrderSummaryPage;
+export default PaymentPage;

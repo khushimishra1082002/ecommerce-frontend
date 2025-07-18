@@ -15,16 +15,16 @@ export const getDiscountOptionsData = async (categoryID) => {
   }
 };
 
-export const createDiscountOptionsData = async ({ category, options }) => {
+export const createDiscountOptionsData = async ({ categoryId, options }) => {
   try {
     const response = await api.post(conf.createDiscountOptionsModel, {
-      category,
+      categoryId,
       options,
     });
-    console.log("response", response);
     return response.data;
   } catch (error) {
     console.error("Error add products", error.response?.data || error.message);
     throw error;
   }
 };
+

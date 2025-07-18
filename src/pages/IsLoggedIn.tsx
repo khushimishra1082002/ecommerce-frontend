@@ -9,7 +9,7 @@ const IsLoggedIn = () => {
   return (
     <>
      <div className="flex justify-center items-center h-screen">
-     <div className="bg-white grid grid-cols-2 w-full h-full  ">
+     <div className="bg-white grid grid-cols-1 md:grid-cols-2 w-full h-full  ">
         
         <div className="w-full h-full object-cover">
           <img className="w-full h-full object-cover"

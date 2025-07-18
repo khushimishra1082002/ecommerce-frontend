@@ -114,4 +114,19 @@ export const editSubcategoryData = async (subcategoryID, formData) => {
 };
 
 
+export const getAllSubcategoryByCategoryData = async (categoryId) => {
+  try {
+    const response = await api.get(`${conf.getAllSubcategoryByCategoryUrl}/${categoryId}`);
+    console.log("API Response single subcategory:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching subcategory",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+
 

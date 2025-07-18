@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { fetchAllCategory } from "../ReduxToolkit/Slices/CategorySlice";
 import conf from "../config/Conf";
+import { Link } from "react-router-dom";
 
 const Categories = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,6 +38,7 @@ const Categories = () => {
           {category.map((v, i) => {
             return (
               <SwiperSlide>
+                <Link to={`/selectCategoryResult/${v._id}`}>
                 <div
                   className="w-24 h-24 rounded-md  
                  flex flex-col justify-center items-center"
@@ -50,6 +52,7 @@ const Categories = () => {
                     {v.name}
                   </span>
                 </div>
+                </Link>
               </SwiperSlide>
             );
           })}
