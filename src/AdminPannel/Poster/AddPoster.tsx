@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AddPoster = ({closeAddPosterModal,refreshBanners,}) => {
+const AddPoster = ({closeAddPosterModal,}) => {
   return (
     <>
       <div>

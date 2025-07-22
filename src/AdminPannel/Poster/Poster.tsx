@@ -30,16 +30,16 @@ export const Poster: React.FC = () => {
   }, []);
 
   const handleDelete = async (bannerId: string) => {
-    try {
-      const res = await deletePosterData(bannerId);
-      if (res) {
-        alert("Banner Deleted Successfully");
-        fetchBanners();
-      }
-    } catch (error) {
-      console.error("Delete failed:", error);
-      alert("Failed to delete banner. Please try again.");
-    }
+    // try {
+    //   const res = await deletePosterData(bannerId);
+    //   if (res) {
+    //     alert("Banner Deleted Successfully");
+    //     fetchBanners();
+    //   }
+    // } catch (error) {
+    //   console.error("Delete failed:", error);
+    //   alert("Failed to delete banner. Please try again.");
+    // }
   };
 
   const handleEdit = async (bannerId: string) => {
@@ -128,7 +128,7 @@ export const Poster: React.FC = () => {
           <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
             <AddPoster
               closeAddPosterModal={closeAddPosterModal}
-              refreshBanners={fetchPosters}
+              // refreshBanners={fetchPosters}
             />
           </div>
         </div>
@@ -140,7 +140,7 @@ export const Poster: React.FC = () => {
             <EditPoster
               closeEditPosterModal={closeEditPosterModal}
               editData={editData}
-              fetchBanners={fetchPosters}
+              // fetchPosters={fetchPosters}
             />
           </div>
         </div>

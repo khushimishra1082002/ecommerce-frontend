@@ -1,6 +1,6 @@
 import React from 'react'
 
-const EditPoster = ({closeEditPosterModal,editData,fetchBanners}) => {
+const EditPoster = ({closeEditPosterModal,editData}) => {
   return (
     <>
       <div>
