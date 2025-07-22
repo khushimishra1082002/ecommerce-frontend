@@ -7,12 +7,13 @@ import { FaTwitterSquare } from "react-icons/fa";
 const Footer = () => {
   return (
     <>
-      <div className=" bg-gray-100 h-80 w-full py-16 flex items-center">
-        <div className="w-11/12 m-auto grid grid-cols-5 gap-5">
+      <div className=" bg-gray-100 min-h-80 w-full py-16 flex items-center">
+        <div className="w-11/12 m-auto grid grid-cols-2 sm:grid-cols-3
+        md:grid-cols-4 lg:grid-cols-5 gap-5">
           <div className=" space-y-2">
             <h3 className=" font-body text-lg font-medium">About Us</h3>
             <p className="text-sm font-body font-light">
-              At YourStoreName, we’re committed to bringing you the best
+              At megamart, we’re committed to bringing you the best
               products at unbeatable prices.
             </p>
           </div>

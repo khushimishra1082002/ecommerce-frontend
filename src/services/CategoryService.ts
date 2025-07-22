@@ -5,7 +5,7 @@ import { buildQueryFromFilters } from "../utils/buildQueryFromFilters";
 export const getAllCategoryData = async () => {
   try {
     const response = await api.get(conf.GetAllCategoryUrl); 
-    console.log("API Response:", response.data);
+    console.log("response", response.data);
     return response.data;
   } catch (error) {
     console.error(
@@ -19,11 +19,11 @@ export const getAllCategoryData = async () => {
 export const getSingleCategoryData = async (categoryID) => {
   try {
     const response = await api.get(`${conf.getSingleCategoryUrl}/${categoryID}`);
-    console.log("API Response single:", response.data);
+    console.log("response", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching category",
+      "Error category",
       error.response?.data || error.message
     );
     throw error;
@@ -37,11 +37,11 @@ export const getFilterCategoryData = async (filters = {}) => {
       `${conf.getFilteredCategoriesUrl}?${queryString}`
     );
 
-    console.log("API Response: filtrd product", response.data);
+    console.log("response", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching products",
+      "Error category",
       error.response?.data || error.message
     );
     throw error;
@@ -58,7 +58,7 @@ export const CreateCategoryData = async (formData: FormData) => {
     return response.data;
   } catch (error) {
     console.error(
-      "Error adding product:",
+      "Error category:",
       error.response?.data || error.message
     );
     throw error;
@@ -69,7 +69,7 @@ export const CreateCategoryData = async (formData: FormData) => {
 export const deleteCategoryData = async (categoryID) => {
   try {
     const response = await api.delete(`${conf.deleteCategoryUrl}/${categoryID}`);
-    console.log("API Response single:", response.data);
+    console.log("response", response.data);
     return response.data;
   } catch (error) {
     console.error(
@@ -85,10 +85,10 @@ export const deleteMultipleCategoryData = async (ids) => {
     const response = await api.delete(conf.deleteMultipleCategoryUrl, {
       data: { ids }, 
     });
-    console.log("API Response multiple delete:", response.data);
+    console.log("Response", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error deleting multiple products:", error.response?.data || error.message);
+    console.error("Error category", error.response?.data || error.message);
     throw error;
   }
 };
@@ -100,10 +100,10 @@ export const editCategoryData = async (categoryID, formData) => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log("API Response single:", response.data);
+    console.log("response", response.data);
     return { ok: true, data: response.data };
   } catch (error) {
-    console.error("Error updating product", error.response?.data || error.message);
+    console.error("Error category", error.response?.data || error.message);
     return { ok: false, message: error.response?.data?.message || error.message };
   }
 };

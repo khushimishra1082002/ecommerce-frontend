@@ -3,6 +3,11 @@ export interface PriceRange {
   max: number | string;
 }
 
+export interface PriceRange {
+  min: number | string;
+  max: number | string;
+}
+
 export interface FiltersState {
   categories: string;
   subcategories: string[];
@@ -12,5 +17,7 @@ export interface FiltersState {
   size: string[]; 
   colors: string[];
   inStock: boolean | null;
-  discount:[]
+  discount: string[];
+
 }
+

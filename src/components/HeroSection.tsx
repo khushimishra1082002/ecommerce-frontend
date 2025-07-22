@@ -14,9 +14,10 @@ import "swiper/css/scrollbar";
 import axios from "axios";
 import { getBannerData } from "../services/BannerServices";
 import SwiperButtonThree from "./SwiperButtonThree";
+import { BannerDTO } from "../types/banner";
 
 const HeroSection = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<BannerDTO[]>([]);
 
   console.log("herosdata", data);
 
@@ -45,10 +46,12 @@ const HeroSection = () => {
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           className="overflow-hidden"
         >
-           <span slot="container-start"
-              className="w-full absolute top-1/2 -translate-y-1/2 z-10 duration-200">
-              <SwiperButtonThree/>
-              </span>
+          <span
+            slot="container-start"
+            className="w-full absolute top-1/2 -translate-y-1/2 z-10 duration-200"
+          >
+            <SwiperButtonThree />
+          </span>
           {data.map((v, i) => {
             return (
               <SwiperSlide>

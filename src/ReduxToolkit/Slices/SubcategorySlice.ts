@@ -18,14 +18,16 @@ export const fetchSubcategories = createAsyncThunk(
   }
 );
 
-export const fetchSubcategoriesByCategory = createAsyncThunk(
-  "subcategory/fetchSubcategoriesByCategory",
-  async (categoryId) => {
-    const data = await getAllSubcategoryByCategoryData(categoryId);
-    console.log("Subcategories returned from service:", data);
-    return data as SubcategoryDTO[];
-  }
-);
+
+export const fetchSubcategoriesByCategory = createAsyncThunk<
+  SubcategoryDTO[], 
+  string 
+>("subcategory/fetchSubcategoriesByCategory", async (categoryId) => {
+  const data = await getAllSubcategoryByCategoryData(categoryId);
+  console.log("Subcategories returned from service:", data);
+  return data;
+});
+
 
 
 const subcategorySlice = createSlice({
@@ -49,7 +51,7 @@ const subcategorySlice = createSlice({
       state.error = action.error.message || "Failed to fetch subcategories";
     })
 
-    // ✅ fetchSubcategoriesByCategory (specific to a category)
+    
     .addCase(fetchSubcategoriesByCategory.pending, (state) => {
       state.loading = true;
       state.error = null;

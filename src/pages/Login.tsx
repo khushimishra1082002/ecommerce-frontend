@@ -66,20 +66,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
             Login your account
           </span>
         </div>
-        {/* <div className="flex gap-2 justify-center items-center border border-black/10 rounded-sm p-3">
-          <img
-            className="w-6"
-            src="https://cdn.iconscout.com/icon/free/png-256/free-google-logo-icon-download-in-svg-png-gif-file-formats--brands-pack-logos-icons-189824.png?f=webp&w=256"
-          />
-          <span className="text-gray-500 font-heading text-[14px]">
-            Sign up with Google
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-full h-[1px] bg-black/15"></div>
-          <span className="text-sm font-body px-1 text-gray-600">or</span>
-          <div className="w-full h-[1px] bg-black/10"></div>
-        </div> */}
+       
         <div className="w-full ">
           <Formik
             initialValues={initialValues}

@@ -3,19 +3,20 @@ import Searchbar from "../components/Searchbar";
 import { FiMenu } from "react-icons/fi";
 import { GoBell } from "react-icons/go";
 import { FaSearch } from "react-icons/fa";
+import { decodeToken } from "../utils/decodeToken";
 
-const DashboardHeader = () => {
-  const [search, setSearch] = useState();
+const DashboardHeader = ({onMenuClick }) => {
+  const decoded = decodeToken();
   return (
-    <div className="shadow p-4 h-14 flex items-center justify-between w-full sticky top-0">
+    <div className="shadow p-4 h-14 flex items-center justify-between
+     w-full sticky top-0 z-20 bg-white">
       <div className="flex gap-2 items-center">
         <div
-          className=" bg-skin-accent_one text-white rounded-md flex justify-center items-center p-2
-      md:hidden"
+          className="bg-skin-accent_one text-white rounded-md flex justify-center items-center p-2 md:hidden cursor-pointer"
+          onClick={onMenuClick}
         >
           <FiMenu />
         </div>
-        {/* Title */}
         <span className="font-heading font-medium text-lg">Dashboard</span>
       </div>
 
@@ -26,7 +27,8 @@ const DashboardHeader = () => {
                  text-sm"
           />
           <input
-            className="border border-gray-800/10 rounded-sm font-heading text-sm  w-96 pl-8 px-2
+            className="border border-gray-800/10 rounded-sm font-heading text-sm w-60
+            sm:w-80  md:w-80 lg:w-96 pl-8 px-2
                   h-10 text-[13px]"
             type="text"
             placeholder="Search product categories and more"
@@ -43,19 +45,17 @@ const DashboardHeader = () => {
         </div>
 
         <div className="flex gap-2 items-center">
-          {/* Avatar with online status */}
           <div className="relative w-10 h-10 rounded-full overflow-hidden">
             <img
               src="https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg"
               alt="avatar"
               className="w-full h-full object-cover"
             />
-            {/* Online Status Dot */}
+
             <div className="absolute bottom-2 right-0 z-10 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
           </div>
 
-          {/* User name */}
-          <span className="font-heading text-gray-600 text-sm">Khushi</span>
+          <span className="font-heading text-gray-600 text-sm">{decoded?.name}</span>
         </div>
       </div>
     </div>

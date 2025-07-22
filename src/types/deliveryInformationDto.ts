@@ -11,10 +11,11 @@ export interface DeliveryInfoDTO {
 }
 
 export interface DeliveryInfoStateDTO {
-  deliveryInfo: DeliveryInfoDTO[];
+  deliveryInfo: DeliveryInfoDTO | null; 
   loading: boolean;
   error: string | null;
 }
+
 
 export interface DeliveryInfoFormDTO {
   fullname: string;

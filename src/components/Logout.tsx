@@ -5,14 +5,12 @@ const Logout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 🔸 Token delete karo
     localStorage.removeItem("token");
 
-    // 🔸 Login page pe redirect karo
-    navigate("/IsLoggedIn"); // ya "/" agar homepage chahiye
+    navigate("/IsLoggedIn");
   }, [navigate]);
 
-  return null; // Kuch UI show nahi karna
+  return null;
 };
 
 export default Logout;

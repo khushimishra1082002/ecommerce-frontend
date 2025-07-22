@@ -68,7 +68,11 @@ const conf = {
  createBannerUrl:"/banner/createBanner",
  deleteBannerUrl:"/banner/deleteBanner",
  updateBannerUrl:"/banner/updateBanner",
- getSingleBannerUrl:"/banner/getSingleBanner"
+ getSingleBannerUrl:"/banner/getSingleBanner",
+ getAllOrders:"/order/getAllOrders",
+ deleteOrderUrl:"/order/deleteOrder",
+ getFilteredOrdersUrl:"/order/getFilteredOrders",
+ updateOrderStatusUrl:"/order/updateOrderStatus"
 };
 
 export default conf;

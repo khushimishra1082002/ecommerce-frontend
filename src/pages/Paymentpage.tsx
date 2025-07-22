@@ -39,21 +39,21 @@ const PaymentPage = () => {
     const order = {
       userId,
       deliveryInfo,
-      items: cart.items,
-      summary: cart.summary,
+      items: cart?.items,
+      summary: cart?.summary,
       paymentMethod,
-      paymentDetails: paymentData, // ✅ always passed for Online
+      paymentDetails: paymentData, 
     };
 
-    console.log("📦 Order payload:", order);
+    console.log(" Order payload:", order);
 
     const res = await placeOrderData(order);
-    console.log("✅ Order placed:", res.data || res);
+    console.log(" Order placed:", res.data || res);
 
     alert("Order placed successfully!");
-    navigate("/order-success");
+    navigate("/");
   } catch (err: any) {
-    console.error("❌ Order failed:", err?.response?.data || err.message || err);
+    console.error(" Order failed:", err?.response?.data || err.message || err);
     alert("Something went wrong while placing order.");
   }
 };
@@ -89,7 +89,7 @@ const PaymentPage = () => {
           ))}
           <div className="flex justify-between font-semibold font-heading pt-2">
             <span>Total</span>
-            <span>₹{cart.summary?.finalTotal}</span>
+            <span>₹{cart?.summary?.finalTotal}</span>
           </div>
         </div>
 
@@ -97,11 +97,11 @@ const PaymentPage = () => {
         <div className="space-y-1">
           <h3 className="font-heading text-sm font-medium">Delivery Info</h3>
           <p className="font-heading font-light text-[14px]">
-            {deliveryInfo.fullname}, {deliveryInfo.phoneNo}
+            {deliveryInfo?.fullname}, {deliveryInfo?.phoneNo}
           </p>
           <p className="text-[14px] font-heading font-light">
-            {deliveryInfo.address1}, {deliveryInfo.address2},{" "}
-            {deliveryInfo.city}, {deliveryInfo.state} - {deliveryInfo.zip}
+            {deliveryInfo?.address1}, {deliveryInfo?.address2},{" "}
+            {deliveryInfo?.city}, {deliveryInfo?.state} - {deliveryInfo?.zip}
           </p>
         </div>
 

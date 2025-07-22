@@ -4,14 +4,12 @@ import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../ReduxToolkit/app/Store";
 import { BrandFormDTO } from "../../../types/brand";
-import { productValidationSchema } from "../../../Validations/productValidations";
 import { fetchAllCategory } from "../../../ReduxToolkit/Slices/CategorySlice";
 import { fetchSubcategories } from "../../../ReduxToolkit/Slices/SubcategorySlice";
 import { fetchBrands } from "../../../ReduxToolkit/Slices/BrandSlice";
-import { fetchAllProducts } from "../../../ReduxToolkit/Slices/ProductSlice";
 import FormikControl from "../../../components/ReusableFormField/FormikControl";
-import { editProductData } from "../../../services/ProductService";
 import { editBrandData } from "../../../services/BrandService";
+import { brandValidationSchema } from "../../../Validations/brandValidations";
 
 interface EditProductProps {
   closeEditBrandModal: () => void;
@@ -95,12 +93,13 @@ const EditBrand: React.FC<EditProductProps> = ({
         key={formKey}
         initialValues={initialValues}
         onSubmit={onSubmit}
-        // validationSchema={productValidationSchema}
+        validationSchema={brandValidationSchema}
+        
       >
         {(formik) => {
           useEffect(() => {
             if (formik.values.category) {
-              dispatch(fetchSubcategories(formik.values.category));
+              dispatch(fetchSubcategories());
             }
           }, [formik.values.category]);
 

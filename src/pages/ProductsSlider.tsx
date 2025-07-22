@@ -15,14 +15,16 @@ import { AddProductInWishlistData } from "../services/wishlistService";
 import { decodeToken } from "../utils/decodeToken";
 import { getFilterProductsData } from "../services/ProductService";
 import SwiperButton from "../components/SwiperButton";
+import { ProductDTO } from "../types/product";
 
 const ProductSlider = ({ title, filterQuery }) => {
-  console.log("dddrrrfilterQuery", filterQuery);
+  console.log("filterQuery", filterQuery);
 
   const dispatch = useDispatch<AppDispatch>();
   const [wishlisted, setWishlisted] = useState(false);
-  const [products, setProducts] = useState([]);
-  console.log("jjjooo", products);
+  const [products, setProducts] = useState<ProductDTO[]>([]);
+
+  console.log("products", products);
 
   const [data, setData] = useState([]);
   const [wishlistedProducts, setWishlistedProducts] = useState<string[]>([]);
@@ -70,13 +72,39 @@ const ProductSlider = ({ title, filterQuery }) => {
           spaceBetween={10}
           slidesPerView={6}
           className="space-y-5"
+          breakpoints={{
+            240: {
+              slidesPerView: 1,
+              spaceBetween: 6,
+            },
+            340: {
+              slidesPerView: 2,
+              spaceBetween: 6,
+            },
+            440: {
+              slidesPerView: 2,
+              spaceBetween: 6,
+            },
+            640: {
+              slidesPerView: 3,
+              spaceBetween: 6,
+            },
+            768: {
+              slidesPerView: 4,
+              spaceBetween: 6,
+            },
+            1024: {
+              slidesPerView: 6,
+              spaceBetween: 6,
+            },
+          }}
         >
           <span
             slot="container-start"
             className="w-full flex justify-between gap-3"
           >
             <div className="flex justify-between items-center">
-              <h2 className="font-heading text-lg font-semibold">{title}</h2>
+              <h2 className="font-heading text-sm sm:text-base md:text-lg font-semibold">{title}</h2>
             </div>
 
             <SwiperButton />

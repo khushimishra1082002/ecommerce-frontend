@@ -1,30 +1,3 @@
-// import React, { useEffect } from "react";
-
-// const EditProduct = ({ closeEditProductModal, editData }) => {
-//   useEffect(() => {
-//     console.log("Edit Modal Data:", editData); // ✅ confirm it's coming
-//   }, [editData]);
-
-//   if (!editData) return <div>Loading product data...</div>;
-
-//   return (
-//     <div>
-//       <h2 className="text-lg font-bold mb-4">Edit Product</h2>
-//       <p>Product Name: {editData.name}</p>
-//       <p>Price: ₹{editData.price}</p>
-//       {/* Add your actual form here with Formik and initialValues using editData */}
-//       <button
-//         onClick={closeEditProductModal}
-//         className="bg-red-500 px-4 py-2 text-white mt-4"
-//       >
-//         Close
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default EditProduct;
-
 import React, { useEffect, useState } from "react";
 import { Formik, Form, FormikHelpers } from "formik";
 import { RxCross2 } from "react-icons/rx";
@@ -33,14 +6,14 @@ import { RootState, AppDispatch } from "../../../ReduxToolkit/app/Store";
 import { ProductFormDTO } from "../../../types/product";
 import { productValidationSchema } from "../../../Validations/productValidations";
 import { fetchAllCategory } from "../../../ReduxToolkit/Slices/CategorySlice";
-import { fetchSubcategories } from "../../../ReduxToolkit/Slices/SubcategorySlice";
-import { fetchBrands } from "../../../ReduxToolkit/Slices/BrandSlice";
 import { fetchAllProducts } from "../../../ReduxToolkit/Slices/ProductSlice";
 import FormikControl from "../../../components/ReusableFormField/FormikControl";
 import { editProductData } from "../../../services/ProductService";
 import { Field, FieldArray } from "formik";
 import { getAllSubcategoryByCategoryData } from "../../../services/SubcategoryService";
 import { getAllBrandBySubcategoryData } from "../../../services/BrandService";
+import { SubcategoryDTO } from "../../../types/subcategory";
+import { BrandDTO } from "../../../types/brand";
 
 interface EditProductProps {
   closeEditProductModal: () => void;
@@ -69,9 +42,9 @@ const EditProduct: React.FC<EditProductProps> = ({
   console.log("editData product", editData.gender);
   console.log("editData size", editData.size);
 
-  const [subcategory, setSubcategory] = useState();
+  const [subcategory, setSubcategory] = useState<SubcategoryDTO[]>([]);
 
-  const [brands, setBrands] = useState();
+  const [brands, setBrands] = useState<BrandDTO[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
   const [formKey, setFormKey] = useState(0);
@@ -83,7 +56,7 @@ const EditProduct: React.FC<EditProductProps> = ({
     name: editData?.name || "",
     slug: editData?.slug || "",
     description: editData?.description || "",
-    image: [], // we'll allow new image selection if needed
+    image: [],
     price: editData?.price || 0,
     stock: editData?.stock || 0,
     inStock: editData?.inStock?.toString() || "true",
@@ -139,19 +112,26 @@ const EditProduct: React.FC<EditProductProps> = ({
       formData.append("subcategory", values.subcategory || "");
       formData.append("brand", values.brand || "");
       formData.append("isActive", String(values.isActive));
+
       // Gender
-      values.gender?.forEach((g) => formData.append("gender", g?.value || g));
+      values.gender?.forEach((g) => {
+        const genderValue = typeof g === "string" ? g : g.value;
+        formData.append("gender", genderValue);
+      });
 
       // Size
-      values.size?.forEach((s) => formData.append("size", s?.value || s));
+      values.size?.forEach((s) => {
+        const sizeValue = typeof s === "string" ? s : s.value;
+        formData.append("size", sizeValue);
+      });
 
-      // Color - safely handle string or array
+      // Color
       formData.append(
         "colors",
         Array.isArray(values.colors) ? values.colors.join(",") : values.colors
       );
 
-      // Attributes - send as JSON string
+      // Attributes
       formData.append("attributes", JSON.stringify(values.attributes));
 
       console.log("Attributes JSON:", JSON.stringify(values.attributes));
@@ -163,11 +143,11 @@ const EditProduct: React.FC<EditProductProps> = ({
         });
       }
 
-      console.log(values.image); // ✅ yahan FileList milna chahiye
+      console.log(values.image);
 
       const response = await editProductData(editData._id, formData);
 
-      console.log("kandy", response);
+      console.log("response", response);
 
       if (response.ok) {
         alert("Product updated successfully");
@@ -189,7 +169,7 @@ const EditProduct: React.FC<EditProductProps> = ({
   const fetchSubcategoryByCategory = async (categoryId: string) => {
     try {
       const res = await getAllSubcategoryByCategoryData(categoryId);
-      setSubcategory(res); // Store in local state
+      setSubcategory(res);
     } catch (err) {
       console.error("Failed to fetch subcategories by category", err);
       setSubcategory([]);
@@ -199,7 +179,7 @@ const EditProduct: React.FC<EditProductProps> = ({
   const ftchBrandBySubcategory = async (subcategoryID: string) => {
     try {
       const res = await getAllBrandBySubcategoryData(subcategoryID);
-      setBrands(res); // Store in local state
+      setBrands(res);
     } catch (err) {
       console.error("Failed to fetch subcategories by category", err);
     }
@@ -221,13 +201,13 @@ const EditProduct: React.FC<EditProductProps> = ({
         key={formKey}
         initialValues={initialValues}
         onSubmit={onSubmit}
-        // validationSchema={productValidationSchema}
+        validationSchema={productValidationSchema}
       >
         {(formik) => {
           console.log(formik.values.category);
           useEffect(() => {
             if (formik.values.category) {
-              fetchSubcategoryByCategory(formik.values.category); // 👈 Fetch subcategories
+              fetchSubcategoryByCategory(formik.values.category);
             }
           }, [formik.values.category]);
           useEffect(() => {

@@ -9,7 +9,7 @@ const MainCartPage = () => {
     <>
       <div className='bg-gray-50 p-5'>
        <div className='grid grid-cols-4 gap-4'>
-         <div className='col-span-3'>
+         <div className='col-span-3 h-[70vh] overflow-y-scroll'>
             <Cart/>
          </div>
          <div>

@@ -5,11 +5,12 @@ import FormikControl from "../components/ReusableFormField/Input";
 import { RxCross2 } from "react-icons/rx";
 import { postDeliveryInfoData } from "../services/deliveryInfoService";
 import { useNavigate } from "react-router-dom";
+import {deliveryInfoValidationSchema} from "../Validations/deliveryInfovalidations"
 
 const DeliveryInformation = ({ closeModal }) => {
   const [step, setStep] = useState(1);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const initialValues = {
     fullname: "",
@@ -22,21 +23,6 @@ const DeliveryInformation = ({ closeModal }) => {
     zip: "",
   };
 
-  const validationSchemas = [
-    Yup.object({
-      fullname: Yup.string().required("Full name is required"),
-      email: Yup.string().email("Invalid email").required("Email is required"),
-      phoneNo: Yup.string()
-        .matches(/^\d{10}$/, "Phone must be 10 digits")
-        .required("Phone is required"),
-    }),
-    Yup.object({
-      address1: Yup.string().required("Address is required"),
-      city: Yup.string().required("City is required"),
-      zip: Yup.string().required("Zip is required"),
-    }),
-  ];
-
   const handleSubmit = async (values, actions) => {
     if (step < 2) {
       setStep(step + 1);
@@ -46,7 +32,7 @@ const DeliveryInformation = ({ closeModal }) => {
         console.log("res", res);
         alert("Post info successfully");
         closeModal();
-        navigate("/orderSummaryPage")
+        navigate("/orderSummaryPage");
       } catch (error) {
         console.error("Submission failed", error);
         alert("Something went wrong while submitting delivery info");
@@ -73,10 +59,11 @@ const DeliveryInformation = ({ closeModal }) => {
       {/* Formik Wrapper */}
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchemas[step - 1]}
+        validationSchema={deliveryInfoValidationSchema[step - 1]}
         onSubmit={handleSubmit}
       >
         {(formik) => (
+
           <Form className="space-y-4">
             {/* Step 1 */}
             {step === 1 && (

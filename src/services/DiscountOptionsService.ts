@@ -4,11 +4,11 @@ import conf from "../config/Conf";
 export const getDiscountOptionsData = async (categoryID) => {
   try {
     const response = await api.get(`${conf.getDiscountOptionsUrl}/${categoryID}`);
-    console.log("API Response:", response.data);
+    console.log("Response", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching category",
+      "Error discount",
       error.response?.data || error.message
     );
     throw error;
@@ -23,7 +23,7 @@ export const createDiscountOptionsData = async ({ categoryId, options }) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error add products", error.response?.data || error.message);
+    console.error("Error add siscount options", error.response?.data || error.message);
     throw error;
   }
 };

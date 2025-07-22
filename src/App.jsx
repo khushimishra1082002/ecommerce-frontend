@@ -3,12 +3,10 @@ import { Routes, Route } from "react-router-dom";
 import Mainpage from "./pages/Mainpage";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
-import SelectProductResults from "./pages/SelectProductResults";
 import SearchResult from "./pages/SearchResult";
 import SelectCategoryResults from "./pages/SelectCategoryResults";
 import IsLoggedIn from "./pages/IsLoggedIn";
 import MainCartPage from "./pages/MainCartPage";
-import CheckoutPage from "./pages/CheckoutPage";
 import Wishlist from "./pages/Wishlist";
 import ScrollTop from "./components/ScrollTop";
 import OrderSummaryPage from "./pages/OrderSummaryPage";
@@ -25,6 +23,7 @@ import MyOrders from "./pages/user/MyOrders.tsx";
 import OrderHistory from "./pages/user/OrderHistory.tsx";
 import Logout from "./components/Logout.tsx";
 import {DashboardBanner} from "./AdminPannel/Banner/DashboardBanner.tsx";
+import OrderTable from "./AdminPannel/DataTable/Orders/OrderTable";
 
 const App = () => {
   return (
@@ -35,17 +34,13 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route index element={<Home />} />
           <Route path="/:productId" element={<ProductDetail />} />
-          <Route
-            path="/selectProductResult/:id"
-            element={<SelectProductResults />}
-          />
+          
           <Route path="/searchResult/:query" element={<SearchResult />} />
           <Route
             path="/selectCategoryResult/:categoryID"
             element={<SelectCategoryResults />}
           />
           <Route path="/mainCartPage" element={<MainCartPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/myWishList" element={<Wishlist />} />
           <Route path="/orderSummaryPage" element={<OrderSummaryPage />} />
           <Route path="/paymentPage" element={<Paymentpage />} />
@@ -64,6 +59,7 @@ const App = () => {
           <Route path="subcategoryTable" element={<SubcategoryTable />} />
           <Route path="brandTable" element={<BrandTable />} />
           <Route path="banner" element={<DashboardBanner />} />
+          <Route path="orderTable" element={<OrderTable />} />
 
         </Route>
         <Route path="IsLoggedIn" element={<IsLoggedIn />} />

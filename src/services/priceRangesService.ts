@@ -4,10 +4,10 @@ import conf from "../config/Conf"
 export const getPriceRangeData = async (categoryID) => {
   try {
     const response = await api.get(`${conf.GetPriceRangeUrl}/${categoryID}`);
-    console.log("API Response price range:", response.data);
+    console.log("Response", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error fetching price range", error.response?.data || error.message);
+    console.error("Error price range", error.response?.data || error.message);
     throw error;
   }
 };
@@ -20,7 +20,7 @@ export const CreatePriceRangeData = async ({ label, min, max, category }) => {
     console.log("response", response);
     return response.data;
   } catch (error) {
-    console.error("Error add products", error.response?.data || error.message);
+    console.error("Error price range", error.response?.data || error.message);
     throw error;
   }
 };

@@ -21,10 +21,7 @@ const SubcategoryFilter: React.FC<SubcategoryFilterProps> = ({
   setSizeOptions,
   setGenderOptions,
 }) => {
-
-    console.log("categoryID",categoryID);
-    
-
+  console.log("categoryID", categoryID);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -34,19 +31,19 @@ const SubcategoryFilter: React.FC<SubcategoryFilterProps> = ({
     error: subcategoryError,
   } = useSelector((state: RootState) => state.subcategory);
 
-  // Fetch subcategories when categoryID changes
   useEffect(() => {
     if (categoryID) {
       dispatch(fetchSubcategoriesByCategory(categoryID));
     }
   }, [dispatch, categoryID]);
 
-  // Fetch dynamic options when selected subcategories change
   useEffect(() => {
     if (selectedSubcategories.length > 0) {
       const fetchOptions = async () => {
         try {
-          const res = await getMultipleSubcategoriesData(selectedSubcategories.join(","));
+          const res = await getMultipleSubcategoriesData(
+            selectedSubcategories.join(",")
+          );
 
           const allColors = new Set<string>();
           const allSizes = new Set<string>();
@@ -73,7 +70,12 @@ const SubcategoryFilter: React.FC<SubcategoryFilterProps> = ({
       setSizeOptions([]);
       setGenderOptions([]);
     }
-  }, [selectedSubcategories, setColorOptions, setSizeOptions, setGenderOptions]);
+  }, [
+    selectedSubcategories,
+    setColorOptions,
+    setSizeOptions,
+    setGenderOptions,
+  ]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;

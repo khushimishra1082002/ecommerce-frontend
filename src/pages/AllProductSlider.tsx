@@ -12,8 +12,8 @@ const AllProductSlider = () => {
       filterQuery: { category: "Mobiles", maxPrice: 10000 },
     },
     {
-      title: "10% Off or More",
-      filterQuery: { discount: ["10"] }, 
+      title: "20% Off or More",
+      filterQuery: { discount: ["20"] }, 
     },
     {
       title: "Electronics",

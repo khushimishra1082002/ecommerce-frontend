@@ -11,7 +11,7 @@ const initialState: FiltersState = {
   size: [],
   colors: [],
   inStock: null,
-  discount:[]
+  discount: [],
 };
 
 const filterSlice = createSlice({
@@ -32,24 +32,23 @@ const filterSlice = createSlice({
     // console.log("state.brands",state.brands);
     // },
     setBrands: (state, action: PayloadAction<BrandDTO[]>) => {
-      state.brands = action.payload;
-      console.log("state.brands", state.brands);
+      state.brands = action.payload.map((brand) => brand.name);
     },
 
     setPriceRange: (state, action: PayloadAction<PriceRange>) => {
       state.priceRange = action.payload;
     },
     setDiscount: (state, action: PayloadAction<string[]>) => {
-      console.log("action.payload....",action.payload);
-      
+      console.log("action.payload....", action.payload);
+
       state.discount = action.payload;
     },
     setSize: (state, action: PayloadAction<string[]>) => {
       state.size = action.payload;
     },
     setAvailability(state, action) {
-      console.log("action",action.payload);
-      
+      console.log("action", action.payload);
+
       state.inStock = action.payload;
     },
     clearFilters: () => initialState,
@@ -65,7 +64,7 @@ export const {
   setSize,
   setAvailability,
   clearFilters,
-  setDiscount
+  setDiscount,
 } = filterSlice.actions;
 
 export default filterSlice.reducer;

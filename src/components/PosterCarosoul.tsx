@@ -6,11 +6,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { getPosterData } from "../services/PosterService";
+import { PosterDTO } from "../types/poster";
 
 const PosterCarosoul = () => {
-  const [data, setData] = useState([]);
+ const [data, setData] = useState<PosterDTO[]>([]);
 
-  console.log("ppppppp", data);
+  console.log("data", data);
 
   useEffect(() => {
     const fetchPosters = async () => {
@@ -31,9 +32,25 @@ const PosterCarosoul = () => {
           modules={[Navigation, Pagination, Scrollbar, A11y]}
           spaceBetween={14}
           slidesPerView={3}
-          navigation
+       
           onSlideChange={() => console.log("slide change")}
           onSwiper={(swiper) => console.log(swiper)}
+           breakpoints={{
+            
+            240: {
+              slidesPerView: 1,
+              spaceBetween: 6,
+            },
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 3,
+            },
+           
+          }}
           className=""
         >
           {data.map((v, i) => {

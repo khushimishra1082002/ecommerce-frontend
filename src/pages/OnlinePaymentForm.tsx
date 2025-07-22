@@ -36,7 +36,7 @@ const OnlinePaymentForm: React.FC<OnlinePaymentFormProps> = ({
         initialValues={initialValues}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            await handlePlaceOrder(values); // ✅ correct
+            await handlePlaceOrder(values); 
             onClose();
           } catch (err) {
             alert("Something went wrong");

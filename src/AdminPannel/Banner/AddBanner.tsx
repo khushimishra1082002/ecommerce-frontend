@@ -1,32 +1,19 @@
 import React, { useState } from "react";
 import { Formik, Form, FormikHelpers } from "formik";
-import * as Yup from "yup";
 import { RxCross2 } from "react-icons/rx";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../ReduxToolkit/app/Store";
 import FormikControl from "../../components/ReusableFormField/FormikControl";
 import { CreateBannerData } from "../../services/BannerServices";
+import { BannerDTO } from "../../types/banner";
+import { bannerValidationSchema } from "../../Validations/bannerValidations";
 
-// ✅ Banner form type matching Mongoose schema
-export interface BannerDTO {
-  image: File | null;
-  link: string;
-  location: string;
-  displayOrder: number;
-  startDate: string;
-  endDate: string;
-  active: boolean;
-}
-
-// ✅ Props for AddBanner modal
 interface AddBannerProps {
   closeAddBannerModel: () => void;
   refreshBanners: () => void;
 }
 
-// ✅ Initial form values
 const initialValues: BannerDTO = {
-  image: null,
+  _id: "",
+  image: "",
   link: "",
   location: "",
   displayOrder: 0,
@@ -35,24 +22,11 @@ const initialValues: BannerDTO = {
   active: true,
 };
 
-// ✅ Yup validation schema
-const validationSchema = Yup.object({
-  image: Yup.mixed().required("Banner image is required"),
-  location: Yup.string().required("Location is required"),
-  displayOrder: Yup.number().min(0, "Must be 0 or more"),
-  startDate: Yup.string().required("Start date is required"),
-  endDate: Yup.string()
-    .nullable()
-    .test("is-after-start", "End date must be after start date", function (value) {
-      const { startDate } = this.parent;
-      return !value || new Date(value) >= new Date(startDate);
-    }),
-  active: Yup.boolean().required(),
-});
-
-const AddBanner: React.FC<AddBannerProps> = ({ closeAddBannerModel, refreshBanners }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const [formKey, setFormKey] = useState(0); // For resetting image input
+const AddBanner: React.FC<AddBannerProps> = ({
+  closeAddBannerModel,
+  refreshBanners,
+}) => {
+  const [formKey, setFormKey] = useState(0);
 
   const onSubmit = async (
     values: BannerDTO,
@@ -63,7 +37,7 @@ const AddBanner: React.FC<AddBannerProps> = ({ closeAddBannerModel, refreshBanne
       formData.append("location", values.location);
       formData.append("displayOrder", String(values.displayOrder));
       formData.append("startDate", values.startDate);
-      formData.append("endDate", values.endDate);
+      formData.append("endDate", values.endDate || "");
       formData.append("active", String(values.active));
       formData.append("link", values.link ?? "");
 
@@ -79,14 +53,14 @@ const AddBanner: React.FC<AddBannerProps> = ({ closeAddBannerModel, refreshBanne
       if (response.ok) {
         alert("Banner added successfully");
         actions.resetForm();
-        setFormKey((prevKey) => prevKey + 1); // Reset image field
+        setFormKey((prevKey) => prevKey + 1);
         closeAddBannerModel();
-        refreshBanners(); // ✅ Refresh the list after add
+        refreshBanners();
       } else {
         alert(response.message || "Something went wrong");
       }
     } catch (error: any) {
-      console.error("Error adding banner:", error);
+      console.error("Error adding banner", error);
       alert(error.response?.data?.message || "Submission failed");
     } finally {
       actions.setSubmitting(false);
@@ -95,18 +69,17 @@ const AddBanner: React.FC<AddBannerProps> = ({ closeAddBannerModel, refreshBanne
 
   return (
     <div className="relative">
-      {/* Close Button */}
       <button onClick={closeAddBannerModel} className="absolute top-2 right-2">
         <RxCross2 className="text-lg cursor-pointer" />
       </button>
 
-      {/* Heading */}
-      <h2 className="text-lg font-heading font-semibold mb-5">Add New Banner</h2>
+      <h2 className="text-lg font-heading font-semibold mb-5">
+        Add New Banner
+      </h2>
 
-      {/* Formik Form */}
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={bannerValidationSchema}
         onSubmit={onSubmit}
         key={formKey}
       >

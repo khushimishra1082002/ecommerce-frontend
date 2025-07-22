@@ -10,10 +10,19 @@ export interface CartItemDTO {
   };
 }
 
+export interface CartSummary {
+  totalPrice: number;
+  totalDiscount: number;
+  totalTax: number;
+  finalTotal: number;
+}
+
+
 export interface CartDTO {
   _id: string;
   userId: string;
   items: CartItemDTO[];
+  summary: CartSummary;
   __v?: number;
 }
 

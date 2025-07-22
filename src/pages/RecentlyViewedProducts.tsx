@@ -20,12 +20,9 @@ interface RecentlyViewedItem {
   };
 }
 
-
 const RecentlyViewedProducts = () => {
-  const [data, setData] = useState<RecentlyViewedItem[]>([]); // ✅ Apply the type here
-
-  console.log("bbhhh",data);
-  
+  const [data, setData] = useState<RecentlyViewedItem[]>([]); 
+  console.log("bbhhh", data);
 
   const decoded = decodeToken();
   const userId = decoded?.id;
@@ -34,7 +31,7 @@ const RecentlyViewedProducts = () => {
     const fetchRecentlyViewedProduct = async () => {
       try {
         const res = await getRecentlyViewedProductData(userId);
-        setData(res); // res should be typed correctly
+        setData(res);
       } catch (err) {
         console.error("Error fetching product:", err);
       }
@@ -60,13 +57,41 @@ const RecentlyViewedProducts = () => {
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y]}
           spaceBetween={10}
-          slidesPerView={5}
+          slidesPerView={6}
+          breakpoints={{
+            240: {
+              slidesPerView: 1,
+              spaceBetween: 6,
+            },
+            340: {
+              slidesPerView: 2,
+              spaceBetween: 6,
+            },
+            440: {
+              slidesPerView: 2,
+              spaceBetween: 6,
+            },
+            640: {
+              slidesPerView: 3,
+              spaceBetween: 6,
+            },
+            768: {
+              slidesPerView: 4,
+              spaceBetween: 6,
+            },
+            1024: {
+              slidesPerView: 6,
+              spaceBetween: 6,
+            },
+          }}
           className=""
         >
-           <span slot="container-start"
-              className="w-full absolute top-1/2 -translate-y-1/2 z-10 duration-200">
-              <SwiperButtonThree/>
-              </span>
+          <span
+            slot="container-start"
+            className="w-full absolute top-1/2 -translate-y-1/2 z-10 duration-200"
+          >
+            <SwiperButtonThree />
+          </span>
           {data?.map((v) => (
             <SwiperSlide key={v._id}>
               <Link to={`/${v.productId?._id}`}>

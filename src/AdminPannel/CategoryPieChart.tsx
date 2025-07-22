@@ -59,7 +59,7 @@ const CategoryPieChart = () => {
               overflow: "hidden",
               textAlign: "center",
               paddingTop: 10,
-              paddingBottom: 16, // ✅ Adds space below the legend
+              paddingBottom: 16, 
               width: "100%",
             }}
           />

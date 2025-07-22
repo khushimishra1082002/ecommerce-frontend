@@ -1,44 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, FormikHelpers } from "formik";
-import * as Yup from "yup";
 import { RxCross2 } from "react-icons/rx";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../ReduxToolkit/app/Store";
 import FormikControl from "../../components/ReusableFormField/FormikControl";
 import { editBannerData } from "../../services/BannerServices";
 import { BannerDTO } from "../../types/banner";
-
+import {bannerValidationSchema} from  '../../Validations/bannerValidations'
 
 interface EditBannerProps {
   closeEditBannerModel: () => void;
   editData: any;
- fetchBanners: () => void;
+  fetchBanners: () => void;
 }
-
-const validationSchema = Yup.object({
-  // image: Yup.mixed(),
-  // location: Yup.string().required("Location is required"),
-  // displayOrder: Yup.number().min(0, "Must be 0 or more"),
-  // startDate: Yup.string().required("Start date is required"),
-  // endDate: Yup.string()
-  //   .nullable()
-  //   .test("is-after-start", "End date must be after start date", function (value) {
-  //     const { startDate } = this.parent;
-  //     return !value || new Date(value) >= new Date(startDate);
-  //   }),
-  // active: Yup.boolean().required(),
-});
 
 const EditBanner: React.FC<EditBannerProps> = ({
   closeEditBannerModel,
   editData,
   fetchBanners,
 }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  
   const [formKey, setFormKey] = useState(0);
 
   const initialValues: BannerDTO = {
-    image: null,
+    _id: "",
+    image: editData?.image || "",
     link: editData?.link || "",
     location: editData?.location || "",
     displayOrder: editData?.displayOrder || 0,
@@ -48,9 +34,8 @@ const EditBanner: React.FC<EditBannerProps> = ({
   };
 
   useEffect(() => {
-  console.log("typeof fetchBanners:", typeof fetchBanners);
-}, []);
-
+    console.log("typeof fetchBanners:", typeof fetchBanners);
+  }, []);
 
   const onSubmit = async (
     values: BannerDTO,
@@ -63,7 +48,7 @@ const EditBanner: React.FC<EditBannerProps> = ({
       formData.append("location", values.location);
       formData.append("displayOrder", String(values.displayOrder));
       formData.append("startDate", values.startDate);
-      formData.append("endDate", values.endDate);
+      formData.append("endDate", values.endDate || "");
       formData.append("active", String(values.active));
       formData.append("link", values.link ?? "");
 
@@ -92,10 +77,7 @@ const EditBanner: React.FC<EditBannerProps> = ({
 
   return (
     <div className="relative">
-      <button
-        onClick={closeEditBannerModel}
-        className="absolute top-2 right-2"
-      >
+      <button onClick={closeEditBannerModel} className="absolute top-2 right-2">
         <RxCross2 className="text-lg cursor-pointer" />
       </button>
 
@@ -104,7 +86,7 @@ const EditBanner: React.FC<EditBannerProps> = ({
       <Formik
         key={formKey}
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={bannerValidationSchema}
         enableReinitialize
         onSubmit={onSubmit}
       >

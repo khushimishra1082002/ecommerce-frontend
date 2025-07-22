@@ -15,9 +15,10 @@ interface EditCategoryProps {
 }
 
 const IsActive = [
-  { value: "true", label: "True" },
-  { value: "false", label: "False" },
+  { value: true, label: "True" },
+  { value: false, label: "False" },
 ];
+
 
 const EditCategory: React.FC<EditCategoryProps> = ({
   closeEditCategoryModal,
@@ -30,7 +31,7 @@ const EditCategory: React.FC<EditCategoryProps> = ({
     name: editData?.name || "",
     description: editData?.description || "",
     image: null,
-    isActive: editData?.isActive?.toString() || "true",
+    isActive: editData?.isActive ?? true,
   };
 
   useEffect(() => {
@@ -95,7 +96,6 @@ const EditCategory: React.FC<EditCategoryProps> = ({
         {(formik) => (
           <Form className="space-y-4">
             <div className="grid grid-cols-1 gap-3">
-
               {/* Existing image preview */}
               {editData?.image && (
                 <div className="mb-2">

@@ -8,6 +8,7 @@ import priceRangeReducer from "../Slices/PriceRangeSlice"
 import discountOptionsReducer from "../Slices/DiscountOptionsSlice"
 import filterReducer from "../Slices/FilterSlice"
 import deliveryInfoReducer from "../Slices/DeliveryInfoSlice"
+import orderReducer from "../Slices/OrderSlice"
 
 export const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ export const store = configureStore({
     priceRange:priceRangeReducer,
     discount:discountOptionsReducer,
     filter:filterReducer,
-    deliveryInfo:deliveryInfoReducer
+    deliveryInfo:deliveryInfoReducer,
+    order:orderReducer
   },
 });
 

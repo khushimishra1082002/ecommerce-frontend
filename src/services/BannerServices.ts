@@ -1,10 +1,10 @@
 import api from "../utils/api";
-import conf from "../config/Conf"
+import conf from "../config/Conf";
 
 export const getBannerData = async () => {
   try {
-    const response = await api.get(conf.GetAllBanner); 
-    console.log("API Response banner:", response.data);
+    const response = await api.get(conf.GetAllBanner);
+    console.log("banner:", response.data);
     return response.data;
   } catch (error) {
     console.error(
@@ -15,15 +15,14 @@ export const getBannerData = async () => {
   }
 };
 
-
 export const getSingleBannerData = async (bannerId) => {
   try {
     const response = await api.get(`${conf.getSingleBannerUrl}/${bannerId}`);
-    console.log("API Response single:", response.data);
+    console.log("single banner", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching category",
+      "Error fetching banner",
       error.response?.data || error.message
     );
     throw error;
@@ -40,7 +39,7 @@ export const CreateBannerData = async (formData: FormData) => {
     return response.data;
   } catch (error) {
     console.error(
-      "Error adding product:",
+      "Error adding banner:",
       error.response?.data || error.message
     );
     throw error;
@@ -50,11 +49,11 @@ export const CreateBannerData = async (formData: FormData) => {
 export const deleteBannerData = async (bannerId) => {
   try {
     const response = await api.delete(`${conf.deleteBannerUrl}/${bannerId}`);
-    console.log("API Response single:", response.data);
+    console.log("banner:", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching product",
+      "Error banner",
       error.response?.data || error.message
     );
     throw error;
@@ -63,15 +62,25 @@ export const deleteBannerData = async (bannerId) => {
 
 export const editBannerData = async (bannerId, formData) => {
   try {
-    const response = await api.put(`${conf.updateBannerUrl}/${bannerId}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    console.log("API Response single:", response.data);
+    const response = await api.put(
+      `${conf.updateBannerUrl}/${bannerId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    console.log("Banner", response.data);
     return { ok: true, data: response.data };
   } catch (error) {
-    console.error("Error updating product", error.response?.data || error.message);
-    return { ok: false, message: error.response?.data?.message || error.message };
+    console.error(
+      "Error updating banner",
+      error.response?.data || error.message
+    );
+    return {
+      ok: false,
+      message: error.response?.data?.message || error.message,
+    };
   }
 };

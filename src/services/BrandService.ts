@@ -5,7 +5,7 @@ import { buildQueryFromFilters } from "../utils/buildQueryFromFilters";
 export const getBrandData = async () => {
   try {
     const response = await api.get(`${conf.GetBrandUrl}`);
-    console.log("API Response Brands:", response.data);
+    console.log("Brand", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching brand", error.response?.data || error.message);
@@ -16,11 +16,11 @@ export const getBrandData = async () => {
 export const deleteBrandData = async (BrandId) => {
   try {
     const response = await api.delete(`${conf.deleteBrandUrl}/${BrandId}`);
-    console.log("API Response single:", response.data);
+    console.log("brand", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching product",
+      "Error brand",
       error.response?.data || error.message
     );
     throw error;
@@ -34,11 +34,11 @@ export const getFilterBrandData = async (filters = {}) => {
       `${conf.getFilteredBrandUrl}?${queryString}`
     );
 
-    console.log("API Response: filtrd product", response.data);
+    console.log("brand", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching products",
+      "Error brand",
       error.response?.data || error.message
     );
     throw error;
@@ -51,7 +51,7 @@ export const CreateBrandData = async (formData: FormData) => {
     return response.data;
   } catch (error) {
     console.error(
-      "Error adding product:",
+      "Error adding brand:",
       error.response?.data || error.message
     );
     throw error;
@@ -61,11 +61,11 @@ export const CreateBrandData = async (formData: FormData) => {
 export const getSingleBrandData = async (brandID) => {
   try {
     const response = await api.get(`${conf.singleBrandUrl}/${brandID}`);
-    console.log("API Response single:", response.data);
+    console.log("Single Brand", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching category",
+      "Error brand",
       error.response?.data || error.message
     );
     throw error;
@@ -77,7 +77,7 @@ export const editBrandData = async (brandID, updatedData) => {
     const response = await api.put(`${conf.editBrandUrl}/${brandID}`, updatedData);
     return { ok: true, data: response.data };
   } catch (error) {
-    console.error("Error updating product", error.response?.data || error.message);
+    console.error("Error updating brand", error.response?.data || error.message);
     return { ok: false, message: error.response?.data?.message || error.message };
   }
 };
@@ -87,10 +87,10 @@ export const deleteMultipleBrandData = async (ids) => {
     const response = await api.delete(conf.deleteMultipleBrandUrl, {
       data: { ids }, 
     });
-    console.log("API Response multiple delete:", response.data);
+    console.log("brand", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error deleting multiple products:", error.response?.data || error.message);
+    console.error("Error deleting multiple brand:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -105,7 +105,7 @@ export const getAllBrandBySubcategoryData = async (subcategoryID: string) => {
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching subcategory",
+      "Error fetching brand",
       error.response?.data || error.message
     );
     throw error;
@@ -122,7 +122,7 @@ export const getAllBrandByCategoryData = async (categoryID: string) => {
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching subcategory",
+      "Error fetching brand",
       error.response?.data || error.message
     );
     throw error;
@@ -134,10 +134,10 @@ export const getAllBrandByMultipleSubcategoryData = async (ids) => {
     const response = await api.get(conf.getAllBrandByMultipleSubcategoryUrl, {
       params: { ids: ids.join(",") }, // pass as query param ?ids=...
     });
-    console.log("API Response multiple subcategory brands:", response.data);
+    console.log("Brand", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error fetching brands by subcategories:", error.response?.data || error.message);
+    console.error("Error brand", error.response?.data || error.message);
     throw error;
   }
 };

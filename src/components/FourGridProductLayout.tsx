@@ -1,11 +1,10 @@
-// components/FourGridProductLayout.tsx
 import React, { useEffect, useState } from "react";
 import FourGridProduct from "./FourGridProduct";
 import {
   getNewArrivalsProductData,
   getFeaturedProductData,
   getTreandingProductData,
-} from "../services/ProductService"; // 👈 adjust path if needed
+} from "../services/ProductService"; 
 
 const FourGridProductLayout = () => {
   const [featured, setFeatured] = useState([]);
@@ -58,7 +57,7 @@ const FourGridProductLayout = () => {
 
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 bg-gray-100 m-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 bg-gray-100 m-4">
       <FourGridProduct title="Featured Products" products={featured} />
       <FourGridProduct title="New Arrivals" products={newArrivals} />
       <FourGridProduct title="Trending Products" products={trending} />

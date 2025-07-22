@@ -6,36 +6,37 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { buildQueryFromFilters } from "../utils/buildQueryFromFilters";
 import { setCategory } from "../ReduxToolkit/Slices/FilterSlice";
+import { ProductDTO } from "../types/product";
 
 const SelectCategoryResults = () => {
   const { categoryID } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const filters = useSelector((state: RootState) => state.filter);
-  console.log("Redux filters:", useSelector((state: RootState) => state.filter));
+  console.log(
+    "Redux filters:",
+    useSelector((state: RootState) => state.filter)
+  );
 
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductDTO[]>([]);
 
-  // Fetch products based on filters and categoryID
   const fetchFilterProduct = async () => {
     try {
-      // Construct filters object with categoryID and other filters from Redux
       const filterParams = {
         ...filters,
-        category: categoryID, // Ensure categoryID from URL is included
+        category: categoryID,
       };
       const res = await getFilterProductsData(filterParams);
       console.log("Filtered Products:", res);
-      setFilteredProducts(res); // Update state with fetched products
+      setFilteredProducts(res);
     } catch (err) {
       console.error("Error fetching filtered products:", err);
     }
   };
 
-  // Set category in Redux store and fetch products when component mounts or categoryID/filters change
   useEffect(() => {
     if (categoryID) {
-      dispatch(setCategory(categoryID)); // Set category in Redux store
-      fetchFilterProduct(); // Fetch products
+      dispatch(setCategory(categoryID));
+      fetchFilterProduct();
     }
   }, [categoryID, filters, dispatch]);
 

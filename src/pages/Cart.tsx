@@ -10,6 +10,7 @@ import {
 } from "../ReduxToolkit/Slices/CartSlice";
 import { decodeToken } from "../utils/decodeToken";
 import { DeleteProductFromCartData } from "../services/cartService";
+import { MdDelete } from "react-icons/md";
 
 const Cart = () => {
   const decoded = decodeToken();
@@ -117,10 +118,8 @@ const Cart = () => {
                         <span className="font-body">Rs {product?.price}</span>
                       </div>
 
-                      <div className="flex  ">
-                        <div className=" p-2">
-                          <FaHeart className="text-gray-300 text-base" />
-                        </div>
+                      <div className="flex  items-center ">
+                        <MdDelete className=" text-red-600"/>
                         <div className=" p-1 cursor-pointer">
                           <span
                             onClick={() => handleCartProductDelete(product._id)}

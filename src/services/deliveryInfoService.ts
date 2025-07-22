@@ -9,11 +9,11 @@ export const getDeliveryInfoData = async () => {
         requiresAuth: true, 
       },
     });
-    console.log("API Response single delivery info:", response.data);
+    console.log("response", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching product",
+      "Error info",
       error.response?.data || error.message
     );
     throw error;
@@ -27,11 +27,11 @@ export const postDeliveryInfoData = async (deliveryData) => {
         requiresAuth: true,
       },
     });
-    console.log("API Response:", response.data);
+    console.log("response", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error posting delivery info",
+      "Error info",
       error.response?.data || error.message
     );
     throw error;

@@ -4,18 +4,10 @@ import { FaEdit, FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../ReduxToolkit/app/Store";
-import { fetchAllProducts } from "../../../ReduxToolkit/Slices/ProductSlice";
-import { FaEye } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { MdRefresh } from "react-icons/md";
 import AddBrand from "./AddBrand";
-import {
-  deleteProductData,
-  getFilterProductsData,
-  getSingleProductData,
-} from "../../../services/ProductService";
 import EditBrand from "./EditBrand";
-import { deleteMultipleProductData } from "../../../services/ProductService";
 import { fetchBrands } from "../../../ReduxToolkit/Slices/BrandSlice";
 import { deleteBrandData } from "../../../services/BrandService";
 import { getFilterBrandData } from "../../../services/BrandService";
@@ -26,7 +18,6 @@ const BrandTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [showAddBrandModal, setshowAddBrandModal] = useState(false);
   const [showEditBrandModal, setshowEditBrandModal] = useState(false);
-  const [singleBrand, setSingleBrand] = useState();
   const [editData, setEditData] = useState();
   const [query, setQuery] = useState("");
   const [filteredBrand, setFilteredBrand] = useState([]);
@@ -89,7 +80,7 @@ const BrandTable = () => {
       if (res) {
         alert("Selected Brands Deleted Successfully");
         dispatch(fetchBrands());
-        setSelectedRows([]); // clear selection
+        setSelectedRows([]);
       }
     } catch (error) {
       console.error("Multiple delete failed:", error);
@@ -101,22 +92,20 @@ const BrandTable = () => {
     try {
       const res = await getSingleBrandData(brandID);
       if (res) {
-        setEditData(res); // ✅ set product data first
-        setshowEditBrandModal(true); // ✅ then open modal
+        setEditData(res);
+        setshowEditBrandModal(true);
       }
     } catch (error) {
       console.error("Error fetching product for edit:", error);
     }
   };
 
- 
-
   const columns = [
     {
       name: "S.No.",
       cell: (row, index) => index + 1,
       grow: 0,
-      width: "70px", // ✅ narrow
+      width: "70px",
     },
     {
       name: " Brand Name",
@@ -138,7 +127,6 @@ const BrandTable = () => {
       name: "ACTIONS",
       cell: (row) => (
         <div className="flex gap-1">
-         
           <button
             onClick={() => handleEdit(row._id)}
             className="btn bg-blue-600 text-white p-1 rounded"
@@ -155,7 +143,7 @@ const BrandTable = () => {
           </button>
         </div>
       ),
-      width: "160px", // increase slightly to fit all three icons
+      width: "160px",
     },
   ];
 
@@ -171,8 +159,8 @@ const BrandTable = () => {
     setQuery(query);
 
     if (query.trim() === "") {
-      dispatch(fetchBrands()); // Corrected here
-      setFilteredBrand([]); // Reset filtered list
+      dispatch(fetchBrands());
+      setFilteredBrand([]);
       return;
     }
 
@@ -259,7 +247,7 @@ const BrandTable = () => {
       {showAddBrandModal && (
         <div
           className="fixed inset-0 flex items-center justify-center
-   bg-black bg-opacity-50 z-50 px-4"
+        bg-black bg-opacity-50 z-50 px-4"
         >
           <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
             <AddBrand closeAddBrandModal={closeAddBrandModal} />

@@ -1,49 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { IoStar } from "react-icons/io5";
-import { FaStar } from "react-icons/fa";
-import { FaRupeeSign } from "react-icons/fa";
+import { FaStar, FaRupeeSign, FaShoppingCart, FaHeart } from "react-icons/fa";
 import SimilorProduct from "./SimilorProduct";
 import RecentlyViewedProducts from "./RecentlyViewedProducts";
-import { getSingleProductData } from "../services/ProductService";
-import { useParams } from "react-router-dom";
-import { postRecentlyViewedProductData } from "../services/ProductService";
-import { decodeToken } from "../utils/decodeToken";
 import RecommendedProducts from "./RecommendedProducts";
+import { getSingleProductData, postRecentlyViewedProductData } from "../services/ProductService";
 import { AddProductInCartData } from "../services/cartService";
+import { AddProductInWishlistData } from "../services/wishlistService";
+import { useParams } from "react-router-dom";
+import { decodeToken } from "../utils/decodeToken";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
-import { addToCart, updateQuantity } from "../ReduxToolkit/Slices/CartSlice";
-import { fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
-import { FaShoppingCart } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa";
+import { addToCart, fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
+import { ProductDTO } from "../types/product";
 
 const ProductDetail = () => {
   const { productId } = useParams();
-
   const dispatch = useDispatch<AppDispatch>();
-
   const decoded = decodeToken();
   const userId = decoded?.id;
 
-  console.log("vvvvvv", userId);
+  const [singleProduct, setSingleProduct] = useState<ProductDTO | null>(null);
 
-  console.log("userId", userId);
+  const [data, setData] = useState([]);
 
-  const [singleProduct, setSingleProduct] = useState(null);
-
-  console.log("singleProduct", singleProduct);
-
-  const { cart, loading, error } = useSelector(
-    (state: RootState) => state.cart
-  );
-  console.log("cart", cart);
+  const { cart } = useSelector((state: RootState) => state.cart);
 
   useEffect(() => {
-    dispatch(fetchcartProduct(userId));
-  }, [dispatch]);
+    if (userId) dispatch(fetchcartProduct(userId));
+  }, [dispatch, userId]);
 
   useEffect(() => {
-    const fetchSingleProduct = async () => {
+    const fetchProduct = async () => {
       try {
         const res = await getSingleProductData(productId);
         setSingleProduct(res);
@@ -51,304 +39,144 @@ const ProductDetail = () => {
         console.error("Error fetching product:", err);
       }
     };
-    fetchSingleProduct();
+    fetchProduct();
   }, [productId]);
 
   useEffect(() => {
-    const postRecentlyViewProduct = async () => {
-      if (!userId || !singleProduct?._id) return; // ✅ Ensure product is loaded
+    const postViewed = async () => {
+      if (!userId || !singleProduct?._id) return;
       try {
-        await postRecentlyViewedProductData({
-          productId: singleProduct._id, // ✅ Use actual product _id from fetched data
-          userId,
-        });
+        await postRecentlyViewedProductData({ userId, productId: singleProduct._id });
       } catch (err) {
         console.error("Error posting recently viewed product:", err);
       }
     };
-    postRecentlyViewProduct();
-  }, [singleProduct, userId]); // ✅ Depend on singleProduct
+    postViewed();
+  }, [singleProduct, userId]);
 
   const handleAddToCart = () => {
     alert("Product added successfully in cart");
     dispatch(addToCart({ userId, productId, quantity: 1 }));
   };
 
+  const handleWishlistProduct = async (productId) => {
+    try {
+      const res = await AddProductInWishlistData({ userId, productId });
+      alert("Product added to wishlist");
+      setData(res.data);
+    } catch (error) {
+      console.error("Error post product:", error);
+    }
+  };
+
   return (
     <>
-      <div className=" p-2 bg-gray-50 shadow">
-        <div className="">
-          <div className=" grid grid-cols-3 gap-8  bg-white px-4 py-6 m-3 rounded ">
-            <div className="flex flex-col justify-center items-center">
+      <div className="bg-gray-50 p-2 shadow">
+        <div className="max-w-screen-xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-white p-4 rounded-md">
+            {/* Product Image and Buttons */}
+            <div className="flex flex-col items-center">
               <img
-                className=""
+                className="w-full object-contain max-h-[300px]"
                 src={`http://localhost:5000/api/upload/${singleProduct?.image}`}
-                alt="banner"
+                alt={singleProduct?.name}
               />
-              <div className=" w-full grid grid-cols-2 gap-2">
+
+              <div className="w-full mt-4 flex flex-col sm:flex-row gap-2">
                 <button
                   onClick={handleAddToCart}
-                  className="bg-blue-500 text-white
-               px-4 py-2 rounded flex justify-center items-center gap-1 font-body"
+                  className="w-full bg-blue-500 text-white px-4 py-2 rounded flex justify-center items-center gap-1 font-body"
                 >
-                  <FaShoppingCart />
-                  ADD TO CART
+                  <FaShoppingCart /> ADD TO CART
                 </button>
 
                 <button
-                  className="bg-orange-500 text-white px-4 py-2
-               rounded flex justify-center items-center gap-1 font-body"
+                  onClick={() => handleWishlistProduct(singleProduct?._id)}
+                  className="w-full bg-orange-500 text-white px-2 py-2
+                   rounded flex justify-center items-center gap-1 font-body"
                 >
-                  <FaHeart />
-                  ADD TO WISHLIST
+                  <FaHeart /> ADD TO WISHLIST
                 </button>
               </div>
             </div>
-            <div className="space-y-4 col-span-2 h-[70vh] overflow-y-auto">
-              <div className="space-y-1 flex flex-col">
+
+            {/* Product Info and Specs */}
+            <div className="lg:col-span-2 space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+              <div className="space-y-1">
                 {singleProduct?.brand && (
-                  <span
-                    className="font-body text-skin-primary
-                font-semibold"
-                  >
-                    Brand : {singleProduct?.brand?.name}
+                  <span className="font-body text-skin-primary font-semibold">
+                    Brand: {singleProduct?.brand?.name}
                   </span>
                 )}
-                <h3 className="font-body text-xl ">{singleProduct?.name}</h3>
-
-                <div className="flex gap-4 items-center">
-                  <div
-                    className="flex justify-center
-                 items-center gap-1 bg-red-500 text-white w-14 p-1 rounded
-                 
-                "
-                  >
-                    <span className="font-body text-sm font-medium ">4.5</span>
-                    <FaStar className="text-sm" />
-                  </div>
-                  <div>
-                    <span
-                      className="font-body
-                 text-gray-500 "
-                    >
-                      396 Ratings & 34 Ratings
-                    </span>
-                  </div>
-                </div>
+                <h3 className="font-body text-xl">{singleProduct?.name}</h3>
               </div>
+
               <div className="flex flex-col">
                 <span className="text-sm text-green-500 font-heading font-medium">
                   Extra ₹{singleProduct?.discount} off
                 </span>
-                <div className="flex items-center">
+                <div className="flex items-center gap-1">
                   <FaRupeeSign />
-                  <div className="flex gap-1 items-center">
-                    <h4 className="text-2xl font-body">
-                      {singleProduct?.price}
-                    </h4>
-                    <span className="text-gray-400 font-body">
-                      inclusive of all taxes
-                    </span>
-                  </div>
+                  <h4 className="text-2xl font-body">{singleProduct?.price}</h4>
+                  <span className="text-gray-400 font-body text-sm">inclusive of all taxes</span>
                 </div>
               </div>
 
-              <div className="flex gap-1">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48ZWxsaXBzZSBjeD0iOSIgY3k9IjE0LjQ3OCIgZmlsbD0iI0ZGRTExQiIgcng9IjkiIHJ5PSIzLjUyMiIvPjxwYXRoIGZpbGw9IiMyODc0RjAiIGQ9Ik04LjYwOSA3LjAxYy0xLjA4IDAtMS45NTctLjgyNi0xLjk1Ny0xLjg0NSAwLS40ODkuMjA2LS45NTguNTczLTEuMzA0YTIuMDIgMi4wMiAwIDAgMSAxLjM4NC0uNTRjMS4wOCAwIDEuOTU2LjgyNSAxLjk1NiAxLjg0NCAwIC40OS0uMjA2Ljk1OS0uNTczIDEuMzA1cy0uODY0LjU0LTEuMzgzLjU0ek0zLjEzIDUuMTY1YzAgMy44NzQgNS40NzkgOC45MjIgNS40NzkgOC45MjJzNS40NzgtNS4wNDggNS40NzgtOC45MjJDMTQuMDg3IDIuMzEzIDExLjYzNCAwIDguNjA5IDAgNS41ODMgMCAzLjEzIDIuMzEzIDMuMTMgNS4xNjV6Ii8+PC9nPjwvc3ZnPg==" />
-                <span
-                  className="text-gray-500 font-heading font-medium
-                    text-sm"
-                >
-                  Deliver to
-                </span>
+              {/* Delivery Info */}
+              <div className="flex items-center gap-2">
+                <img
+                  className="w-4 h-4"
+                  src="data:image/svg+xml;base64,..."
+                  alt="location"
+                />
+                <span className="text-gray-500 font-heading text-sm">Deliver to</span>
               </div>
 
-              {/* Product Detail */}
-              {/* description */}
-              <div className=" border border-black/10">
+              {/* Description */}
+              <div className="border border-black/10 rounded">
                 <div className="p-4">
-                  <h3
-                    className="font-body text-lg font-medium
-                 text-gray-800"
-                  >
-                    Product Description
-                  </h3>
+                  <h3 className="font-body text-lg font-medium text-gray-800">Product Description</h3>
                 </div>
-                <div className="bg-black/10 w-full h-[1px]"></div>
-
-                <div className=" p-4 ">
-                  <div className=" space-y-2 ">
-                    <h3 className="font-heading text-base font-medium">
-                      About the item
-                    </h3>
-                    <p className="font-body font-light text-sm">
-                      {singleProduct?.description}
-                    </p>
-                  </div>
+                <div className="bg-black/10 h-[1px]" />
+                <div className="p-4 space-y-2">
+                  <h3 className="font-heading text-base font-medium">About the item</h3>
+                  <p className="font-body text-sm text-gray-700">{singleProduct?.description}</p>
                 </div>
               </div>
-              {/* spaceification */}
-              <div className=" border border-black/10">
+
+              {/* Specifications */}
+              <div className="border border-black/10 rounded">
                 <div className="p-4">
-                  <h3
-                    className="font-body text-lg font-medium
-                 text-gray-800"
-                  >
-                    Specifications
-                  </h3>
+                  <h3 className="font-body text-lg font-medium text-gray-800">Specifications</h3>
                 </div>
-                <div className="bg-black/10 w-full h-[1px]"></div>
+                <div className="bg-black/10 h-[1px]" />
                 <div className="p-4 space-y-3">
                   <span className="font-heading">General</span>
-
                   {singleProduct?.attributes &&
-                    Object.entries(singleProduct.attributes).map(
-                      ([key, value]) => (
-                        <div key={key} className="flex gap-4 items-start">
-                        
-                          <span className="font-body text-gray-700 text-sm">
-                            {typeof value === "object" && value !== null
-                              ? `${value.key ?? ""}: ${value.value ?? ""}`
-                              : value}
-                          </span>
-                        </div>
-                      )
-                    )}
-                </div>
-              </div>
-              {/* Rating Reviews */}
-              <div className=" border border-black/10">
-                <div className="p-4">
-                  <h3
-                    className="font-body text-lg font-medium
-                 text-gray-800"
-                  >
-                    Rating & Reviews
-                  </h3>
-                </div>
-                <div className="bg-black/10 w-full h-[1px]"></div>
-                <div className="px-4 py-6 flex justify-start gap-4">
-                  <div className=" flex flex-col justify-center items-center  ">
-                    <div
-                      className="text-xl flex gap-1  items-center text-center
-                  text-gray-700"
-                    >
-                      <span className="text-xl font-body">4.2</span>
-                      <IoStar />
-                    </div>
-                    <span
-                      className="text-[13px] text-gray-400 font-heading
-                  w-36 text-center"
-                    >
-                      6,832 Ratings & 437 Reviews
-                    </span>
-                  </div>
-                  <div>
-                    {/* Progrees bar */}
-                    <div>
-                      {/* Rating 5 */}
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="text-sm flex gap-1  items-center text-center
-                  text-gray-800"
-                        >
-                          <span className="text-sm font-body">5</span>
-                          <IoStar />
-                        </div>
-                        <div
-                          className="bg-gray-200 w-44 h-1 rounded
-                       relative overflow-hidden"
-                        >
-                          <div className="bg-green-500 h-full absolute left-0 top-0 w-48"></div>
-                        </div>
-                        <span className="font-body text-gray-600 text-xs">
-                          4,006
+                    Object.entries(singleProduct.attributes).map(([key, value]) => (
+                      <div key={key} className="flex gap-4 items-start">
+                        <span className="font-body text-gray-700 text-sm">
+                          {typeof value === "object"
+                            ? `${value.key ?? ""}: ${value.value ?? ""}`
+                            : `${key}: ${value}`}
                         </span>
                       </div>
-                      {/* Rating 4 */}
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="text-sm flex gap-1  items-center text-center
-                  text-gray-800"
-                        >
-                          <span className="text-sm font-body">4</span>
-                          <IoStar />
-                        </div>
-                        <div
-                          className="bg-gray-200 w-44 h-1 rounded
-                       relative overflow-hidden"
-                        >
-                          <div className="bg-green-500 h-full absolute left-0 top-0 w-20"></div>
-                        </div>
-                        <span className="font-body text-gray-600 text-xs">
-                          1,416
-                        </span>
-                      </div>
-                      {/* Rating 3 */}
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="text-sm flex gap-1  items-center text-center
-                  text-gray-800"
-                        >
-                          <span className="text-sm font-body">3</span>
-                          <IoStar />
-                        </div>
-                        <div
-                          className="bg-gray-200 w-44 h-1 rounded
-                       relative overflow-hidden"
-                        >
-                          <div className="bg-green-500 h-full absolute left-0 top-0 w-10"></div>
-                        </div>
-                        <span className="font-body text-gray-600 text-xs">
-                          1,416
-                        </span>
-                      </div>
-                      {/* Rating 2 */}
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="text-sm flex gap-1  items-center text-center
-                  text-gray-800"
-                        >
-                          <span className="text-sm font-body">2</span>
-                          <IoStar />
-                        </div>
-                        <div
-                          className="bg-gray-200 w-44 h-1 rounded
-                       relative overflow-hidden"
-                        >
-                          <div className="bg-orange-500 h-full absolute left-0 top-0 w-6"></div>
-                        </div>
-                      </div>
-                      {/* Rating 1 */}
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="text-sm flex gap-1  items-center text-center
-                  text-gray-800"
-                        >
-                          <span className="text-sm font-body">1</span>
-                          <IoStar />
-                        </div>
-                        <div
-                          className="bg-gray-200 w-44 h-1 rounded
-                       relative overflow-hidden"
-                        >
-                          <div
-                            className="bg-yellow-500 h-full absolute left-0 top-0"
-                            style={{ width: `${(4.5 / 5) * 100}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    ))}
                 </div>
               </div>
             </div>
           </div>
 
-          <SimilorProduct productId={productId} />
-
-          <RecommendedProducts />
+          {/* Similar & Recommended Products */}
+          
         </div>
+
+        <div className="">
+            <SimilorProduct productId={productId} />
+          </div>
+          <div className="">
+            <RecommendedProducts />
+          </div>
       </div>
     </>
   );

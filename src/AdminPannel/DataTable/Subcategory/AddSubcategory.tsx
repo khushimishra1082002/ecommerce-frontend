@@ -12,6 +12,7 @@ import { fetchSubcategories } from "../../../ReduxToolkit/Slices/SubcategorySlic
 import { fetchBrands } from "../../../ReduxToolkit/Slices/BrandSlice";
 import { fetchAllProducts } from "../../../ReduxToolkit/Slices/ProductSlice";
 import { CreateSubcategoryData } from "../../../services/SubcategoryService";
+import { subcategoryValidationSchema } from "../../../Validations/subcategoryValidations";
 
 interface AddSubcategoryProps {
   closeAddSubcategoryModal: () => void;
@@ -39,7 +40,7 @@ const AddSubcategory: React.FC<AddSubcategoryProps> = ({
 
   const { category } = useSelector((state: RootState) => state.allcategory);
 
-  // Fetch categories on mount
+  
   useEffect(() => {
     dispatch(fetchAllCategory());
   }, [dispatch]);
@@ -59,8 +60,8 @@ const AddSubcategory: React.FC<AddSubcategoryProps> = ({
       formData.append("category", values.category || "");
       formData.append("isActive", String(values.isActive));
 
-      // 🔥 Call API
-      const response = await CreateSubcategoryData(formData); // <-- send FormData
+
+      const response = await CreateSubcategoryData(formData); 
 
       console.log("API Response:", response);
 
@@ -97,7 +98,7 @@ const AddSubcategory: React.FC<AddSubcategoryProps> = ({
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
-        // validationSchema={productValidationSchema}
+        validationSchema={subcategoryValidationSchema}
       >
         {(formik) => {
           return (

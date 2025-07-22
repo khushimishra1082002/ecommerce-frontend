@@ -1,5 +1,10 @@
+export interface SelectOption {
+  label: string;
+  value: string;
+}
+
 export interface ProductDTO {
-  // _id: string;
+  _id: string;
   name: string;
   slug: string;
   description: string;
@@ -24,8 +29,9 @@ export interface ProductDTO {
   sold?: number;
   // Custom fields
   colors: string[];
-  size: string[];
-  gender: string[];
+  gender: (string | SelectOption)[];
+  size: (string | SelectOption)[];
+
   // Optional backend fields
   attributes: {
     key: string;
@@ -68,8 +74,8 @@ export interface ProductFormDTO {
   sold?: number;
   // Custom fields
   colors: string[];
-  size: string[];
-  gender: string[];
+  size: (string | SelectOption)[];
+  gender: (string | SelectOption)[];
   // Optional backend fields
   attributes: {
     key: string;

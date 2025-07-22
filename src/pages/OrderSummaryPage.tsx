@@ -20,7 +20,7 @@ const PaymentPage = () => {
 
   const [paymentMethod, setPaymentMethod] = useState("COD");
 
-  // ✅ Store payment form data here instead of using separate state
+ 
   const [paymentFormData, setPaymentFormData] = useState({
     upiId: "",
     cardNumber: "",
@@ -99,11 +99,11 @@ const PaymentPage = () => {
           <h3 className="font-heading text-sm font-medium">Delivery Info</h3>
           <div>
             <p className="font-heading font-light text-[14px]">
-              {deliveryInfo.fullname}, {deliveryInfo.phoneNo}
+              {deliveryInfo?.fullname}, {deliveryInfo?.phoneNo}
             </p>
             <p className="text-[14px] font-heading font-light">
-              {deliveryInfo.address1}, {deliveryInfo.address2}, {deliveryInfo.city},{" "}
-              {deliveryInfo.state} - {deliveryInfo.zip}
+              {deliveryInfo?.address1}, {deliveryInfo?.address2}, {deliveryInfo?.city},{" "}
+              {deliveryInfo?.state} - {deliveryInfo?.zip}
             </p>
           </div>
         </div>

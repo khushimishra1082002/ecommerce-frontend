@@ -7,18 +7,17 @@ import {
 import AddBanner from "./AddBanner";
 import EditBanner from "./EditBanner";
 import { AiOutlinePlus } from "react-icons/ai";
+import { BannerDTO } from "../../types/banner";
 
-export const DashboardBanner = () => {
-  const [showAddBannerModel, setshowAddBannerModel] = useState(false);
-  const [showEditBannerModel, setshowEditBannerModel] = useState(false);
-  const [data, setData] = useState([]);
-  const [editData, setEditData] = useState();
-  console.log("editData", editData);
+export const DashboardBanner: React.FC = () => {
+  const [showAddBannerModel, setShowAddBannerModel] = useState<boolean>(false);
+  const [showEditBannerModel, setShowEditBannerModel] = useState<boolean>(false);
+  const [data, setData] = useState<BannerDTO[]>([]);
+  const [editData, setEditData] = useState<BannerDTO | null>(null);
 
-  // ✅ Reusable fetch function
   const fetchBanners = async () => {
     try {
-      const res = await getBannerData();
+      const res: BannerDTO[] = await getBannerData();
       const heroBanners = res.filter((item) => item.location === "herosection");
       setData(heroBanners);
     } catch (err) {
@@ -26,34 +25,16 @@ export const DashboardBanner = () => {
     }
   };
 
-  // ✅ Initial load
   useEffect(() => {
     fetchBanners();
   }, []);
 
-  // ✅ Close modal
-  const closeAddBannerModel = () => {
-    setshowAddBannerModel(false);
-  };
-
-  // ✅ Close modal
-  const closeEditBannerModel = () => {
-    setshowEditBannerModel(false);
-  };
-
-  // ✅ Prevent scroll when modal is open
-  useEffect(() => {
-    document.body.classList.toggle("overflow-hidden", showAddBannerModel);
-    return () => document.body.classList.remove("overflow-hidden");
-  }, [showAddBannerModel]);
-
-  // ✅ Delete and refresh
-  const handleDelete = async (bannerId) => {
+  const handleDelete = async (bannerId: string) => {
     try {
       const res = await deleteBannerData(bannerId);
       if (res) {
         alert("Banner Deleted Successfully");
-        fetchBanners(); // Refresh banners after delete
+        fetchBanners();
       }
     } catch (error) {
       console.error("Delete failed:", error);
@@ -61,19 +42,29 @@ export const DashboardBanner = () => {
     }
   };
 
-  const handleEdit = async (bannerId) => {
-    console.log("Clicked edit for bannerId:", bannerId); // ✅ Add this
-
+  const handleEdit = async (bannerId: string) => {
     try {
-      const res = await getSingleBannerData(bannerId);
-      if (res) {
-        setEditData(res);
-        setshowEditBannerModel(true);
-      }
+      const res: BannerDTO = await getSingleBannerData(bannerId);
+      setEditData(res);
+      setShowEditBannerModel(true);
     } catch (error) {
-      console.error("Error fetching product for edit:", error);
+      console.error("Error fetching banner for edit:", error);
     }
   };
+
+  const closeAddBannerModel = () => {
+    setShowAddBannerModel(false);
+  };
+
+  const closeEditBannerModel = () => {
+    setShowEditBannerModel(false);
+    setEditData(null);
+  };
+
+  useEffect(() => {
+    document.body.classList.toggle("overflow-hidden", showAddBannerModel);
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [showAddBannerModel]);
 
   return (
     <>
@@ -82,9 +73,8 @@ export const DashboardBanner = () => {
           Hero Section Banners
         </h2>
         <button
-          onClick={() => setshowAddBannerModel(true)}
-          className="border border-orange-500 font-heading text-sm px-4 py-2 rounded
-          flex justify-center items-center gap-1"
+          onClick={() => setShowAddBannerModel(true)}
+          className="border border-orange-500 font-heading text-sm px-4 py-2 rounded flex justify-center items-center gap-1"
         >
           <AiOutlinePlus className="text-lg text-orange-600" />
           Add New Banner
@@ -109,7 +99,9 @@ export const DashboardBanner = () => {
               </p>
               <p>
                 <span>End:</span>{" "}
-                {new Date(banner.endDate).toLocaleDateString()}
+                {banner.endDate
+                  ? new Date(banner.endDate).toLocaleDateString()
+                  : "N/A"}
               </p>
               <p>
                 <span>Order:</span> {banner.displayOrder}
@@ -118,15 +110,13 @@ export const DashboardBanner = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => handleEdit(banner._id)}
-                className="bg-yellow-500 text-white px-3 py-1 rounded font-heading text-sm
-                font-medium"
+                className="bg-yellow-500 text-white px-3 py-1 rounded font-heading text-sm font-medium"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleDelete(banner._id)}
-                className="bg-red-600 text-white px-3 py-1 rounded font-heading text-sm
-                font-medium"
+                className="bg-red-600 text-white px-3 py-1 rounded font-heading text-sm font-medium"
               >
                 Delete
               </button>
@@ -135,13 +125,12 @@ export const DashboardBanner = () => {
         ))}
       </div>
 
-      {/* Modal */}
       {showAddBannerModel && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 px-4">
           <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
             <AddBanner
               closeAddBannerModel={closeAddBannerModel}
-              refreshBanners={fetchBanners} // ✅ passed here
+              refreshBanners={fetchBanners}
             />
           </div>
         </div>

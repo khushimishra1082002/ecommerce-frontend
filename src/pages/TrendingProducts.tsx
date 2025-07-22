@@ -34,22 +34,46 @@ const TrendingProducts = () => {
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={10}
         slidesPerView={6}
-        
         autoplay={{ delay: 3000 }}
         breakpoints={{
-          1024: { slidesPerView: 6 },
-          768: { slidesPerView: 3 },
-          480: { slidesPerView: 2 },
-          0: { slidesPerView: 1 },
+          240: {
+            slidesPerView: 1,
+            spaceBetween: 6,
+          },
+           340: {
+            slidesPerView: 2,
+            spaceBetween: 6,
+          },
+          440: {
+            slidesPerView: 2,
+            spaceBetween: 6,
+          },
+          640: {
+            slidesPerView: 3,
+            spaceBetween: 6,
+          },
+          768: {
+            slidesPerView: 4,
+            spaceBetween: 6,
+          },
+          1024: {
+            slidesPerView: 6,
+            spaceBetween: 6,
+          },
         }}
       >
-         <span slot="container-start"
-              className="w-full absolute top-1/2 -translate-y-1/2 z-10 duration-200">
-              <SwiperButtonThree/>
-              </span>
+        <span
+          slot="container-start"
+          className="w-full absolute top-1/2 -translate-y-1/2 z-10 duration-200"
+        >
+          <SwiperButtonThree />
+        </span>
         {data.map((v, i) => (
           <SwiperSlide key={i}>
-            <Link to={`/${v._id}`} className="block bg-white border border-black/10">
+            <Link
+              to={`/${v._id}`}
+              className="block bg-white border border-black/10"
+            >
               <div className="h-52 flex justify-center items-center">
                 <img
                   className="w-44 object-contain h-full"

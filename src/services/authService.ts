@@ -1,7 +1,6 @@
 import api from "../utils/api";
-import conf from "../config/Conf"
+import conf from "../config/Conf";
 import { LoginDTO, SignupDTO } from "../types/auth";
-
 
 export const SignUpUserData = async (formData: SignupDTO) => {
   try {

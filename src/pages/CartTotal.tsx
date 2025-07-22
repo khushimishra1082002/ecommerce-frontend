@@ -5,7 +5,7 @@ import { decodeToken } from "../utils/decodeToken";
 import { fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
 import DeliveryInformation from "../pages/DeliveryInformation";
 
-// 💡 Accept prop with default value true
+
 interface CartTotalProps {
   showCheckoutButton?: boolean;
 }
@@ -77,7 +77,7 @@ const CartTotal: React.FC<CartTotalProps> = ({ showCheckoutButton = true }) => {
           <span className="text-base font-heading">₹{finalTotal}</span>
         </div>
 
-        {/* ✅ Conditionally show checkout button */}
+        
         {showCheckoutButton && (
           <div>
             <button

@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, FormikHelpers } from "formik";
 import { CategoryFormDTO } from "../../../types/category";
-import { productValidationSchema } from "../../../Validations/productValidations";
 import { RxCross2 } from "react-icons/rx";
-import { CreateProductData } from "../../../services/ProductService";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../ReduxToolkit/app/Store";
 import { fetchAllCategory } from "../../../ReduxToolkit/Slices/CategorySlice";
 import FormikControl from "../../../components/ReusableFormField/FormikControl";
-import { fetchSubcategories } from "../../../ReduxToolkit/Slices/SubcategorySlice";
-import { fetchBrands } from "../../../ReduxToolkit/Slices/BrandSlice";
-import { fetchAllProducts } from "../../../ReduxToolkit/Slices/ProductSlice";
 import { CreateCategoryData } from "../../../services/CategoryService";
 import { categoryValidationSchema } from "../../../Validations/categoryValidations";
 
@@ -30,55 +25,49 @@ const IsActive = [
   { value: false, label: "False" },
 ];
 
-
 const AddCategory: React.FC<AddCategoryProps> = ({ closeAddCategoryModal }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [formKey, setFormKey] = useState(0);
 
-  
+  const onSubmit = async (
+    values: CategoryFormDTO,
+    actions: FormikHelpers<CategoryFormDTO>
+  ) => {
+    try {
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("description", values.description ?? "");
+      formData.append("isActive", String(values.isActive));
 
+      if (values.image) {
+        formData.append("image", values.image);
+      } else {
+        alert("Image is required");
+        return;
+      }
 
- const onSubmit = async (
-  values: CategoryFormDTO,
-  actions: FormikHelpers<CategoryFormDTO>
-) => {
-  try {
-    const formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("description", values.description ?? "");
-    formData.append("isActive", String(values.isActive));
+      for (const pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+      }
 
-    if (values.image) {
-      formData.append("image", values.image);
-    } else {
-      alert("Image is required");
-      return;
+      const response = await CreateCategoryData(formData);
+
+      if (response.ok) {
+        alert("Category added successfully");
+        actions.resetForm();
+        setFormKey((prevKey) => prevKey + 1);
+        closeAddCategoryModal();
+        dispatch(fetchAllCategory());
+      } else {
+        alert(response.message || "Something went wrong");
+      }
+    } catch (error: any) {
+      console.error("Error submitting category:", error);
+      alert(error.response?.data?.message || "Submission failed");
+    } finally {
+      actions.setSubmitting(false);
     }
-
-    // Debug the formData being sent
-    for (const pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
-    const response = await CreateCategoryData(formData);
-
-    if (response.ok) {
-      alert("Category added successfully");
-      actions.resetForm();
-      setFormKey((prevKey) => prevKey + 1);
-      closeAddCategoryModal();
-      dispatch(fetchAllCategory());
-    } else {
-      alert(response.message || "Something went wrong");
-    }
-  } catch (error: any) {
-    console.error("Error submitting category:", error);
-    alert(error.response?.data?.message || "Submission failed");
-  } finally {
-    actions.setSubmitting(false);
-  }
-};
-
+  };
 
   return (
     <div className="relative">
@@ -143,7 +132,6 @@ const AddCategory: React.FC<AddCategoryProps> = ({ closeAddCategoryModal }) => {
                   rounded "
                 >
                   {formik.isSubmitting ? "Submitting..." : "Add Category"}
-
                 </button>
               </div>
             </Form>

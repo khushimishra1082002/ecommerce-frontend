@@ -4,26 +4,22 @@ import { FaEdit, FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../ReduxToolkit/app/Store";
-import { fetchAllProducts } from "../../../ReduxToolkit/Slices/ProductSlice";
-import { FaEye } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { MdRefresh } from "react-icons/md";
 import AddCategory from "./AddCategory";
-import {
-  deleteProductData,
-  getFilterProductsData,
-  getSingleProductData,
-} from "../../../services/ProductService";
 import EditCategory from "./EditCategory";
-import { deleteMultipleProductData } from "../../../services/ProductService";
 import { fetchAllCategory } from "../../../ReduxToolkit/Slices/CategorySlice";
-import { deleteCategoryData, deleteMultipleCategoryData, getFilterCategoryData, getSingleCategoryData } from "../../../services/CategoryService";
+import {
+  deleteCategoryData,
+  deleteMultipleCategoryData,
+  getFilterCategoryData,
+  getSingleCategoryData,
+} from "../../../services/CategoryService";
 
 const CategoryTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [showAddCategoryModal, setshowAddCategoryModal] = useState(false);
   const [showEditCategoryModal, setshowEditCategoryModal] = useState(false);
-  const [singleCategory, setSingleCategory] = useState();
   const [editData, setEditData] = useState();
   const [query, setQuery] = useState("");
   const [filteredCategories, setFilteredCategories] = useState([]);
@@ -33,15 +29,14 @@ const CategoryTable = () => {
 
   console.log("editData", editData);
 
- const { category, loading, error } = useSelector(
-     (state: RootState) => state.allcategory
-   );
-   console.log("categoryiiiii",category);
- 
-   useEffect(() => {
-     dispatch(fetchAllCategory());
-   }, [dispatch]);
- 
+  const { category, loading, error } = useSelector(
+    (state: RootState) => state.allcategory
+  );
+  console.log("category", category);
+
+  useEffect(() => {
+    dispatch(fetchAllCategory());
+  }, [dispatch]);
 
   const handleChange = ({ selectedRows }) => {
     console.log("Selected Rows: ", selectedRows);
@@ -49,7 +44,7 @@ const CategoryTable = () => {
   };
 
   useEffect(() => {
-    if (showAddCategoryModal || showEditCategoryModal ) {
+    if (showAddCategoryModal || showEditCategoryModal) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
@@ -85,7 +80,7 @@ const CategoryTable = () => {
       if (res) {
         alert("Selected Category Deleted Successfully");
         dispatch(fetchAllCategory());
-        setSelectedRows([]); 
+        setSelectedRows([]);
       }
     } catch (error) {
       console.error("Multiple delete failed:", error);
@@ -97,21 +92,20 @@ const CategoryTable = () => {
     try {
       const res = await getSingleCategoryData(categoryID);
       if (res) {
-        setEditData(res); // ✅ set product data first
-        setshowEditCategoryModal(true); // ✅ then open modal
+        setEditData(res);
+        setshowEditCategoryModal(true);
       }
     } catch (error) {
       console.error("Error fetching product for edit:", error);
     }
   };
 
-
   const columns = [
     {
       name: "S.No.",
       cell: (row, index) => index + 1,
       grow: 0,
-      width: "70px", // ✅ narrow
+      width: "70px",
     },
     {
       name: "Image",
@@ -136,25 +130,25 @@ const CategoryTable = () => {
       width: "220px",
     },
     {
-  name: "Active",
-  cell: (row) => (
-    <span
-      className={`px-2 py-1 rounded-xl text-xs font-medium ${
-        row.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-      }`}
-    >
-      {row.isActive ? "Active" : "Inactive"}
-    </span>
-  ),
-  width: "140px",
-},
+      name: "Active",
+      cell: (row) => (
+        <span
+          className={`px-2 py-1 rounded-xl text-xs font-medium ${
+            row.isActive
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {row.isActive ? "Active" : "Inactive"}
+        </span>
+      ),
+      width: "140px",
+    },
 
-    
     {
       name: "ACTIONS",
       cell: (row) => (
         <div className="flex gap-1">
-         
           <button
             onClick={() => handleEdit(row._id)}
             className="btn bg-blue-600 text-white p-1 rounded"
@@ -169,10 +163,9 @@ const CategoryTable = () => {
           >
             <MdDelete />
           </button>
-          
         </div>
       ),
-      width: "160px", // increase slightly to fit all three icons
+      width: "160px",
     },
   ];
 
@@ -184,24 +177,21 @@ const CategoryTable = () => {
     setshowEditCategoryModal(false);
   };
 
-  
-
   const handleSearch = async (query) => {
-  setQuery(query);
-  if (query.trim() === "") {
-    dispatch(fetchAllCategory());
-    setFilteredCategories([]); // ✅ clear filtered state
-    return;
-  }
+    setQuery(query);
+    if (query.trim() === "") {
+      dispatch(fetchAllCategory());
+      setFilteredCategories([]);
+      return;
+    }
 
-  try {
-    const res = await getFilterCategoryData({ q: query });
-    setFilteredCategories(res);
-  } catch (err) {
-    console.error("Error searching categories", err);
-  }
-};
-
+    try {
+      const res = await getFilterCategoryData({ q: query });
+      setFilteredCategories(res);
+    } catch (err) {
+      console.error("Error searching categories", err);
+    }
+  };
 
   return (
     <>
@@ -263,7 +253,9 @@ const CategoryTable = () => {
           <DataTable
             columns={columns}
             data={
-              filteredCategories.length > 0 || query ? filteredCategories : category
+              filteredCategories.length > 0 || query
+                ? filteredCategories
+                : category
             }
             fixedHeader
             fixedHeaderScrollHeight="60vh"
@@ -298,11 +290,8 @@ const CategoryTable = () => {
           </div>
         </div>
       )}
-
-  
     </>
   );
 };
 
 export default CategoryTable;
-

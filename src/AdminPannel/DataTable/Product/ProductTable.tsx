@@ -84,7 +84,7 @@ const ProductTable = () => {
       if (res) {
         alert("Selected Products Deleted Successfully");
         dispatch(fetchAllProducts());
-        setSelectedRows([]); // clear selection
+        setSelectedRows([]);
       }
     } catch (error) {
       console.error("Multiple delete failed:", error);
@@ -96,8 +96,8 @@ const ProductTable = () => {
     try {
       const res = await getSingleProductData(productID);
       if (res) {
-        setEditData(res); // ✅ set product data first
-        setShowEditProductModal(true); // ✅ then open modal
+        setEditData(res);
+        setShowEditProductModal(true);
       }
     } catch (error) {
       console.error("Error fetching product for edit:", error);
@@ -108,8 +108,8 @@ const ProductTable = () => {
     try {
       const res = await getSingleProductData(productID);
       if (res) {
-        setSingleProduct(res); // ✅ set product data first
-        setShowProductDetailModal(true); // ✅ then open modal
+        setSingleProduct(res);
+        setShowProductDetailModal(true);
       }
     } catch (error) {
       console.error("Error fetching product for edit:", error);
@@ -121,7 +121,7 @@ const ProductTable = () => {
       name: "S.No.",
       cell: (row, index) => index + 1,
       grow: 0,
-      width: "70px", // ✅ narrow
+      width: "70px",
     },
     {
       name: "Image",
@@ -188,7 +188,7 @@ const ProductTable = () => {
           </button>
         </div>
       ),
-      width: "160px", // increase slightly to fit all three icons
+      width: "160px",
     },
   ];
 

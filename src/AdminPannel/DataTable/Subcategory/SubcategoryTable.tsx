@@ -8,19 +8,8 @@ import { fetchAllProducts } from "../../../ReduxToolkit/Slices/ProductSlice";
 import { FaEye } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { MdRefresh } from "react-icons/md";
-import {
-  deleteProductData,
-  getFilterProductsData,
-  getSingleProductData,
-} from "../../../services/ProductService";
 import { deleteMultipleProductData } from "../../../services/ProductService";
 import { fetchAllCategory } from "../../../ReduxToolkit/Slices/CategorySlice";
-import {
-  deleteCategoryData,
-  deleteMultipleCategoryData,
-  getFilterCategoryData,
-  getSingleCategoryData,
-} from "../../../services/CategoryService";
 import { fetchSubcategories } from "../../../ReduxToolkit/Slices/SubcategorySlice";
 import AddSubcategory from "./AddSubcategory";
 import EditSubcategory from "./EditSubcategory";
@@ -36,7 +25,7 @@ const SubcategoryTable = () => {
   const [showAddSubcategoryModal, setshowAddSubcategoryModal] = useState(false);
   const [showEditSubcategoryModal, setshowEditSubcategoryModal] =
     useState(false);
-  const [singleSubcategory, setSingleSubcategory] = useState();
+
   const [editData, setEditData] = useState();
   const [query, setQuery] = useState("");
   const [filteredSubcategories, setFilteredSubcategories] = useState([]);
@@ -110,8 +99,8 @@ const SubcategoryTable = () => {
     try {
       const res = await getSingleSubcategoryData(subcategoryID);
       if (res) {
-        setEditData(res); // ✅ set product data first
-        setshowEditSubcategoryModal(true); // ✅ then open modal
+        setEditData(res);
+        setshowEditSubcategoryModal(true);
       }
     } catch (error) {
       console.error("Error fetching product for edit:", error);
@@ -123,7 +112,7 @@ const SubcategoryTable = () => {
       name: "S.No.",
       cell: (row, index) => index + 1,
       grow: 0,
-      width: "70px", // ✅ narrow
+      width: "70px",
     },
     {
       name: "category",
@@ -172,7 +161,7 @@ const SubcategoryTable = () => {
           </button>
         </div>
       ),
-      width: "160px", // increase slightly to fit all three icons
+      width: "160px",
     },
   ];
 
@@ -188,8 +177,8 @@ const SubcategoryTable = () => {
     setQuery(query);
 
     if (query.trim() === "") {
-      dispatch(fetchSubcategories()); // ✅ Original list wapas laane ke liye
-      setFilteredSubcategories([]); // ✅ Filtered list ko clear karna
+      dispatch(fetchSubcategories());
+      setFilteredSubcategories([]);
       return;
     }
 
@@ -280,7 +269,7 @@ const SubcategoryTable = () => {
       {showAddSubcategoryModal && (
         <div
           className="fixed inset-0 flex items-center justify-center
-   bg-black bg-opacity-50 z-50 px-4"
+       bg-black bg-opacity-50 z-50 px-4"
         >
           <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
             <AddSubcategory

@@ -5,11 +5,11 @@ import { buildQueryFromFilters } from "../utils/buildQueryFromFilters";
 export const getAllProductData = async () => {
   try {
     const response = await api.get(conf.GetAllProductUrl);
-    console.log("API Response:", response.data);
+    console.log("Response", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "Error fetching products",
+      "Error price range",
       error.response?.data || error.message
     );
     throw error;

@@ -8,12 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../ReduxToolkit/app/Store";
 import { fetchAllCategory } from "../../../ReduxToolkit/Slices/CategorySlice";
 import FormikControl from "../../../components/ReusableFormField/FormikControl";
-import { fetchSubcategories } from "../../../ReduxToolkit/Slices/SubcategorySlice";
-import { fetchBrands } from "../../../ReduxToolkit/Slices/BrandSlice";
 import { fetchAllProducts } from "../../../ReduxToolkit/Slices/ProductSlice";
 import { Field, FieldArray } from "formik";
 import { getAllSubcategoryByCategoryData } from "../../../services/SubcategoryService";
 import { getAllBrandBySubcategoryData } from "../../../services/BrandService";
+import { SubcategoryDTO } from "../../../types/subcategory";
+import { BrandDTO } from "../../../types/brand";
 
 interface AddProductProps {
   closeAddProductModal: () => void;
@@ -61,16 +61,13 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
   const [formKey, setFormKey] = useState(0);
 
   const { category } = useSelector((state: RootState) => state.allcategory);
-  // const { subcategories } = useSelector(
-  //   (state: RootState) => state.subcategory
-  // );
-  const [subcategory, setSubcategory] = useState();
 
-  const [brands, setBrands] = useState();
+  const [subcategory, setSubcategory] = useState<SubcategoryDTO[]>([]);
+
+  const [brands, setBrands] = useState<BrandDTO[]>([]);
 
   console.log("brandsdata", brands);
 
-  // Fetch categories on mount
   useEffect(() => {
     dispatch(fetchAllCategory());
   }, [dispatch]);
@@ -105,13 +102,11 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
         formData.append("size", typeof s === "string" ? s : s.value)
       );
 
-      // Color - safely handle string or array
       formData.append(
         "colors",
         Array.isArray(values.colors) ? values.colors.join(",") : values.colors
       );
 
-      // Attributes - send as JSON string
       formData.append("attributes", JSON.stringify(values.attributes));
 
       console.log("Attributes JSON:", JSON.stringify(values.attributes));
@@ -123,17 +118,11 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
         });
       }
 
-      console.log(values.image); // ✅ yahan FileList milna chahiye
+      console.log(values.image);
 
-      // 🔥 Call API
-      const response = await CreateProductData(formData); // <-- send FormData
+      const response = await CreateProductData(formData);
 
       console.log("API Response:", response);
-
-      console.log(
-        "Uploading images:",
-        values.image.map((f) => f.name)
-      );
 
       if (response.ok) {
         alert("Product added successfully");
@@ -155,7 +144,7 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
   const fetchSubcategoryByCategory = async (categoryId: string) => {
     try {
       const res = await getAllSubcategoryByCategoryData(categoryId);
-      setSubcategory(res); // Store in local state
+      setSubcategory(res);
     } catch (err) {
       console.error("Failed to fetch subcategories by category", err);
       setSubcategory([]);
@@ -165,7 +154,7 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
   const ftchBrandBySubcategory = async (subcategoryID: string) => {
     try {
       const res = await getAllBrandBySubcategoryData(subcategoryID);
-      setBrands(res); // Store in local state
+      setBrands(res);
     } catch (err) {
       console.error("Failed to fetch subcategories by category", err);
     }
@@ -190,7 +179,7 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
           console.log(formik.values.category);
           useEffect(() => {
             if (formik.values.category) {
-              fetchSubcategoryByCategory(formik.values.category); // 👈 Fetch subcategories
+              fetchSubcategoryByCategory(formik.values.category);
             }
           }, [formik.values.category]);
           useEffect(() => {
@@ -320,7 +309,7 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
                   </>
                 )}
 
-                {/* Optional: color can be available for all */}
+               
                 <FormikControl
                   control="input"
                   type="text"
