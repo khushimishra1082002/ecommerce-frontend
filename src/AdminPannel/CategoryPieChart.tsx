@@ -18,12 +18,12 @@ const data = [
 ];
 
 const COLORS = [
-  "#3b82f6", // Blue 500 - Electronics (trustworthy, tech)
-  "#f97316", // Orange 500 - Fashion (vibrant, energetic)
-  "#22c55e", // Green 500 - Grocery (fresh, natural)
-  "#a855f7", // Purple 500 - Beauty (luxury, creativity)
-  "#0ea5e9", // Sky 500 - Mobiles (modern, sharp)
-  "#eab308", // Yellow 500 - Footwear (attention-grabbing)
+  "#3b82f6", 
+  "#f97316", 
+  "#22c55e", 
+  "#a855f7", 
+  "#0ea5e9", 
+  "#eab308", 
 ];
 
 const CategoryPieChart = () => {

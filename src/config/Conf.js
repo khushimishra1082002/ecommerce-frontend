@@ -72,7 +72,8 @@ const conf = {
  getAllOrders:"/order/getAllOrders",
  deleteOrderUrl:"/order/deleteOrder",
  getFilteredOrdersUrl:"/order/getFilteredOrders",
- updateOrderStatusUrl:"/order/updateOrderStatus"
+ updateOrderStatusUrl:"/order/updateOrderStatus",
+ deletePosterUrl:"/poster/deletePoster"
 };
 
 export default conf;

@@ -24,6 +24,7 @@ import OrderHistory from "./pages/user/OrderHistory.tsx";
 import Logout from "./components/Logout.tsx";
 import {DashboardBanner} from "./AdminPannel/Banner/DashboardBanner.tsx";
 import OrderTable from "./AdminPannel/DataTable/Orders/OrderTable";
+import { Poster } from "./AdminPannel/Poster/Poster.tsx";
 
 const App = () => {
   return (
@@ -60,6 +61,7 @@ const App = () => {
           <Route path="brandTable" element={<BrandTable />} />
           <Route path="banner" element={<DashboardBanner />} />
           <Route path="orderTable" element={<OrderTable />} />
+          {/* <Route path="posterDashboard" element={<Poster/>}/> */}
 
         </Route>
         <Route path="IsLoggedIn" element={<IsLoggedIn />} />

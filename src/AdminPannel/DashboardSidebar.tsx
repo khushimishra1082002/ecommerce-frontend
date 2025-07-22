@@ -83,6 +83,16 @@ const DashboardSidebar = ({onClose }) => {
             <span>Orders</span>
           </div>
         </li></Link>
+
+
+
+         {/* <Link onClick={onClose} to="/adminDashboard/posterDashboard">
+        <li className="rounded py-2 px-4">
+          <div className="flex items-center gap-4">
+            <ClipboardList className="w-4 h-4 text-skin-accent_one" />
+            <span>Poster</span>
+          </div>
+        </li></Link> */}
        
         <div  className="border border-black/10 w-full my-6"></div>
         <li onClick={onClose} className="rounded py-2 px-4">

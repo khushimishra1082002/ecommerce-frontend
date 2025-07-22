@@ -14,3 +14,17 @@ export const getPosterData = async () => {
     throw error;
   }
 };
+
+export const deletePosterData = async (posterId) => {
+  try {
+    const response = await api.delete(`${conf.deletePosterUrl}/${posterId}`);
+    console.log("response", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching poster",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
