@@ -4,7 +4,10 @@ import { FaStar, FaRupeeSign, FaShoppingCart, FaHeart } from "react-icons/fa";
 import SimilorProduct from "./SimilorProduct";
 import RecentlyViewedProducts from "./RecentlyViewedProducts";
 import RecommendedProducts from "./RecommendedProducts";
-import { getSingleProductData, postRecentlyViewedProductData } from "../services/ProductService";
+import {
+  getSingleProductData,
+  postRecentlyViewedProductData,
+} from "../services/ProductService";
 import { AddProductInCartData } from "../services/cartService";
 import { AddProductInWishlistData } from "../services/wishlistService";
 import { useParams } from "react-router-dom";
@@ -47,7 +50,10 @@ const ProductDetail = () => {
     const postViewed = async () => {
       if (!userId || !singleProduct?._id) return;
       try {
-        await postRecentlyViewedProductData({ userId, productId: singleProduct._id });
+        await postRecentlyViewedProductData({
+          userId,
+          productId: singleProduct._id,
+        });
       } catch (err) {
         console.error("Error posting recently viewed product:", err);
       }
@@ -65,7 +71,13 @@ const ProductDetail = () => {
       return;
     }
     alert("Product added successfully in cart");
-    dispatch(addToCart({ userId: userId as string, productId: productId as string, quantity: 1 }));
+    dispatch(
+      addToCart({
+        userId: userId as string,
+        productId: productId as string,
+        quantity: 1,
+      })
+    );
   };
 
   const handleWishlistProduct = async (productId) => {
@@ -87,7 +99,7 @@ const ProductDetail = () => {
             <div className="flex flex-col items-center">
               <img
                 className="w-full object-contain max-h-[300px]"
-               src={`${conf.BaseURL}${conf.GetImageUrl}/${singleProduct?.image}`}
+                src={`${conf.BaseURL}${conf.GetImageUrl}/${singleProduct?.image}`}
                 alt={singleProduct?.name}
               />
 
@@ -127,65 +139,81 @@ const ProductDetail = () => {
                 <div className="flex items-center gap-1">
                   <FaRupeeSign />
                   <h4 className="text-2xl font-body">{singleProduct?.price}</h4>
-                  <span className="text-gray-400 font-body text-sm">inclusive of all taxes</span>
+                  <span className="text-gray-400 font-body text-sm">
+                    inclusive of all taxes
+                  </span>
                 </div>
               </div>
 
               {/* Delivery Info */}
               <div className="flex items-center gap-2">
-                <img
-                  className="w-4 h-4"
-                  
-                  alt="location"
-                />
-                <span className="text-gray-500 font-heading text-sm">Deliver to</span>
+                <img className="w-4 h-4" alt="location" />
+                <span className="text-gray-500 font-heading text-sm">
+                  Deliver to
+                </span>
               </div>
 
               {/* Description */}
               <div className="border border-black/10 rounded">
                 <div className="p-4">
-                  <h3 className="font-body text-lg font-medium text-gray-800">Product Description</h3>
+                  <h3 className="font-body text-lg font-medium text-gray-800">
+                    Product Description
+                  </h3>
                 </div>
                 <div className="bg-black/10 h-[1px]" />
                 <div className="p-4 space-y-2">
-                  <h3 className="font-heading text-base font-medium">About the item</h3>
-                  <p className="font-body text-sm text-gray-700">{singleProduct?.description}</p>
+                  <h3 className="font-heading text-base font-medium">
+                    About the item
+                  </h3>
+                  <p className="font-body text-sm text-gray-700">
+                    {singleProduct?.description}
+                  </p>
                 </div>
               </div>
 
               {/* Specifications */}
               <div className="border border-black/10 rounded">
                 <div className="p-4">
-                  <h3 className="font-body text-lg font-medium text-gray-800">Specifications</h3>
+                  <h3 className="font-body text-lg font-medium text-gray-800">
+                    Specifications
+                  </h3>
                 </div>
                 <div className="bg-black/10 h-[1px]" />
                 <div className="p-4 space-y-3">
                   <span className="font-heading">General</span>
                   {singleProduct?.attributes &&
-                    Object.entries(singleProduct.attributes).map(([key, value]) => (
-                      <div key={key} className="flex gap-4 items-start">
-                        <span className="font-body text-gray-700 text-sm">
-                          {typeof value === "object"
-                            ? `${value.key ?? ""}: ${value.value ?? ""}`
-                            : `${key}: ${value}`}
-                        </span>
-                      </div>
-                    ))}
+                    Object.entries(singleProduct.attributes).map(
+                      ([key, value]) => (
+                        <div key={key} className="flex gap-4 items-start">
+                          <span className="font-body text-gray-700 text-sm">
+                            {key}:
+                            {typeof value === "object" && value !== null
+                              ? ` ${
+                                  "name" in value
+                                    ? value.name
+                                    : "value" in value
+                                    ? value.value
+                                    : JSON.stringify(value)
+                                }`
+                              : ` ${value}`}
+                          </span>
+                        </div>
+                      )
+                    )}
                 </div>
               </div>
             </div>
           </div>
 
           {/* Similar & Recommended Products */}
-          
         </div>
 
         <div className="">
-            <SimilorProduct productId={productId} />
-          </div>
-          <div className="">
-            <RecommendedProducts />
-          </div>
+          <SimilorProduct productId={productId} />
+        </div>
+        <div className="">
+          <RecommendedProducts />
+        </div>
       </div>
     </>
   );
