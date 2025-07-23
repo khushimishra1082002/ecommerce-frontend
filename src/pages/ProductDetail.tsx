@@ -92,7 +92,7 @@ const ProductDetail = () => {
 
   return (
     <>
-      <div className="bg-gray-50 p-2 shadow">
+      {/* <div className="bg-gray-50 p-2 shadow">
         <div className="max-w-screen-xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-white p-4 rounded-md">
            
@@ -121,7 +121,7 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Product Info and Specs */}
+           
             <div className="lg:col-span-2 space-y-6 max-h-[70vh] overflow-y-auto pr-2">
               <div className="space-y-1">
                 {singleProduct?.brand && (
@@ -181,7 +181,7 @@ const ProductDetail = () => {
                 <div className="bg-black/10 h-[1px]" />
                 <div className="p-4 space-y-3">
                   <span className="font-heading">General</span>
-                  {/* {singleProduct?.attributes &&
+                  {singleProduct?.attributes &&
                     Object.entries(singleProduct.attributes).map(
                       ([key, value]) => (
                         <div key={key} className="flex gap-4 items-start">
@@ -193,21 +193,24 @@ const ProductDetail = () => {
                           </span>
                         </div>
                       )
-                    )} */}
+                    )}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Similar & Recommended Products */}
+         
         </div>
 
-        {/* <div className="">
+        <div className="">
           <SimilorProduct productId={productId} />
-        </div> */}
+        </div>
         <div className="">
           <RecommendedProducts />
         </div>
+      </div> */}
+      <div>
+        deatil
       </div>
     </>
   );
