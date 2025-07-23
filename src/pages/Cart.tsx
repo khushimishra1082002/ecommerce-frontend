@@ -63,7 +63,7 @@ const Cart = () => {
                     <div className="border border-black/10 p-2 rounded h-44 ">
                       <img
                         className="h-full w-full object-contain"
-                        src={`http://localhost:5000/api/upload/${product?.image}`}
+                        src={`http://localhost:8000/api/upload/${product?.image}`}
                         alt="product"
                       />
                     </div>

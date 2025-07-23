@@ -127,7 +127,7 @@ const ProductTable = () => {
       name: "Image",
       selector: (row) => (
         <img
-          src={`http://localhost:5000/api/upload/${row.image}`}
+          src={`http://localhost:8000/api/upload/${row.image}`}
           width={40}
           height={40}
           alt=""

@@ -93,7 +93,7 @@ const RecommendedProducts = () => {
                     <div className="">
                       <img
                         className="w-44 m-auto object-contain h-44"
-                        src={`http://localhost:5000/api/upload/${v?.image}`}
+                        src={`http://localhost:8000/api/upload/${v?.image}`}
                         alt="banner"
                       />
                     </div>

@@ -15,12 +15,14 @@ import { Link } from "react-router-dom";
 import { MdPhotoLibrary } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 
-
-const DashboardSidebar = ({onClose }) => {
+const DashboardSidebar = ({ onClose }) => {
   return (
     <div className="p-4 relative h-full">
-       <div className="md:hidden absolute top-4 right-4 cursor-pointer" onClick={onClose}>
-        <IoClose/>
+      <div
+        className="md:hidden absolute top-4 right-4 cursor-pointer"
+        onClick={onClose}
+      >
+        <IoClose />
       </div>
       <div className="flex items-center justify-center gap-2">
         <LayoutDashboard className="text-skin-accent_one text-2xl" />
@@ -77,24 +79,24 @@ const DashboardSidebar = ({onClose }) => {
         </Link>
 
         <Link onClick={onClose} to="/adminDashboard/orderTable">
-        <li className="rounded py-2 px-4">
-          <div className="flex items-center gap-4">
-            <ClipboardList className="w-4 h-4 text-skin-accent_one" />
-            <span>Orders</span>
-          </div>
-        </li></Link>
+          <li className="rounded py-2 px-4">
+            <div className="flex items-center gap-4">
+              <ClipboardList className="w-4 h-4 text-skin-accent_one" />
+              <span>Orders</span>
+            </div>
+          </li>
+        </Link>
 
+        <Link onClick={onClose} to="/adminDashboard/posterDashboard">
+          <li className="rounded py-2 px-4">
+            <div className="flex items-center gap-4">
+              <ClipboardList className="w-4 h-4 text-skin-accent_one" />
+              <span>Poster</span>
+            </div>
+          </li>
+        </Link>
 
-
-         {/* <Link onClick={onClose} to="/adminDashboard/posterDashboard">
-        <li className="rounded py-2 px-4">
-          <div className="flex items-center gap-4">
-            <ClipboardList className="w-4 h-4 text-skin-accent_one" />
-            <span>Poster</span>
-          </div>
-        </li></Link> */}
-       
-        <div  className="border border-black/10 w-full my-6"></div>
+        <div className="border border-black/10 w-full my-6"></div>
         <li onClick={onClose} className="rounded py-2 px-4">
           <div className="flex items-center gap-4">
             <HelpCircle className="w-4 h-4 text-skin-accent_one" />
@@ -109,11 +111,14 @@ const DashboardSidebar = ({onClose }) => {
         </li>
         <li onClick={onClose} className="rounded py-2 px-4 cursor-pointer">
           <div className="flex items-center gap-4">
-            <LogOut onClick={() => {
-                        localStorage.removeItem("token");
-                        alert("logout successful")
-                        window.location.href = "/IsLoggedIn";
-                      }} className="w-4 h-4 text-skin-accent_one cursor-pointer" />
+            <LogOut
+              onClick={() => {
+                localStorage.removeItem("token");
+                alert("logout successful");
+                window.location.href = "/IsLoggedIn";
+              }}
+              className="w-4 h-4 text-skin-accent_one cursor-pointer"
+            />
             <span>Logout</span>
           </div>
         </li>

@@ -32,7 +32,7 @@ const FourGridProduct: React.FC<FourGridProductProps> = ({
               <div className="">
                 <img
                   className="w-20 h-20 object-contain m-auto"
-                  src={`http://localhost:5000/api/upload/${product.image}`}
+                  src={`http://localhost:8000/api/upload/${product.image}`}
                   alt={product.subcategory.name}
                 />
               </div>

@@ -78,7 +78,7 @@ const ProductDetail = () => {
             <div className="flex flex-col items-center">
               <img
                 className="w-full object-contain max-h-[300px]"
-                src={`http://localhost:5000/api/upload/${singleProduct?.image}`}
+                src={`http://localhost:8000/api/upload/${singleProduct?.image}`}
                 alt={singleProduct?.name}
               />
 

@@ -58,7 +58,7 @@ const HeroSection = () => {
                 <div className="h-64">
                   <img
                     className="w-full h-full object-cover"
-                    src={`http://localhost:5000/api/upload/${v.image}`}
+                    src={`http://localhost:8000/api/upload/${v.image}`}
                   />
                 </div>
               </SwiperSlide>

@@ -96,7 +96,7 @@ const NewArrivals = () => {
                       <div className="h-52">
                         <img
                           className="w-48 h-full object-contain"
-                          src={`http://localhost:5000/api/upload/${v.image}`}
+                          src={`http://localhost:8000/api/upload/${v.image}`}
                         />
                       </div>
                       <span className=" font-heading text-sm line-clamp-2">

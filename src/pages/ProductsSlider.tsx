@@ -119,7 +119,7 @@ const ProductSlider = ({ title, filterQuery }) => {
                 <div className="w-full aspect-square flex justify-center items-center">
                   <img
                     className="h-40 m-auto w-full object-contain"
-                    src={`http://localhost:5000/api/upload/${v.image}`}
+                    src={`http://localhost:8000/api/upload/${v.image}`}
                     alt="product"
                   />
                 </div>

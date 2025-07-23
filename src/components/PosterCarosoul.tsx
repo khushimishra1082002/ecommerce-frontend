@@ -59,7 +59,7 @@ const PosterCarosoul = () => {
                 <div className="h-72 relative">
                   <img
                     className="w-full h-full object-cover rounded-md"
-                    src={`http://localhost:5000/api/upload/${v.image}`}
+                    src={`http://localhost:8000/api/upload/${v.image}`}
                     alt={v.title || "Poster Image"}
                   />
                   <div

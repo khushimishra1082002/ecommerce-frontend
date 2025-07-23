@@ -61,7 +61,7 @@ const App = () => {
           <Route path="brandTable" element={<BrandTable />} />
           <Route path="banner" element={<DashboardBanner />} />
           <Route path="orderTable" element={<OrderTable />} />
-          {/* <Route path="posterDashboard" element={<Poster/>}/> */}
+          <Route path="posterDashboard" element={<Poster/>}/>
 
         </Route>
         <Route path="IsLoggedIn" element={<IsLoggedIn />} />

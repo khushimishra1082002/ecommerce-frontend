@@ -102,7 +102,7 @@ const RecentlyViewedProducts = () => {
                   <div className="h-52">
                     <img
                       className="w-44 object-contain h-full"
-                      src={`http://localhost:5000/api/upload/${v?.productId?.image?.[0]}`}
+                      src={`http://localhost:8000/api/upload/${v?.productId?.image?.[0]}`}
                       alt="product"
                     />
                   </div>

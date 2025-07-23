@@ -9,6 +9,7 @@ import EditPoster from "./EditPoster";
 import { AiOutlinePlus } from "react-icons/ai";
 import { PosterDTO } from "../../types/poster";
 import { getPosterData } from "../../services/PosterService";
+import { deletePosterData } from "../../services/PosterService";
 
 export const Poster: React.FC = () => {
   const [showAddPosterModal, setshowAddPosterModal] = useState<boolean>(false);
@@ -17,29 +18,32 @@ export const Poster: React.FC = () => {
   const [data, setData] = useState<PosterDTO[]>([]);
   const [editData, setEditData] = useState<PosterDTO | null>(null);
 
-  useEffect(() => {
-    const fetchPosters = async () => {
+   const fetchPosters = async () => {
       try {
-        const res = await getPosterData();
+        const res: PosterDTO[] = await getPosterData();
+        // const heroBanners = res.filter((item) => item.location === "herosection");
         setData(res);
       } catch (err) {
-        console.error("Error fetching posters:", err);
+        console.error("Error fetching banners:", err);
       }
     };
-    fetchPosters();
-  }, []);
+  
+    useEffect(() => {
+      fetchPosters();
+    }, []);
+  
 
   const handleDelete = async (bannerId: string) => {
-    // try {
-    //   const res = await deletePosterData(bannerId);
-    //   if (res) {
-    //     alert("Banner Deleted Successfully");
-    //     fetchBanners();
-    //   }
-    // } catch (error) {
-    //   console.error("Delete failed:", error);
-    //   alert("Failed to delete banner. Please try again.");
-    // }
+    try {
+      const res = await deletePosterData(bannerId);
+      if (res) {
+        alert("Banner Deleted Successfully");
+        // fetchPosters();
+      }
+    } catch (error) {
+      console.error("Delete failed:", error);
+      alert("Failed to delete banner. Please try again.");
+    }
   };
 
   const handleEdit = async (bannerId: string) => {
@@ -83,7 +87,7 @@ export const Poster: React.FC = () => {
         {data.map((poster) => (
           <div key={poster._id} className="border p-4 shadow rounded space-y-2">
             <img
-              src={`http://localhost:5000/api/upload/${poster.image}`}
+              src={`http://localhost:8000/api/upload/${poster.image}`}
               alt="Banner"
               className="w-full h-52 object-cover"
             />
@@ -128,7 +132,7 @@ export const Poster: React.FC = () => {
           <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
             <AddPoster
               closeAddPosterModal={closeAddPosterModal}
-              // refreshBanners={fetchPosters}
+              refreshPosters={fetchPosters}
             />
           </div>
         </div>
@@ -140,7 +144,7 @@ export const Poster: React.FC = () => {
             <EditPoster
               closeEditPosterModal={closeEditPosterModal}
               editData={editData}
-              // fetchPosters={fetchPosters}
+              fetchPosters={fetchPosters}
             />
           </div>
         </div>

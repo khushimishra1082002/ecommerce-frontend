@@ -70,7 +70,7 @@ const SimilorProduct = ({ productId }) => {
                 <div className="w-full aspect-square flex justify-center items-center">
                   <img
                     className="w-44 object-contain h-full"
-                    src={`http://localhost:5000/api/upload/${v.image}`}
+                    src={`http://localhost:8000/api/upload/${v.image}`}
                     alt="banner"
                   />
                 </div>

@@ -61,7 +61,7 @@ const Wishlist = () => {
                 <div className="sm:col-span-1 flex justify-center items-center">
                   <img
                     className="w-24 h-24 object-contain rounded border border-gray-200"
-                    src={`http://localhost:5000/api/upload/${product.image[0]}`}
+                    src={`http://localhost:8000/api/upload/${product.image[0]}`}
                     alt={product.name}
                   />
                 </div>
