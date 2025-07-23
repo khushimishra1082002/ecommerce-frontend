@@ -186,16 +186,10 @@ const ProductDetail = () => {
                       ([key, value]) => (
                         <div key={key} className="flex gap-4 items-start">
                           <span className="font-body text-gray-700 text-sm">
-                            {key}:
+                            {key}:{" "}
                             {typeof value === "object" && value !== null
-                              ? ` ${
-                                  "name" in value
-                                    ? value.name
-                                    : "value" in value
-                                    ? value.value
-                                    : JSON.stringify(value)
-                                }`
-                              : ` ${value}`}
+                              ? JSON.stringify(value)
+                              : String(value)}
                           </span>
                         </div>
                       )
