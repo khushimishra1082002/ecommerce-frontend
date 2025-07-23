@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { addToCart, fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
 import { ProductDTO } from "../types/product";
+import conf from "../config/Conf";
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -78,7 +79,7 @@ const ProductDetail = () => {
             <div className="flex flex-col items-center">
               <img
                 className="w-full object-contain max-h-[300px]"
-                src={`http://localhost:8000/api/upload/${singleProduct?.image}`}
+               src={`${conf.BaseURL}${conf.GetImageUrl}/${singleProduct?.image}`}
                 alt={singleProduct?.name}
               />
 
