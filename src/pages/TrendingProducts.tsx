@@ -10,8 +10,15 @@ import SwiperButtonTwo from "../components/SwiperButtonTwo";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import conf from "../config/Conf";
 
+type Product = {
+  _id: string;
+  name: string;
+  image: string;
+  // add other fields as needed
+};
+
 const TrendingProducts = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchTrendingProducts = async () => {
@@ -78,8 +85,8 @@ const TrendingProducts = () => {
               <div className="h-52 flex justify-center items-center">
                 <img
                   className="w-44 object-contain h-full"
-                   src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
-                  alt={v.name}
+                   src={`${conf.BaseURL}${conf.GetImageUrl}/${v?.image}`}
+                  alt={v?.name}
                 />
               </div>
               <div className="p-2">
