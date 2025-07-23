@@ -95,7 +95,7 @@ const ProductDetail = () => {
       <div className="bg-gray-50 p-2 shadow">
         <div className="max-w-screen-xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-white p-4 rounded-md">
-            {/* Product Image and Buttons */}
+           
             <div className="flex flex-col items-center">
               <img
                 className="w-full object-contain max-h-[300px]"
@@ -145,7 +145,7 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Delivery Info */}
+             
               <div className="flex items-center gap-2">
                 <img className="w-4 h-4" alt="location" />
                 <span className="text-gray-500 font-heading text-sm">
@@ -153,7 +153,7 @@ const ProductDetail = () => {
                 </span>
               </div>
 
-              {/* Description */}
+             
               <div className="border border-black/10 rounded">
                 <div className="p-4">
                   <h3 className="font-body text-lg font-medium text-gray-800">
@@ -171,7 +171,7 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Specifications */}
+              
               <div className="border border-black/10 rounded">
                 <div className="p-4">
                   <h3 className="font-body text-lg font-medium text-gray-800">
@@ -202,9 +202,9 @@ const ProductDetail = () => {
           {/* Similar & Recommended Products */}
         </div>
 
-        <div className="">
+        {/* <div className="">
           <SimilorProduct productId={productId} />
-        </div>
+        </div> */}
         <div className="">
           <RecommendedProducts />
         </div>
