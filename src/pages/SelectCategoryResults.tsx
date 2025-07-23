@@ -53,7 +53,7 @@ const SelectCategoryResults = () => {
               <div key={product._id} className="border shadow p-2 space-y-1">
                 <div className="h-52 bg-gray-50 flex justify-center items-center">
                   <img
-                    src={`${conf.BaseURL}${conf.GetImageUrl}/${product.image}`}
+                    src={`${conf.BaseURL}${conf.GetImageUrl}/${product?.image}`}
                     className="w-36"
                     alt={product.name}
                   />

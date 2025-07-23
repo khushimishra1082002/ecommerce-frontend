@@ -71,7 +71,7 @@ const SimilorProduct = ({ productId }) => {
                 <div className="w-full aspect-square flex justify-center items-center">
                   <img
                     className="w-44 object-contain h-full"
-                    src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                    // src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                     alt="banner"
                   />
                 </div>
