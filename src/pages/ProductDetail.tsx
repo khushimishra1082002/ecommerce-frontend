@@ -181,7 +181,7 @@ const ProductDetail = () => {
                 <div className="bg-black/10 h-[1px]" />
                 <div className="p-4 space-y-3">
                   <span className="font-heading">General</span>
-                  {singleProduct?.attributes &&
+                  {/* {singleProduct?.attributes &&
                     Object.entries(singleProduct.attributes).map(
                       ([key, value]) => (
                         <div key={key} className="flex gap-4 items-start">
@@ -193,7 +193,7 @@ const ProductDetail = () => {
                           </span>
                         </div>
                       )
-                    )}
+                    )} */}
                 </div>
               </div>
             </div>
