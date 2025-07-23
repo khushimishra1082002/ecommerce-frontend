@@ -28,3 +28,20 @@ export const deletePosterData = async (posterId) => {
     throw error;
   }
 };
+
+export const CreatePosterData = async (formData: FormData) => {
+  try {
+    const response = await api.post(conf.createPosterUrl, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error adding poster:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};

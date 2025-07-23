@@ -71,8 +71,7 @@ const Categories = () => {
                   >
                     <img
                       className="w-12 md:w-14"
-                      // src={`${conf.GetImageUrl}/${v?.image}`}
-                      src={`http://localhost:8000/api/upload/${v.image}`}
+                      src={`${conf.GetImageUrl}/${v.image}`}
                     />
                     <span className="text-[13px] font-heading font-medium tracking-wider">
                       {v.name}
