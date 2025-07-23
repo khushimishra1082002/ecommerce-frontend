@@ -8,6 +8,7 @@ import "swiper/css/scrollbar";
 import { FaStar } from "react-icons/fa";
 import { getSimilorProductData } from "../services/ProductService";
 import { ProductDTO } from "../types/product";
+import conf from "../config/Conf";
 
 const SimilorProduct = ({ productId }) => {
     const [data, setData] = useState<ProductDTO[]>([]);
@@ -70,7 +71,7 @@ const SimilorProduct = ({ productId }) => {
                 <div className="w-full aspect-square flex justify-center items-center">
                   <img
                     className="w-44 object-contain h-full"
-                    src={`http://localhost:8000/api/upload/${v.image}`}
+                    src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                     alt="banner"
                   />
                 </div>

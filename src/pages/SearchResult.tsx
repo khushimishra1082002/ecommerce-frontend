@@ -10,6 +10,7 @@ import { fetchAllCategory } from "../ReduxToolkit/Slices/CategorySlice";
 import { buildQueryFromFilters } from "../utils/buildQueryFromFilters";
 import { getFilterProductsData } from "../services/ProductService";
 import { ProductDTO } from "../types/product";
+import conf from "../config/Conf";
 
 const SearchResult = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -129,7 +130,8 @@ const SearchResult = () => {
                 <div className="bg-white shadow px-2 py-4">
                   <img
                     className="w-44 h-44 m-auto object-contain"
-                    src={`http://localhost:5000/api/upload/${v.image}`}
+                    src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                   
                   />
                   <div className="p-2">
                     <h4

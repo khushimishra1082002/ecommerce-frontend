@@ -7,6 +7,7 @@ import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { buildQueryFromFilters } from "../utils/buildQueryFromFilters";
 import { setCategory } from "../ReduxToolkit/Slices/FilterSlice";
 import { ProductDTO } from "../types/product";
+import conf from "../config/Conf";
 
 const SelectCategoryResults = () => {
   const { categoryID } = useParams();
@@ -52,7 +53,7 @@ const SelectCategoryResults = () => {
               <div key={product._id} className="border shadow p-2 space-y-1">
                 <div className="h-52 bg-gray-50 flex justify-center items-center">
                   <img
-                    src={`http://localhost:5000/api/upload/${product.image}`}
+                    src={`${conf.BaseURL}${conf.GetImageUrl}/${product.image}`}
                     className="w-36"
                     alt={product.name}
                   />

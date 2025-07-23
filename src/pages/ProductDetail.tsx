@@ -56,8 +56,16 @@ const ProductDetail = () => {
   }, [singleProduct, userId]);
 
   const handleAddToCart = () => {
+    if (!userId) {
+      alert("User not logged in");
+      return;
+    }
+    if (!productId) {
+      alert("Invalid product ID");
+      return;
+    }
     alert("Product added successfully in cart");
-    dispatch(addToCart({ userId, productId, quantity: 1 }));
+    dispatch(addToCart({ userId: userId as string, productId: productId as string, quantity: 1 }));
   };
 
   const handleWishlistProduct = async (productId) => {
@@ -106,7 +114,7 @@ const ProductDetail = () => {
               <div className="space-y-1">
                 {singleProduct?.brand && (
                   <span className="font-body text-skin-primary font-semibold">
-                    Brand: {singleProduct?.brand?.name}
+                    Brand: {singleProduct?.brand}
                   </span>
                 )}
                 <h3 className="font-body text-xl">{singleProduct?.name}</h3>
