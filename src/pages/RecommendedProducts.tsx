@@ -11,6 +11,7 @@ import { decodeToken } from "../utils/decodeToken";
 import { Link } from "react-router-dom";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import { ProductDTO } from "../types/product";
+import conf from "../config/Conf";
 
 const RecommendedProducts = () => {
   const decoded = decodeToken();
@@ -93,7 +94,8 @@ const RecommendedProducts = () => {
                     <div className="">
                       <img
                         className="w-44 m-auto object-contain h-44"
-                        src={`http://localhost:8000/api/upload/${v?.image}`}
+                    src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                        
                         alt="banner"
                       />
                     </div>

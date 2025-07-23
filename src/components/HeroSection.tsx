@@ -15,6 +15,7 @@ import axios from "axios";
 import { getBannerData } from "../services/BannerServices";
 import SwiperButtonThree from "./SwiperButtonThree";
 import { BannerDTO } from "../types/banner";
+import conf from "../config/Conf";
 
 const HeroSection = () => {
   const [data, setData] = useState<BannerDTO[]>([]);
@@ -58,7 +59,7 @@ const HeroSection = () => {
                 <div className="h-64">
                   <img
                     className="w-full h-full object-cover"
-                    src={`http://localhost:8000/api/upload/${v.image}`}
+                     src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                   />
                 </div>
               </SwiperSlide>

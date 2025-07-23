@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
+import conf from "../config/Conf";
 
 interface Product {
   _id: string;
@@ -32,7 +33,7 @@ const FourGridProduct: React.FC<FourGridProductProps> = ({
               <div className="">
                 <img
                   className="w-20 h-20 object-contain m-auto"
-                  src={`http://localhost:8000/api/upload/${product.image}`}
+                   src={`${conf.BaseURL}${conf.GetImageUrl}/${product.image}`}
                   alt={product.subcategory.name}
                 />
               </div>

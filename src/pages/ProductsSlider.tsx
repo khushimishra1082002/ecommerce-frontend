@@ -16,6 +16,7 @@ import { decodeToken } from "../utils/decodeToken";
 import { getFilterProductsData } from "../services/ProductService";
 import SwiperButton from "../components/SwiperButton";
 import { ProductDTO } from "../types/product";
+import conf from "../config/Conf";
 
 const ProductSlider = ({ title, filterQuery }) => {
   console.log("filterQuery", filterQuery);
@@ -119,7 +120,7 @@ const ProductSlider = ({ title, filterQuery }) => {
                 <div className="w-full aspect-square flex justify-center items-center">
                   <img
                     className="h-40 m-auto w-full object-contain"
-                    src={`http://localhost:8000/api/upload/${v.image}`}
+                    src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                     alt="product"
                   />
                 </div>

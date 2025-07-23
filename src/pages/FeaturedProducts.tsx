@@ -8,6 +8,7 @@ import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import { ProductDTO } from "../types/product";
+import conf from "../config/Conf";
 
 const FeaturedProducts = () => {
   
@@ -85,7 +86,7 @@ const FeaturedProducts = () => {
                 <div className="h-52 flex justify-center items-center">
                   <img
                     className="w-44 object-contain h-full"
-                    src={`http://localhost:8000/api/upload/${v.image}`}
+                     src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                     alt={v.name}
                   />
                 </div>

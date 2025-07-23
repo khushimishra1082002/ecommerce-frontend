@@ -7,6 +7,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { getPosterData } from "../services/PosterService";
 import { PosterDTO } from "../types/poster";
+import conf from "../config/Conf";
 
 const PosterCarosoul = () => {
  const [data, setData] = useState<PosterDTO[]>([]);
@@ -59,7 +60,7 @@ const PosterCarosoul = () => {
                 <div className="h-72 relative">
                   <img
                     className="w-full h-full object-cover rounded-md"
-                    src={`http://localhost:8000/api/upload/${v.image}`}
+                     src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                     alt={v.title || "Poster Image"}
                   />
                   <div

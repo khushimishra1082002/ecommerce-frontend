@@ -34,11 +34,11 @@ const Categories = () => {
           onSwiper={(swiper) => console.log(swiper)}
           onSlideChange={() => console.log("slide change")}
           breakpoints={{
-             300: {
+            300: {
               slidesPerView: 4,
               spaceBetween: 20,
             },
-             440: {
+            440: {
               slidesPerView: 4,
               spaceBetween: 20,
             },
@@ -71,8 +71,9 @@ const Categories = () => {
                   >
                     <img
                       className="w-12 md:w-14"
-                      src={`${conf.GetImageUrl}/${v.image}`}
+                      src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                     />
+
                     <span className="text-[13px] font-heading font-medium tracking-wider">
                       {v.name}
                     </span>

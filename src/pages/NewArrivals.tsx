@@ -9,6 +9,7 @@ import "swiper/css/scrollbar";
 import { Link } from "react-router-dom";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import { ProductDTO } from "../types/product";
+import conf from "../config/Conf";
 
 const NewArrivals = () => {
     const [data, setData] = useState<ProductDTO[]>([]);
@@ -96,7 +97,7 @@ const NewArrivals = () => {
                       <div className="h-52">
                         <img
                           className="w-48 h-full object-contain"
-                          src={`http://localhost:8000/api/upload/${v.image}`}
+                           src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                         />
                       </div>
                       <span className=" font-heading text-sm line-clamp-2">

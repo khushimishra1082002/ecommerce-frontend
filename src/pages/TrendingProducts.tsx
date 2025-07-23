@@ -8,6 +8,7 @@ import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import SwiperButtonTwo from "../components/SwiperButtonTwo";
 import SwiperButtonThree from "../components/SwiperButtonThree";
+import conf from "../config/Conf";
 
 const TrendingProducts = () => {
   const [data, setData] = useState([]);
@@ -77,7 +78,7 @@ const TrendingProducts = () => {
               <div className="h-52 flex justify-center items-center">
                 <img
                   className="w-44 object-contain h-full"
-                  src={`http://localhost:8000/api/upload/${v.image}`}
+                   src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                   alt={v.name}
                 />
               </div>
