@@ -135,7 +135,7 @@ const ProductDetail = () => {
               <div className="flex items-center gap-2">
                 <img
                   className="w-4 h-4"
-                  src="data:image/svg+xml;base64,..."
+                  
                   alt="location"
                 />
                 <span className="text-gray-500 font-heading text-sm">Deliver to</span>
