@@ -6,6 +6,7 @@ import {
 } from "../services/wishlistService";
 import { MdDelete } from "react-icons/md";
 import { WishlistItem } from "../types/wishlist";
+import conf from "../config/Conf";
 
 const Wishlist = () => {
   const [data, setData] = useState<WishlistItem[]>([]);
@@ -61,7 +62,8 @@ const Wishlist = () => {
                 <div className="sm:col-span-1 flex justify-center items-center">
                   <img
                     className="w-24 h-24 object-contain rounded border border-gray-200"
-                    src={`http://localhost:8000/api/upload/${product.image[0]}`}
+                    src={`${conf.BaseURL}${conf.GetImageUrl}/${product?.image[0]}`}
+                    
                     alt={product.name}
                   />
                 </div>

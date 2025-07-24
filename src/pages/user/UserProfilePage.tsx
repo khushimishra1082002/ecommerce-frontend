@@ -118,7 +118,7 @@ const UserProfilePage = () => {
                               className="w-full h-full rounded-full object-cover shadow"
                               src={
                                 previewImage ||
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEpWWQrAJpIR6Xy7FhzhCT00vzSmT7xw9S2Q&s"
+                                "https://i.pinimg.com/736x/59/37/5f/59375f2046d3b594d59039e8ffbf485a.jpg"
                               }
                               alt="User"
                             />
