@@ -14,6 +14,7 @@ import {
 import { Link } from "react-router-dom";
 import { MdPhotoLibrary } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
+import { FaImage } from "react-icons/fa";
 
 const DashboardSidebar = ({ onClose }) => {
   return (
@@ -90,7 +91,7 @@ const DashboardSidebar = ({ onClose }) => {
         <Link onClick={onClose} to="/adminDashboard/posterDashboard">
           <li className="rounded py-2 px-4">
             <div className="flex items-center gap-4">
-              <ClipboardList className="w-4 h-4 text-skin-accent_one" />
+              <FaImage className="w-4 h-4 text-skin-accent_one" />
               <span>Poster</span>
             </div>
           </li>

@@ -8,6 +8,7 @@ import AddBanner from "./AddBanner";
 import EditBanner from "./EditBanner";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BannerDTO } from "../../types/banner";
+import conf from "../../config/Conf";
 
 export const DashboardBanner: React.FC = () => {
   const [showAddBannerModel, setShowAddBannerModel] = useState<boolean>(false);
@@ -85,7 +86,7 @@ export const DashboardBanner: React.FC = () => {
         {data.map((banner) => (
           <div key={banner._id} className="border p-4 shadow rounded space-y-2">
             <img
-              src={`http://localhost:8000/api/upload/${banner.image}`}
+              src={`${conf.BaseURL}${conf.GetImageUrl}/${banner.image}`}
               alt="Banner"
               className="w-full h-52 object-cover"
             />

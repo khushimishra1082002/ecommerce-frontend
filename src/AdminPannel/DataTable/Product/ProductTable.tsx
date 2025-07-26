@@ -17,6 +17,7 @@ import {
 import EditProduct from "./EditProduct";
 import ViewProduct from "./ViewProduct";
 import { deleteMultipleProductData } from "../../../services/ProductService";
+import conf from "../../../config/Conf";
 
 const ProductTable = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -127,7 +128,7 @@ const ProductTable = () => {
       name: "Image",
       selector: (row) => (
         <img
-          src={`http://localhost:8000/api/upload/${row.image}`}
+          src={`${conf.BaseURL}${conf.GetImageUrl}/${row.image}`}
           width={40}
           height={40}
           alt=""

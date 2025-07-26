@@ -1,5 +1,6 @@
 import React from "react";
 import { RxCross2 } from "react-icons/rx";
+import conf from "../../../config/Conf";
 
 const ViewProduct = ({ closeProductDetailModal, singleProduct }) => {
   return (
@@ -20,7 +21,7 @@ const ViewProduct = ({ closeProductDetailModal, singleProduct }) => {
             <span className="text-sm font-heading font-medium">Image</span>
             {singleProduct?.image && (
               <img
-                src={`http://localhost:5000/api/upload/${singleProduct?.image}`}
+                src={`${conf.BaseURL}${conf.GetImageUrl}/${singleProduct?.image}`}
                 alt="Product"
                 className="w-20 h-20 object-cover rounded border"
               />

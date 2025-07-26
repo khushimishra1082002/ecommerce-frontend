@@ -15,6 +15,9 @@ interface AddPosterProps {
 const initialValues: PosterDTO = {
   _id: "",
   image: "" as unknown as File | string,
+  title: "",
+  subtitle: "",
+  description: "",
   link: "",
   location: "",
   displayOrder: 0,
@@ -41,6 +44,9 @@ const AddPoster: React.FC<AddPosterProps> = ({
       formData.append("endDate", values.endDate || "");
       formData.append("active", String(values.active));
       formData.append("link", values.link ?? "");
+      formData.append("title", values.title || "");
+      formData.append("subtitle", values.subtitle || "");
+      formData.append("description", values.description || "");
 
       if (values.image && typeof values.image !== "string") {
         formData.append("image", values.image);
@@ -50,6 +56,8 @@ const AddPoster: React.FC<AddPosterProps> = ({
       }
 
       const response = await CreatePosterData(formData);
+
+      console.log("rddd", response);
 
       if (response.ok) {
         alert("Poster added successfully");
@@ -140,6 +148,35 @@ const AddPoster: React.FC<AddPosterProps> = ({
                 type="date"
                 label="End Date"
                 name="endDate"
+              />
+
+              {/* Title */}
+              <FormikControl
+                control="input"
+                type="text"
+                label="Title"
+                name="title"
+                placeholder="Enter poster title"
+                valid={formik.errors.title && formik.touched.title}
+              />
+
+              {/* Subtitle */}
+              <FormikControl
+                control="input"
+                type="text"
+                label="Subtitle"
+                name="subtitle"
+                placeholder="Enter poster subtitle"
+                valid={formik.errors.subtitle && formik.touched.subtitle}
+              />
+
+              {/* Description */}
+              <FormikControl
+                control="textarea"
+                label="Description"
+                name="description"
+                placeholder="Enter description"
+                valid={formik.errors.description && formik.touched.description}
               />
 
               {/* Active Status */}
