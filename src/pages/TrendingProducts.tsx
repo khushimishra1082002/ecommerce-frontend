@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getTreandingProductData } from "../services/ProductService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -9,16 +9,19 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import SwiperButtonTwo from "../components/SwiperButtonTwo";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import conf from "../config/Conf";
+import { BsCart } from "react-icons/bs";
 
 type Product = {
   _id: string;
   name: string;
   image: string;
+  price: number;
   // add other fields as needed
 };
 
 const TrendingProducts = () => {
   const [data, setData] = useState<Product[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTrendingProducts = async () => {
@@ -33,22 +36,29 @@ const TrendingProducts = () => {
   }, []);
 
   return (
-    <div className="bg-white p-4 m-3">
-      <h2 className="font-heading text-lg font-semibold mb-4">
-        Trending Products
+    <div className="bg-white p-4 m-3 space-y-4">
+      <div className="">
+        <h2 className="font-heading text-lg font-bold ">
+        🔥 Trending Now
       </h2>
+      <p className="text-sm text-gray-500 font-body  ">
+        Discover the most popular picks everyone’s loving this week.
+      </p>
+      </div>
+
+      <div className="bg-black/10 w-full h-[1px]"></div>
 
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
-        spaceBetween={10}
-        slidesPerView={6}
+        spaceBetween={12}
+        slidesPerView={5}
         autoplay={{ delay: 3000 }}
         breakpoints={{
           240: {
             slidesPerView: 1,
             spaceBetween: 6,
           },
-           340: {
+          340: {
             slidesPerView: 2,
             spaceBetween: 6,
           },
@@ -65,7 +75,7 @@ const TrendingProducts = () => {
             spaceBetween: 6,
           },
           1024: {
-            slidesPerView: 6,
+            slidesPerView: 5,
             spaceBetween: 6,
           },
         }}
@@ -80,20 +90,34 @@ const TrendingProducts = () => {
           <SwiperSlide key={i}>
             <Link
               to={`/${v._id}`}
-              className="block bg-white border border-black/10"
+              className="block bg-white border border-black/10 shadow"
             >
-              <div className="h-52 flex justify-center items-center">
+              <div className="h-44 flex justify-center items-center">
                 <img
-                  className="w-44 object-contain h-full"
-                   src={`${conf.BaseURL}${conf.GetImageUrl}/${v?.image}`}
+                  className="w-36 object-contain h-full"
+                  src={`${conf.BaseURL}${conf.GetImageUrl}/${v?.image}`}
                   alt={v?.name}
                 />
               </div>
-              <div className="p-2">
+              <div className="py-2 px-[10px] flex flex-col gap-2">
                 <span className="text-gray-400 font-body text-xs font-medium">
                   Great Deal
                 </span>
-                <p className="font-heading text-sm line-clamp-2 ">{v.name}</p>
+                <p className="font-heading text-[13px] line-clamp-2  ">
+                  {v.name}
+                </p>
+                <p className="font-heading text-[15px] line-clamp-2 font-medium  ">
+                  Rs {v.price}
+                </p>
+                <button
+                  onClick={() => navigate(`/${v._id}`)}
+                  className="bg-black text-white px-2 py-2 rounded
+                text-[13px] font-subHeading font-medium transition-none shadow
+                flex justify-center items-center gap-1"
+                >
+                  <BsCart className="text-lg" />
+                  Buy Now
+                </button>
               </div>
             </Link>
           </SwiperSlide>

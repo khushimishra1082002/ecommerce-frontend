@@ -10,10 +10,10 @@ import axios from "axios";
 import { LoginUserData, SignUpUserData } from "../services/authService";
 
 type LoginProps = {
-  setLoggedIn: (value: boolean) => void;
+  setShowSignUp: (value: boolean) => void;
 };
 
-const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
+const Login: React.FC<LoginProps> = ({ setShowSignUp }) => {
   const navigate = useNavigate();
 
   const initialValues: LoginDTO = {
@@ -21,9 +21,10 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
     password: "",
   };
 
-  const handleLogin = () => {
-    setLoggedIn(true);
+ const handleGoToSignup = () => {
+    setShowSignUp(true); // Show Signup screen
   };
+
 
   const onSubmit = async (
     values: LoginDTO,
@@ -121,7 +122,7 @@ const Login: React.FC<LoginProps> = ({ setLoggedIn }) => {
               You have no account?{" "}
             </span>
             <span
-              onClick={handleLogin}
+              onClick={handleGoToSignup}
               className="text-skin-primary text-sm  font-body font-semibold hover:underline
                  hover:scale-105 duration-500 hover:text-orange-600 cursor-pointer"
             >

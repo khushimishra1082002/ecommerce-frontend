@@ -14,6 +14,7 @@ export interface WishlistProductDTO {
 
 
 export interface WishlistItem {
+  _id?:string
   productId: ProductDTO; // full populated product
 }
 
@@ -24,4 +25,11 @@ export interface WishlistDTO {
   products: WishlistItem[]; 
   createdAt?: string;
   updatedAt?: string;
+}
+
+
+export interface WishlistStateDTO {
+  wishlist: WishlistDTO | null;
+  loading: boolean;
+  error: string | null;
 }

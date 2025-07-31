@@ -19,7 +19,6 @@ const RecommendedProducts = () => {
 
   const [data, setData] = useState<ProductDTO[]>([]);
 
-
   console.log("data", data);
 
   useEffect(() => {
@@ -40,15 +39,19 @@ const RecommendedProducts = () => {
     <>
       <div className="bg-white p-4 space-y-4 m-3">
         <div className="flex flex-col">
-          <h2 className="font-heading text-lg font-semibold ">
-            Recommended For You
+          <h2 className="font-heading text-lg font-bold ">
+            🎯 Recommended For You
           </h2>
-          <div className="w-full bg-black/15 h-[1px] my-3"></div>
+          <span className="text-sm text-gray-500 font-body ">
+            Personalized picks based on your interests
+          </span>
+          <div className="w-full bg-gray-200 h-[1px] my-3"></div>
         </div>
+
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y]}
-          spaceBetween={10}
-          slidesPerView={6}
+          spaceBetween={12}
+          slidesPerView={5}
           breakpoints={{
             240: {
               slidesPerView: 1,
@@ -71,7 +74,7 @@ const RecommendedProducts = () => {
               spaceBetween: 6,
             },
             1024: {
-              slidesPerView: 6,
+              slidesPerView: 5,
               spaceBetween: 6,
             },
           }}
@@ -87,21 +90,19 @@ const RecommendedProducts = () => {
             return (
               <SwiperSlide>
                 <div
-                  className="border rounded-lg p-4 flex flex-col gap-3
-                  shadow-sm hover:shadow-md transition duration-200 "
+                  className="border rounded-lg  flex flex-col gap-3
+                   hover:shadow-md transition duration-200 py-1 shadow "
                 >
                   <Link to={`${v._id}`} className="space-y-1">
-                    <div className="">
+                    <div className="h-44 p-2">
                       <img
-                        className="w-44 m-auto object-contain h-44"
-                    src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
-                        
+                        className="h-full m-auto object-contain"
+                        src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                         alt="banner"
                       />
                     </div>
-                    <h4 className="text-sm font-body line-clamp-2">{v.name}</h4>
-                    <div className="flex justify-between items-center">
-                      <div>
+                   <div className="px-3 space-y-2">
+                    <div>
                         <span
                           className=" bg-red-500 rounded text-white p-1 text-xs font-body font-medium
          "
@@ -109,10 +110,13 @@ const RecommendedProducts = () => {
                           {v.discount}% off
                         </span>
                       </div>
+                   
+                   
+                    <div className="flex flex-col gap-2">
+                        <h4 className="text-[12px] font-heading line-clamp-2">{v.name}</h4>
+                      <span className="text-base font-heading font-medium">Rs {v.price}</span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-heading">Rs {v.price}</span>
-                    </div>
+                   </div>
                   </Link>
                 </div>
               </SwiperSlide>

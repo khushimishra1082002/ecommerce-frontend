@@ -6,37 +6,33 @@ import { BsCart } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { MdAccountCircle } from "react-icons/md";
 import { decodeToken } from "../utils/decodeToken";
-import { fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
-import { getWishlistData } from "../services/wishlistService";
 import Searchbar from "./Searchbar";
 import { Menu, X } from "lucide-react";
+import { fetchWishlistProduct } from "../ReduxToolkit/Slices/WishlistSlice";
+import { logout } from "../ReduxToolkit/Slices/AuthSlice";
+import { fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
 
 const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const decoded = decodeToken();
   const userId = decoded?.id;
   const dispatch = useDispatch<AppDispatch>();
   const { cart } = useSelector((state: RootState) => state.cart);
-  const [data, setData] = useState([]);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { wishlist, loading, error } = useSelector(
+    (state: RootState) => state.wishlists
+  );
 
   useEffect(() => {
-    if (userId) dispatch(fetchcartProduct(userId));
-  }, [dispatch, userId]);
-
-  const fetchData = async () => {
-    try {
-      const res = await getWishlistData(userId);
-      setData(res.products);
-    } catch (error) {
-      console.error("Error fetching wishlist:", error);
+    if (userId) {
+      dispatch(fetchWishlistProduct(userId));
+      dispatch(fetchcartProduct(userId));
     }
-  };
-
-  useEffect(() => {
-    if (userId) fetchData();
   }, [userId]);
+
+  const wishlistCount = wishlist?.products?.length || 0;
+  const cartCount = cart?.items?.length;
 
   return (
     <>
@@ -52,9 +48,7 @@ const Header = () => {
               <FaLocationDot className="text-skin-primary text-sm" />
               <span className="text-[13px] text-gray-400 font-body">
                 Deliver to{" "}
-                <strong className="text-gray-500 text-[12px] font-heading">
-                  346646
-                </strong>
+                <strong className="text-gray-500 text-[12px] font-heading"></strong>
               </span>
             </div>
             <div className="h-[12px] w-[1px] bg-black" />
@@ -122,7 +116,7 @@ const Header = () => {
                     </Link>
                     <button
                       onClick={() => {
-                        localStorage.removeItem("token");
+                        dispatch(logout());
                         window.location.href = "/IsLoggedIn";
                       }}
                       className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-body"
@@ -149,14 +143,20 @@ const Header = () => {
               >
                 <BsCart className="text-skin-primary text-xl" />
                 <span className="absolute -top-1 -right-2 bg-red-500 text-white w-4 h-4 text-xs rounded-full flex items-center justify-center font-bold">
-                  {cart?.items.length}
+                  {cartCount}
                 </span>
                 <span className="text-[14px] font-body text-gray-800">
                   Cart
                 </span>
               </Link>
-              <Link to="/myWishList" className="flex flex-col items-center">
+              <Link
+                to="/myWishList"
+                className="relative flex flex-col items-center"
+              >
                 <FaHeart className="text-skin-primary text-xl" />
+                <span className="absolute -top-1 left-7 bg-red-500 text-white w-4 h-4 text-xs rounded-full flex items-center justify-center font-bold">
+                  {wishlistCount}
+                </span>
                 <span className="text-[14px] font-body text-gray-800">
                   Wishlist
                 </span>
@@ -212,7 +212,7 @@ const Header = () => {
               to="/mainCartPage"
               className="flex items-center gap-2 text-gray-700 hover:text-sky-600 text-sm"
             >
-              🛒 Cart <span>({cart?.items.length || 0})</span>
+              🛒 Cart <span>({cart?.items?.length || 0})</span>
             </Link>
 
             {/* Wishlist Link */}
@@ -220,7 +220,7 @@ const Header = () => {
               to="/myWishList"
               className="flex items-center gap-2 text-gray-700 hover:text-pink-600 text-sm"
             >
-               Wishlist
+              Wishlist
             </Link>
           </div>
         )}

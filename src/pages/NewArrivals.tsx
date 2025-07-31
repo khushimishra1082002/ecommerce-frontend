@@ -12,8 +12,7 @@ import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
 
 const NewArrivals = () => {
-    const [data, setData] = useState<ProductDTO[]>([]);
-  
+  const [data, setData] = useState<ProductDTO[]>([]);
 
   console.log("data", data);
 
@@ -32,46 +31,47 @@ const NewArrivals = () => {
   return (
     <>
       <div className="bg-white p-4 space-y-4 m-3">
-        <div className="flex flex-col">
-          <h2 className="font-heading text-lg font-semibold ">New Arrivals</h2>
-          <span className="font-body text-sm font-light">
-            Products You Absolutely Can't miss{" "}
-          </span>
-          <div className="w-full bg-black/15 h-[1px] my-3"></div>
+        <div className="">
+          <h2 className="font-heading text-lg font-bold ">✨ New Arrivals</h2>
+          <p className="text-sm text-gray-500 font-body ">
+            Fresh styles & latest picks you won't want to miss.
+          </p>
         </div>
+
+        <div className="bg-black/5 w-full h-[1px]"></div>
 
         <div className="space-y-8 p-4 bg-white my-3">
           <Swiper
             modules={[Navigation, Pagination, Scrollbar, A11y]}
-            spaceBetween={14}
-            slidesPerView={6}
+            spaceBetween={16}
+            slidesPerView={5}
             onSlideChange={() => console.log("slide change")}
             onSwiper={(swiper) => console.log(swiper)}
             className=""
             breakpoints={{
               240: {
                 slidesPerView: 1,
-                spaceBetween: 6,
+                spaceBetween: 8,
               },
               340: {
                 slidesPerView: 2,
-                spaceBetween: 6,
+                spaceBetween: 8,
               },
               440: {
                 slidesPerView: 2,
-                spaceBetween: 6,
+                spaceBetween: 8,
               },
               640: {
                 slidesPerView: 3,
-                spaceBetween: 6,
+                spaceBetween: 8,
               },
               768: {
                 slidesPerView: 4,
-                spaceBetween: 6,
+                spaceBetween: 8,
               },
               1024: {
-                slidesPerView: 6,
-                spaceBetween: 6,
+                slidesPerView: 5,
+                spaceBetween: 8,
               },
             }}
           >
@@ -85,7 +85,10 @@ const NewArrivals = () => {
               return (
                 <SwiperSlide>
                   <Link to={`${v._id}`}>
-                    <div className="flex flex-col  border border-black/10 rounded-md p-2 gap-4 ">
+                    <div
+                      className="flex flex-col  border border-black/10 rounded-md p-2 gap-4
+                    shadow "
+                    >
                       <div>
                         <span
                           className=" bg-red-500 text-white p-1 text-xs font-body font-medium
@@ -94,15 +97,20 @@ const NewArrivals = () => {
                           New
                         </span>
                       </div>
-                      <div className="h-52">
+                      <div className="h-44">
                         <img
-                          className="w-48 h-full object-contain"
-                           src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                          className="w-36 m-auto h-full object-contain"
+                          src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                         />
                       </div>
-                      <span className=" font-heading text-sm line-clamp-2">
-                        {v.name}
-                      </span>
+                      <div className="p-1 flex flex-col gap-1">
+                        <span className=" font-heading text-[13px] line-clamp-2">
+                          {v.name}
+                        </span>
+                        <span className=" font-heading text-[15px] font-medium line-clamp-2">
+                          Rs.{v.price}
+                        </span>
+                      </div>
                     </div>
                   </Link>
                 </SwiperSlide>

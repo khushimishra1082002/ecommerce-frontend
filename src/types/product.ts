@@ -2,6 +2,15 @@ export interface SelectOption {
   label: string;
   value: string;
 }
+export interface subcategory {
+  _id: string;
+  name: string;
+};
+
+export interface brand {
+  _id: string;
+  name: string;
+};
 
 export interface ProductDTO {
   _id: string;
@@ -15,8 +24,8 @@ export interface ProductDTO {
   discount: number;
   isFeatured: boolean;
   category: string;
-  subcategory: string;
-  brand: string;
+  subcategory: subcategory;
+  brand: brand;
   isActive: boolean;
   // metaTitle?: string;
   // metaDescription?: string;

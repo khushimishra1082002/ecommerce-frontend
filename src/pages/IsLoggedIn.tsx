@@ -4,7 +4,7 @@ import Login from "./Login";
 
 const IsLoggedIn = () => {
 
-  const [loggedIn,setLoggedIn] = useState<Boolean>(false)
+  const [showSignUp, setShowSignUp] = useState(false);
 
   return (
     <>
@@ -16,9 +16,11 @@ const IsLoggedIn = () => {
           src="https://wallpapers.com/images/hd/e-commerce-1920-x-1080-wallpaper-tb4uqckgoo0883zw.jpg" />
         </div>
         <div className="h-full flex items-center w-full">
-          {
-            loggedIn ? <SignUp setLoggedIn = {setLoggedIn}/> : <Login setLoggedIn = {setLoggedIn} />
-          }
+           {showSignUp ? (
+            <SignUp setShowSignUp={setShowSignUp} />
+          ) : (
+            <Login setShowSignUp={setShowSignUp} />
+          )}
         </div>
       </div>
      </div>

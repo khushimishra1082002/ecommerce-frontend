@@ -9,3 +9,10 @@ export interface LoginDTO {
   email: string;
   password: string;
 }
+
+export interface AuthStateDTO {
+  user: any | null; 
+  loading: boolean;
+  error: string | null;
+  token: string | null;
+}

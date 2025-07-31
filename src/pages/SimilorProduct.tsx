@@ -5,16 +5,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { FaStar } from "react-icons/fa";
 import { getSimilorProductData } from "../services/ProductService";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
 
 const SimilorProduct = ({ productId }) => {
-    const [data, setData] = useState<ProductDTO[]>([]);
-  
-
-  console.log("similor", data);
+  const [data, setData] = useState<ProductDTO[]>([]);
 
   useEffect(() => {
     const fetchSimilorProduct = async () => {
@@ -31,9 +27,7 @@ const SimilorProduct = ({ productId }) => {
   return (
     <>
       <div className=" bg-white space-y-4 px-4 py-6 m-3 shadow ">
-        <h2 className="font-heading text-lg font-semibold ">
-          Similor Products
-        </h2>
+        <h2 className="font-heading text-lg font-semibold">Related Products</h2>
 
         <Swiper
           modules={[Navigation, Pagination, A11y]}
@@ -76,28 +70,13 @@ const SimilorProduct = ({ productId }) => {
                   />
                 </div>
                 <div className="flex  flex-col gap-1 p-2 ">
-                  <span className=" font-heading text-sm line-clamp-2 ">
+                  <span className=" font-heading text-[13px] line-clamp-2 ">
                     {v.name}
                   </span>
-                  <div className="flex gap-2 items-center">
-                    <div
-                      className="flex justify-center
-                               items-center gap-1 bg-red-500 text-white w-12 p-[1px] rounded
-                               
-                              "
-                    >
-                      <span className="font-body text-[12px] font-medium ">
-                        4.5
-                      </span>
-                      <FaStar className="text-[12px]" />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 ">
-                    <span className=" font-heading text-lg font-medium ">
+
+                  <div className="flex items-center gap-6 ">
+                    <span className=" font-heading text-base font-medium ">
                       Rs {v.price}{" "}
-                    </span>
-                    <span className="text-sm font-fontOne text-orange-600 font-medium">
-                      {v.discount}% off
                     </span>
                   </div>
                 </div>

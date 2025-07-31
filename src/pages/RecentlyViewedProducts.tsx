@@ -10,6 +10,7 @@ import { decodeToken } from "../utils/decodeToken";
 import { Link } from "react-router-dom";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import conf from "../config/Conf";
+import { BsCart } from "react-icons/bs";
 
 interface RecentlyViewedItem {
   _id: string;
@@ -22,7 +23,7 @@ interface RecentlyViewedItem {
 }
 
 const RecentlyViewedProducts = () => {
-  const [data, setData] = useState<RecentlyViewedItem[]>([]); 
+  const [data, setData] = useState<RecentlyViewedItem[]>([]);
   console.log("bbhhh", data);
 
   const decoded = decodeToken();
@@ -46,12 +47,13 @@ const RecentlyViewedProducts = () => {
     <>
       <div className="bg-white p-4 space-y-3 m-3">
         <div className="flex flex-col">
-          <h2 className="font-heading text-lg font-semibold">
-            Recently Viewed
+          <h2 className="font-heading text-lg font-bold ">
+            👀 Recently Viewed
           </h2>
-          <span className="font-body text-sm font-light">
-            A-listers to obsess over
+          <span className="text-sm text-gray-500 font-body">
+            Your favorites at a glance — take another look.
           </span>
+
           <div className="w-full bg-black/10 h-[1px] my-3"></div>
         </div>
 
@@ -97,23 +99,22 @@ const RecentlyViewedProducts = () => {
             <SwiperSlide key={v._id}>
               <Link to={`/${v.productId?._id}`}>
                 <div
-                  className="border rounded-lg p-4 flex flex-col gap-3
+                  className="border rounded-lg flex flex-col gap-3
                   shadow-sm hover:shadow-md transition duration-200 "
                 >
-                  <div className="h-52">
+                  <div className="h-52 p-4">
                     <img
                       className="w-44 object-contain h-full"
-                   
                       src={`${conf.BaseURL}${conf.GetImageUrl}/${v?.productId?.image?.[0]}`}
                       alt="product"
                     />
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-body line-clamp-2">
+                  <div className="space-y-1 p-2 ">
+                    <p className="text-[13px]  font-heading line-clamp-2">
                       {v?.productId?.name}
                     </p>
-                    <p className="text-base font-body line-clamp-2">
-                      Rs {v?.productId?.price}
+                    <p className="text-[15px]  font-heading font-medium line-clamp-2">
+                      Rs.{v?.productId?.price}
                     </p>
                   </div>
                 </div>

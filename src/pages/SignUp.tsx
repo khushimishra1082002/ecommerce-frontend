@@ -8,20 +8,25 @@ import FormikControl from "../components/ReusableFormField/Input";
 import conf from "../config/Conf";
 import axios from "axios";
 import { SignUpUserData } from "../services/authService";
+import { signup } from "../ReduxToolkit/Slices/AuthSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 
 console.log("Register URL:", conf.SignupUrl);
 
 type SignUpProps = {
-  setLoggedIn: (value: boolean) => void;
+  setShowSignUp: (value: boolean) => void;
 };
+
 
 interface SignupResponse {
   success: boolean;
   message: string;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ setLoggedIn }) => {
+const SignUp: React.FC<SignUpProps> = ({ setShowSignUp  }) => {
   const navigate = useNavigate();
+   const dispatch = useDispatch<AppDispatch>();
 
   const initialValues: SignupDTO = {
     fullname: "",
@@ -30,34 +35,32 @@ const SignUp: React.FC<SignUpProps> = ({ setLoggedIn }) => {
     confirmPassword: "",
   };
 
-  const handleSignUp = () => {
-    setLoggedIn(false);
+  const handleBackToLogin = () => {
+    setShowSignUp(false); // Go to Login screen
   };
 
   const onSubmit = async (
-    values: SignupDTO,
-    onSubmitProps: FormikHelpers<SignupDTO>
-  ) => {
-    try {
-      const response = await SignUpUserData(values);
+  values: SignupDTO,
+  { resetForm, setSubmitting }: FormikHelpers<SignupDTO>
+) => {
+  try {
+    const response = await dispatch(signup(values)).unwrap();
 
-      if (response && response.message) {
-        alert(response.message);
-
-        if (response.message === "Sign up successful") {
-          onSubmitProps.resetForm();
-          // setLoggedIn(true);
-        }
-      } else {
-        alert("Unexpected response format.");
-      }
-    } catch (error: any) {
-      console.error("Signup error:", error);
-      alert(error?.message || "An unexpected error occurred.");
-    } finally {
-      onSubmitProps.setSubmitting(false);
+    if (response.message === "Sign up successful") {
+      alert(response.message);
+      resetForm();
+      setShowSignUp(false);
+    } else {
+      alert(response.message || "Something went wrong.");
     }
-  };
+  } catch (error: any) {
+    console.error("Signup error:", error);
+    alert(error.message || "An error occurred.");
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   return (
     <>
@@ -148,7 +151,7 @@ const SignUp: React.FC<SignUpProps> = ({ setLoggedIn }) => {
               Already have an account?{" "}
             </span>
             <span
-              onClick={handleSignUp}
+               onClick={handleBackToLogin}
               className="text-skin-primary text-sm  font-body font-semibold hover:underline
             hover:scale-105 duration-500 hover:text-orange-600 cursor-pointer"
             >

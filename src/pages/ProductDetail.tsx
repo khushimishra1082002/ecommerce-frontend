@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { IoStar } from "react-icons/io5";
-import { FaStar, FaRupeeSign, FaShoppingCart, FaHeart } from "react-icons/fa";
+import { FaRupeeSign, FaShoppingCart, FaHeart } from "react-icons/fa";
 import SimilorProduct from "./SimilorProduct";
-import RecentlyViewedProducts from "./RecentlyViewedProducts";
 import RecommendedProducts from "./RecommendedProducts";
 import {
   getSingleProductData,
   postRecentlyViewedProductData,
 } from "../services/ProductService";
-import { AddProductInCartData } from "../services/cartService";
 import { AddProductInWishlistData } from "../services/wishlistService";
 import { useParams } from "react-router-dom";
 import { decodeToken } from "../utils/decodeToken";
@@ -19,19 +16,18 @@ import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
 
 const ProductDetail = () => {
+
   const { productId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
+  const [singleProduct, setSingleProduct] = useState<ProductDTO | null>(null);
+  const [data, setData] = useState([]);
   const decoded = decodeToken();
   const userId = decoded?.id;
 
-  const [singleProduct, setSingleProduct] = useState<ProductDTO | null>(null);
-
-  const [data, setData] = useState([]);
-
-  const { cart } = useSelector((state: RootState) => state.cart);
-
   useEffect(() => {
-    if (userId) dispatch(fetchcartProduct(userId));
+    if (userId) {
+      dispatch(fetchcartProduct(userId))
+    };
   }, [dispatch, userId]);
 
   useEffect(() => {
@@ -97,30 +93,30 @@ const ProductDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-white p-4 rounded-md">
             <div className="flex flex-col items-center">
               <img
-                className="w-full object-contain max-h-[300px]"
+                className="w-full object-contain max-h-[60vh]"
                 src={`${conf.BaseURL}${conf.GetImageUrl}/${singleProduct?.image}`}
                 alt={singleProduct?.name}
               />
-
-              <div className="w-full mt-4 flex flex-col sm:flex-row gap-2">
+              <div className="w-full flex flex-col gap-2 my-4">
                 <button
                   onClick={handleAddToCart}
-                  className="w-full bg-blue-500 text-white px-4 py-2 rounded flex justify-center items-center gap-1 font-body"
+                  className="w-full bg-blue-500 text-white px-4 py-2
+                   rounded flex justify-center items-center gap-1 font-body text-sm"
                 >
                   <FaShoppingCart /> ADD TO CART
                 </button>
 
                 <button
                   onClick={() => handleWishlistProduct(singleProduct?._id)}
-                  className="w-full bg-orange-500 text-white px-2 py-2
-                   rounded flex justify-center items-center gap-1 font-body"
+                  className="w-full px-2 py-2  border border-blue-500
+                   rounded flex justify-center items-center gap-1 font-body text-sm"
                 >
-                  <FaHeart /> ADD TO WISHLIST
+                  <FaHeart className="text-red-600" /> ADD TO WISHLIST
                 </button>
               </div>
             </div>
 
-            <div className="lg:col-span-2 space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+            <div className="lg:col-span-2 space-y-6 max-h-[75vh] overflow-y-auto pr-2">
               <div className="space-y-1">
                 {singleProduct?.brand?.name && (
                   <span className="font-body text-skin-primary font-semibold">
@@ -144,8 +140,6 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              
-
               <div className="border border-black/10 rounded">
                 <div className="p-4">
                   <h3 className="font-body text-lg font-medium text-gray-800">
@@ -157,7 +151,7 @@ const ProductDetail = () => {
                   <h3 className="font-heading text-base font-medium">
                     About the item
                   </h3>
-                  <p className="font-body text-sm text-gray-700">
+                  <p className="font-heading text-[13px] text-gray-700 font-light">
                     {singleProduct?.description}
                   </p>
                 </div>
@@ -171,7 +165,7 @@ const ProductDetail = () => {
                 </div>
                 <div className="bg-black/10 h-[1px]" />
                 <div className="p-4 space-y-3">
-                  <span className="font-heading">General</span>
+                  
                   {Array.isArray(singleProduct?.attributes) &&
                     singleProduct.attributes.map((attr, index) => (
                       <div key={index} className="flex gap-4 items-start">

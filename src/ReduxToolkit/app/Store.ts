@@ -9,6 +9,9 @@ import discountOptionsReducer from "../Slices/DiscountOptionsSlice"
 import filterReducer from "../Slices/FilterSlice"
 import deliveryInfoReducer from "../Slices/DeliveryInfoSlice"
 import orderReducer from "../Slices/OrderSlice"
+import wishlistReducer from "../Slices/WishlistSlice"
+import authReducer from "../Slices/AuthSlice"
+import bannerReducer from "../Slices/BannerSlice"
 
 export const store = configureStore({
   reducer: {
@@ -21,7 +24,10 @@ export const store = configureStore({
     discount:discountOptionsReducer,
     filter:filterReducer,
     deliveryInfo:deliveryInfoReducer,
-    order:orderReducer
+    order:orderReducer,
+    wishlists:wishlistReducer,
+    auth:authReducer,
+    banner:bannerReducer
   },
 });
 
