@@ -38,6 +38,14 @@ const SimilorProduct = ({ productId }) => {
           onSlideChange={() => console.log("slide change")}
           className=""
           breakpoints={{
+            240: {
+            slidesPerView: 1,
+            spaceBetween: 6,
+          },
+          340: {
+            slidesPerView: 1,
+            spaceBetween: 6,
+          },
             440: {
               slidesPerView: 2,
               spaceBetween: 6,
