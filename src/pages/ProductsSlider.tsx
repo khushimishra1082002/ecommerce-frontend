@@ -114,7 +114,7 @@ const ProductSlider = ({ title, filterQuery }) => {
             className="w-full flex justify-between gap-3"
           >
             <div className="flex justify-between items-center">
-              <h2 className="font-heading text-sm sm:text-base md:text-lg font-bold">
+              <h2 className="font-heading text-base md:text-lg font-bold">
                 {title}
               </h2>
             </div>

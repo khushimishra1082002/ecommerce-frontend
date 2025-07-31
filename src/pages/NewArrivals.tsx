@@ -54,7 +54,7 @@ const NewArrivals = () => {
                 spaceBetween: 8,
               },
               340: {
-                slidesPerView: 2,
+                slidesPerView: 1,
                 spaceBetween: 8,
               },
               440: {
