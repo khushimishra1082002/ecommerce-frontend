@@ -39,7 +39,7 @@ const TrendingProducts = () => {
     <div className="bg-white p-4 m-3 space-y-4">
       <div className="">
         <h2 className="font-heading text-lg font-bold ">
-        🔥 Trending Now
+        {/* 🔥 Trending Now */}
       </h2>
       <p className="text-sm text-gray-500 font-body  ">
         Discover the most popular picks everyone’s loving this week.
