@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import DeliveryInformation from "./DeliveryInformation";
-import PaymentMethod from "./paymentMethod";
 import OrderSummaryPage from "../pages/OrderSummaryPage";
 import OrderSuccessPage from "./OrderSuccessPage";
 import { decodeToken } from "../utils/decodeToken";
 import { useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { motion, AnimatePresence } from "framer-motion";
+import PaymentMethod from "../pages/paymentMethod";
 
 const Checkout = () => {
   const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
