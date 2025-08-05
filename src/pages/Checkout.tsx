@@ -6,7 +6,7 @@ import { decodeToken } from "../utils/decodeToken";
 import { useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { motion, AnimatePresence } from "framer-motion";
-import PaymentMethod from "../pages/paymentMethod";
+import Paymentmethods from "./Paymentmethods";
 
 const Checkout = () => {
   const [showOrderSuccessModal, setShowOrderSuccessModal] = useState(false);
@@ -82,7 +82,7 @@ const Checkout = () => {
               <h2 className="text-lg font-semibold mb-2 font-heading">
                 2. Payment Method
               </h2>
-              <PaymentMethod onComplete={handlePaymentComplete} />
+              <Paymentmethods onComplete={handlePaymentComplete} />
             </section>
           )}
           {step === 3 && (
