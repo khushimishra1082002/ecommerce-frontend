@@ -35,7 +35,7 @@ const FourGridProduct: React.FC<FourGridProductProps> = ({
       <div className="p-4 gap-2 bg-white space-y-3">
         <div className="flex items-center gap-2">
           <IoIosArrowDropleftCircle className="text-xl" />
-          <h2 className="font-heading font-medium text-base">{title}</h2>
+          <h2 className="font-heading font-semibold text-base">{title}</h2>
         </div>
         <div className="grid grid-cols-2 gap-2">
           {products.slice(0, 4).map((product) => (

@@ -75,7 +75,8 @@ const conf = {
  updateOrderStatusUrl:"/order/updateOrderStatus",
  deletePosterUrl:"/poster/deletePoster",
  createPosterUrl:"/poster/createPoster",
- GetImageUrl: "/upload"
+ GetImageUrl: "/upload/",
+ ClearCartUrl:"/cart/clearCart"
 };
 
 export default conf;

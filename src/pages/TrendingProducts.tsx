@@ -92,14 +92,14 @@ const TrendingProducts = () => {
               to={`/${v._id}`}
               className="block bg-white border border-black/10 shadow"
             >
-              <div className="h-44 flex justify-center items-center">
+              <div className="h-44 flex justify-center items-center ">
                 <img
-                  className="w-36 object-contain h-full"
+                  className="w-40 object-contain h-full"
                   src={`${conf.BaseURL}${conf.GetImageUrl}/${v?.image}`}
                   alt={v?.name}
                 />
               </div>
-              <div className="py-2 px-[10px] flex flex-col gap-2">
+              <div className="py-6 px-[10px] flex flex-col gap-2">
                 <span className="text-gray-400 font-body text-xs font-medium">
                   Great Deal
                 </span>

@@ -46,7 +46,9 @@ export const updateQuantity = createAsyncThunk<
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+     
+  },
   extraReducers: (builder) => {
     builder
       // fetch cart
@@ -99,4 +101,6 @@ const cartSlice = createSlice({
   },
 });
 
+
 export default cartSlice.reducer;
+

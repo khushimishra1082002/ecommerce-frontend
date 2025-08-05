@@ -51,7 +51,7 @@ const PaymentPage = () => {
     console.log(" Order placed:", res.data || res);
 
     alert("Order placed successfully!");
-    navigate("/");
+    
   } catch (err: any) {
     console.error(" Order failed:", err?.response?.data || err.message || err);
     alert("Something went wrong while placing order.");

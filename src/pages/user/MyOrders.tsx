@@ -7,12 +7,17 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdFlight } from "react-icons/md";
 import { OrderDTO } from "../../types/order";
+import conf from "../../config/Conf";
+import { useNavigate } from "react-router-dom";
 
 const MyOrders = () => {
+  const navigate = useNavigate();
   const decoded = decodeToken();
   const userId = decoded?.id;
 
   const [orders, setOrders] = useState<OrderDTO[]>([]);
+
+  console.log("orders", orders);
 
   const [loading, setLoading] = useState(true);
 
@@ -43,111 +48,127 @@ const MyOrders = () => {
 
   return (
     <>
-      <div className="bg-gray-50 p-8">
-        <div className="bg-white p-6 space-y-6">
-          <div className="flex gap-2 items-center">
-            <FaShoppingCart className="text-cyan-400 text-2xl" />
-            <h4 className="font-heading text-xl font-semibold">My Orders</h4>
-          </div>
-          <div className="space-y-6">
-            {orders.map((order, i) => {
-              return (
-                <div>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <span className="text-lg font-medium font-heading">
-                        Order ID : {order._id.slice(-6)}
-                      </span>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        className="px-6 py-2 rounded border border-black/10 
-                    font-heading text-sm flex justify-center items-center gap-1 "
-                      >
+      {orders.length > 0 ? (
+        <div className="bg-gray-50 px-4 sm:px-6 md:px-8 py-8">
+          <div className="bg-white p-4 sm:p-6 space-y-6">
+            <div className="flex gap-2 items-center">
+              <FaShoppingCart className="text-cyan-400 text-2xl" />
+              <h4 className="font-heading text-xl font-semibold">My Orders</h4>
+            </div>
+
+            <div className="space-y-6">
+              {orders.map((order, i) => (
+                <div
+                  key={order._id}
+                  className="space-y-4 border rounded-md p-4 sm:p-5"
+                >
+                  {/* Order Header */}
+                  <div className="flex flex-col md:flex-row justify-between gap-3 md:items-center">
+                    <span className="text-base md:text-lg font-heading font-medium">
+                      Order ID: {order._id.slice(-6)}
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      <button className="px-4 py-1.5 border rounded text-sm flex items-center gap-1">
                         <IoDocumentTextOutline />
                         Invoice
                       </button>
-
-                      <button
-                        className="px-6 py-2 rounded bg-green-500 text-white font-semibold
-                    font-heading flex justify-center items-center text-sm gap-1"
-                      >
+                      <button className="px-4 py-1.5 bg-black text-white rounded text-sm flex items-center gap-1">
                         <FaMapMarkedAlt />
                         Track Order
                       </button>
                     </div>
                   </div>
-                  <div className="flex gap-5 items-center">
-                    <div>
-                      <p className="text-sm text-gray-500 mt-1 font-heading">
-                        Order Date:{" "}
-                        <span
-                          className="font-heading text-gray-700
-                    "
-                        >
-                          {format(
-                            new Date(order.createdAt),
-                            "dd MMM yyyy, hh:mm a"
-                          )}
-                        </span>
-                      </p>
-                    </div>
-                    <div className="bg-black/20 w-[1px] h-4"></div>
-                    <div className="flex gap-1 items-center text-green-500 text-base">
-                      <MdFlight className="text-xl" />
-                      <span
-                        className="font-body  text-green-500
-                    "
-                      >
-                        Estimated Delivery : May 14,2022
+
+                  {/* Order Meta Info */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 text-sm">
+                    <p className="text-gray-500">
+                      Order Date:{" "}
+                      <span className="text-gray-700 font-medium">
+                        {format(
+                          new Date(order.createdAt),
+                          "dd MMM yyyy, hh:mm a"
+                        )}
                       </span>
+                    </p>
+                    <div className="hidden sm:block bg-black/20 w-[1px] h-4" />
+                    <div className="flex items-center text-green-500 gap-1">
+                      <MdFlight className="text-xl" />
+                      <span>Estimated Delivery: </span>
                     </div>
                   </div>
-                  <div className="bg-black/5 w-full h-[1px] my-5"></div>
-                  {/* Ordered Items */}
-                  <div className="space-y-3">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">
+
+                  <div className="border-t border-gray-200 pt-4">
+                    {/* Ordered Items */}
+                    <h4 className="text-base font-semibold text-gray-900 mb-2">
                       Items ({order.items.length})
                     </h4>
+
                     <ul className="space-y-4">
                       {order.items.map((item, index) => (
-                        <li key={index} className="flex justify-between  items-center gap-4">
-                         <div className="flex  items-center gap-4">
-                           <img
-                            src={`http://localhost:5000/api/upload/${item.productId.image[0]}`}
-                            alt={item.productId.name}
-                            className="w-16 h-16 object-cover rounded-md border"
-                          />
-                          <div>
-                            <p className=" text-gray-900 font-body text-sm">
-                              {item.productId.name}
-                            </p>
-                            <p className="text-gray-600 text-sm">
-                              ₹{item.productId.price} × {item.quantity} = ₹
-                              {item.productId.price * item.quantity}
-                            </p>
+                        <li
+                          key={index}
+                          className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4"
+                        >
+                          <div className="flex items-start sm:items-center gap-4">
+                            <img
+                              src={`${conf.BaseURL}${conf.GetImageUrl}/${item?.productId?.image[0]}`}
+                              alt={item.productId.name}
+                              className="w-16 h-16 object-cover rounded border"
+                            />
+                            <div>
+                              <p className="text-gray-900 font-body text-sm sm:text-base">
+                                {item.productId.name}
+                              </p>
+                              <p className="text-gray-600 text-sm">
+                                ₹{item.productId.price} × {item.quantity} = ₹
+                                {item.productId.price * item.quantity}
+                              </p>
+                            </div>
                           </div>
-                         </div>
-                         <div>
+
                           <div>
-                            <button className="px-3 py-1 rounded-2xl bg-yellow-500 text-white
-                            font-body flex justify-center items-center text-[13px]">
-                             {order.status}
+                            <button className="px-4 py-1 bg-yellow-500 text-white text-sm rounded-full">
+                              {order.status}
                             </button>
                           </div>
-                         </div>
                         </li>
                       ))}
                     </ul>
                   </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="text-center py-12 bg-white w-full px-4">
+          <div>
+            <img
+              className="w-48 sm:w-60 m-auto mb-6"
+              src="https://media.istockphoto.com/id/861576608/vector/empty-shopping-bag-icon-online-business-vector-icon-template.jpg?s=612x612&w=0&k=20&c=I7MbHHcjhRH4Dy0NVpf4ZN4gn8FVDnwn99YdRW2x5k0="
+              alt="No orders illustration"
+            />
+          </div>
+
+          <h2 className="text-2xl font-semibold text-gray-800 font-heading">
+            🛒 You haven’t placed any orders yet
+          </h2>
+
+          <p className="text-gray-500 mt-3 text-sm sm:text-base font-body">
+            Once you make a purchase, your orders will appear here.
+          </p>
+
+          <button
+            onClick={() => navigate("/")}
+            className="mt-6 bg-black hover:bg-gray-800
+             text-white text-sm 
+              py-2 px-6 rounded-lg transition duration-200 font-heading "
+          >
+            Start Shopping
+          </button>
+        </div>
+      )}
     </>
-    
   );
 };
 

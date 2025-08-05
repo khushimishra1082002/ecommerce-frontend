@@ -3,12 +3,12 @@ import { getDeliveryInfoData } from "../../services/deliveryInfoService";
 import {DeliveryInfoDTO,DeliveryInfoStateDTO } from "../../types/deliveryInformationDto";
 
 const initialState: DeliveryInfoStateDTO = {
-  deliveryInfo: [],
+  deliveryInfo: null,
   loading: false,
   error: null,
 };
 
-export const fetchDeliveryInfo = createAsyncThunk<DeliveryInfoDTO[]>(
+export const fetchDeliveryInfo = createAsyncThunk<DeliveryInfoDTO>(
   "deliveryInfo/fetchDeliveryInfo",
   async () => {
     const res = await getDeliveryInfoData();
@@ -29,7 +29,7 @@ const deliveryInfoSlice = createSlice({
       })
       .addCase(
         fetchDeliveryInfo.fulfilled,
-        (state, action: PayloadAction<DeliveryInfoDTO[]>) => {
+        (state, action: PayloadAction<DeliveryInfoDTO>) => {
           state.loading = false;
           state.deliveryInfo = action.payload;
           state.error = null;

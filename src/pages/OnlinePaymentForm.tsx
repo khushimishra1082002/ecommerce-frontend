@@ -1,17 +1,8 @@
 import React from "react";
 import { Formik, Form } from "formik";
+import { useDispatch } from "react-redux";
 import FormikControl from "../components/ReusableFormField/FormikControl";
-import { RxCross2 } from "react-icons/rx";
-
-interface OnlinePaymentFormProps {
-  onClose: () => void;
-  handlePlaceOrder: (paymentData: {
-    upiId: string;
-    cardNumber: string;
-    expiry: string;
-    cvv: string;
-  }) => void;
-}
+import { setPaymentDetails } from "../ReduxToolkit/Slices/PaymentSlice";
 
 const initialValues = {
   upiId: "",
@@ -20,40 +11,33 @@ const initialValues = {
   cvv: "",
 };
 
-const OnlinePaymentForm: React.FC<OnlinePaymentFormProps> = ({
-  onClose,
-  handlePlaceOrder,
-}) => {
+interface OnlinePaymentFormProps {
+  onComplete?: () => void;
+}
+
+const OnlinePaymentForm: React.FC<OnlinePaymentFormProps> = ({ onComplete }) => {
+  const dispatch = useDispatch();
+
   return (
-    <div className="relative">
-      <button onClick={onClose} className="absolute top-2 right-2">
-        <RxCross2 className="text-lg cursor-pointer" />
-      </button>
-
-      <h2 className="text-lg font-heading font-semibold mb-5">Pay Now</h2>
-
+    <div className="bg-gray-50 border border-gray-200 p-5 rounded">
+      <h2 className="text-md font-heading font-semibold mb-4">Enter Payment Details</h2>
       <Formik
         initialValues={initialValues}
         onSubmit={async (values, { setSubmitting }) => {
-          try {
-            await handlePlaceOrder(values); 
-            onClose();
-          } catch (err) {
-            alert("Something went wrong");
-          } finally {
-            setSubmitting(false);
-          }
+          dispatch(setPaymentDetails(values));
+          if (onComplete) onComplete(); // ✅ Only dispatching, not placing order
+          setSubmitting(false);
         }}
       >
         {(formik) => (
           <Form className="space-y-4">
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormikControl
                 control="input"
                 type="text"
                 label="UPI ID"
                 name="upiId"
-                placeholder="Enter your UPI ID"
+                placeholder="example@upi"
               />
               <FormikControl
                 control="input"
@@ -65,7 +49,7 @@ const OnlinePaymentForm: React.FC<OnlinePaymentFormProps> = ({
               <FormikControl
                 control="input"
                 type="text"
-                label="Expiry"
+                label="Expiry Date"
                 name="expiry"
                 placeholder="MM/YY"
               />
@@ -77,16 +61,14 @@ const OnlinePaymentForm: React.FC<OnlinePaymentFormProps> = ({
                 placeholder="123"
               />
             </div>
-
-            <div>
-              <button
-                type="submit"
-                disabled={!formik.isValid || formik.isSubmitting}
-                className="w-full bg-black text-white p-2 rounded"
-              >
-                {formik.isSubmitting ? "Processing..." : "Submit Payment"}
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={!formik.isValid || formik.isSubmitting}
+              className="bg-black text-sm font-heading my-2
+             text-white font-medium py-2 px-4 rounded-lg"
+            >
+              {formik.isSubmitting ? "Processing..." : "Save Payment Info"}
+            </button>
           </Form>
         )}
       </Formik>

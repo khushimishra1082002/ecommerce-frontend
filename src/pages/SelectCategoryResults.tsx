@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Filter from "./Filter";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getFilterProductsData } from "../services/ProductService";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
-import { buildQueryFromFilters } from "../utils/buildQueryFromFilters";
 import { setCategory } from "../ReduxToolkit/Slices/FilterSlice";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
@@ -26,6 +25,8 @@ const SelectCategoryResults = () => {
         ...filters,
         category: categoryID,
       };
+      console.log("filters",filters);
+      
       const res = await getFilterProductsData(filterParams);
       console.log("Filtered Products:", res);
       setFilteredProducts(res);
@@ -42,30 +43,62 @@ const SelectCategoryResults = () => {
   }, [categoryID, filters, dispatch]);
 
   return (
-    <div className="grid grid-cols-5 gap-2">
+    <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-5 gap-2">
       <div>
-        <Filter categoryID={categoryID} />
+        <Filter categoryID={categoryID ?? ""} categoryName="" />
       </div>
-      <div className="col-span-4 p-4">
-        <div className="grid grid-cols-4 gap-3">
+      <div className=" sm:col-span-4 md:col-span-4 lg:col-span-4 p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
-              <div key={product._id} className="border shadow p-2 space-y-1">
-                <div className="h-52 bg-gray-50 flex justify-center items-center">
-                  <img
-                    src={`${conf.BaseURL}${conf.GetImageUrl}/${product?.image}`}
-                    className="w-36"
-                    alt={product.name}
-                  />
+              <Link to={`/${product._id}`}>
+                <div
+                  key={product._id}
+                  className=" border border-black/10  space-y-1"
+                >
+                  <div className="h-52 bg-gray-50 flex justify-center items-center">
+                    <img
+                      src={`${conf.BaseURL}${conf.GetImageUrl}/${product?.image}`}
+                      className="w-36"
+                      alt={product.name}
+                    />
+                  </div>
+                  <div className="space-y-1 p-2">
+                    <h4 className="text-[14px] font-heading line-clamp-2  font-medium">
+                      {product.brand.name}
+                    </h4>
+                    <h4 className="text-[13px] font-heading line-clamp-2">
+                      {product.name}
+                    </h4>
+                    <p className="font-medium text-sm font-heading">
+                      Rs {product.price}
+                    </p>
+                  </div>
                 </div>
-                <h4 className="text-sm font-heading line-clamp-2">
-                  {product.name}
-                </h4>
-                <p className="font-medium font-heading">Rs {product.price}</p>
-              </div>
+              </Link>
             ))
           ) : (
-            <p>No products found for this category.</p>
+            <div className="col-span-full flex flex-col items-center justify-center text-center py-12">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2748/2748558.png"
+                alt="No products"
+                className="w-36 h-36 mb-6 opacity-80"
+              />
+              <h2 className="text-2xl font-semibold text-gray-800 mb-2 font-heading">
+                No Products Found
+              </h2>
+              <p className="text-gray-600 text-sm max-w-sm font-body">
+                Sorry, we couldn’t find any items that match your current
+                filters. Please try adjusting the filters or browse other
+                categories.
+              </p>
+              <Link
+                to="/"
+                className="mt-6 inline-block bg-black text-white px-4 py-2 rounded hover:bg-blue-700 transition text-sm font-heading"
+              >
+                Back to Home
+              </Link>
+            </div>
           )}
         </div>
       </div>

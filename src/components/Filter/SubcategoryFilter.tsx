@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../ReduxToolkit/app/Store";
 import { fetchSubcategoriesByCategory } from "../../ReduxToolkit/Slices/SubcategorySlice";
 import { getMultipleSubcategoriesData } from "../../services/SubcategoryService";
+import ColorFilter from "./ColourFilter";
 
 interface SubcategoryFilterProps {
   categoryID: string;
@@ -85,26 +86,31 @@ const SubcategoryFilter: React.FC<SubcategoryFilterProps> = ({
   };
 
   return (
-    <div className="space-y-2">
-      <h4 className="text-base font-heading font-medium">Subcategory</h4>
-      {subcategoryLoading && <p>Loading subcategories...</p>}
-      {subcategoryError && <p className="text-red-500">{subcategoryError}</p>}
-      <ul className="font-heading font-light text-sm space-y-1">
-        {subcategories?.map((subcat) => (
-          <li key={subcat._id}>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                value={subcat._id}
-                onChange={handleChange}
-                checked={selectedSubcategories.includes(subcat._id)}
-              />
-              {subcat.name}
-            </label>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <div className="space-y-2">
+        <h4 className="text-base font-heading font-medium">Subcategory</h4>
+        {subcategoryLoading && <p>Loading subcategories...</p>}
+        {subcategoryError && <p className="text-red-500">{subcategoryError}</p>}
+        <ul className="font-heading font-light text-sm space-y-1">
+          {subcategories?.map((subcat) => (
+            <li key={subcat._id}>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  value={subcat._id}
+                  onChange={handleChange}
+                  checked={selectedSubcategories.includes(subcat._id)}
+                />
+                {subcat.name}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+
+      </div>
+    </>
   );
 };
 

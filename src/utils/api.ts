@@ -16,7 +16,7 @@ api.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token.trim()}`;
       } else {
-        window.location.href = "/LoggedInPage";
+        window.location.href = "/IsLoggedIn";
         return Promise.reject("No token found");
       }
     }
@@ -32,7 +32,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       sessionStorage.removeItem("token");
-      window.location.href = "/LoggedInPage";
+      window.location.href = "/IsLoggedIn";
     }
     return Promise.reject(error);
   }

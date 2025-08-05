@@ -12,6 +12,7 @@ import orderReducer from "../Slices/OrderSlice"
 import wishlistReducer from "../Slices/WishlistSlice"
 import authReducer from "../Slices/AuthSlice"
 import bannerReducer from "../Slices/BannerSlice"
+import paymentReducer from "../Slices/PaymentSlice"
 
 export const store = configureStore({
   reducer: {
@@ -27,7 +28,8 @@ export const store = configureStore({
     order:orderReducer,
     wishlists:wishlistReducer,
     auth:authReducer,
-    banner:bannerReducer
+    banner:bannerReducer,
+    payment:paymentReducer
   },
 });
 

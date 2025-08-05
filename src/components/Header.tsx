@@ -32,7 +32,7 @@ const Header = () => {
   }, [userId]);
 
   const wishlistCount = wishlist?.products?.length || 0;
-  const cartCount = cart?.items?.length;
+  const cartCount = cart?.items?.length || 0;
 
   return (
     <>
@@ -189,10 +189,10 @@ const Header = () => {
                   View Profile
                 </Link>
                 <button
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    window.location.href = "/IsLoggedIn";
-                  }}
+                 onClick={() => {
+                        dispatch(logout());
+                        window.location.href = "/IsLoggedIn";
+                      }}
                   className="block text-red-500 hover:text-red-600 text-sm"
                 >
                   Logout

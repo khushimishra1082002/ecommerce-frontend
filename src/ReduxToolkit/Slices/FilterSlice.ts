@@ -27,13 +27,11 @@ const filterSlice = createSlice({
     setGender: (state, action: PayloadAction<string[]>) => {
       state.gender = action.payload;
     },
-    // setBrands: (state, action: PayloadAction<string[]>) => {
-    // state.brands = action.payload;
-    // console.log("state.brands",state.brands);
-    // },
-    setBrands: (state, action: PayloadAction<BrandDTO[]>) => {
-      state.brands = action.payload.map((brand) => brand.name);
+    setBrands: (state, action: PayloadAction<string[]>) => {
+    state.brands = action.payload;
+    console.log("state.brands",state.brands);
     },
+    
 
     setPriceRange: (state, action: PayloadAction<PriceRange>) => {
       state.priceRange = action.payload;

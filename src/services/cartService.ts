@@ -52,3 +52,15 @@ export const UpdateProductQuanityInCartData =  async (userId, productId, quantit
     throw error;
   }
 }
+
+
+export const ClearCartData = async (userId) =>{
+     try {
+    const response = await api.delete(`${conf.ClearCartUrl}/${userId}`);
+    console.log("response", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error in delete cart", error.response?.data || error.message);
+    throw error;
+  }
+}

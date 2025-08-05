@@ -9,6 +9,7 @@ import { fetchAllCategory } from "../ReduxToolkit/Slices/CategorySlice";
 import { fetchSubcategories } from "../ReduxToolkit/Slices/SubcategorySlice";
 import { fetchAllProducts } from "../ReduxToolkit/Slices/ProductSlice";
 import { fetchBrands } from "../ReduxToolkit/Slices/BrandSlice";
+import { Link } from "react-router-dom";
 
 const DashboardHomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,7 +47,9 @@ const DashboardHomePage = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {/* Products */}
-        <div className="relative flex gap-4 items-center border border-black/5 p-6 rounded-md bg-white shadow-sm">
+       <div>
+        <Link to="productTable">
+         <div className="relative flex gap-4 items-center border border-black/5 p-6 rounded-md bg-white shadow-sm">
           <div className="w-12 h-12 bg-blue-100 flex items-center justify-center rounded-md">
             <Boxes className="w-6 h-6 text-blue-600" />
           </div>
@@ -57,9 +60,12 @@ const DashboardHomePage = () => {
             </span>
           </div>
         </div>
+        </Link>
+       </div>
 
         {/* Categories */}
-        <div
+      <div>
+        <Link to="categoryTable">  <div
           className="relative flex gap-4 items-center border
          border-black/5 p-6 rounded-md bg-white shadow-sm"
         >
@@ -73,9 +79,13 @@ const DashboardHomePage = () => {
             </span>
           </div>
         </div>
+        </Link>
+      </div>
 
         {/* Subcategories */}
-        <div className="relative flex gap-4 items-center border border-black/5 p-6 rounded-md bg-white shadow-sm">
+        <div>
+          <Link to="subcategoryTable">
+          <div className="relative flex gap-4 items-center border border-black/5 p-6 rounded-md bg-white shadow-sm">
           <div className="w-12 h-12 bg-pink-100 flex items-center justify-center rounded-md">
             <ListOrdered className="w-6 h-6 text-pink-600" />
           </div>
@@ -86,9 +96,13 @@ const DashboardHomePage = () => {
             </span>
           </div>
         </div>
+          </Link>
+        </div>
 
         {/* Brands */}
-        <div className="relative flex gap-4 items-center border border-black/5 p-6 rounded-md bg-white shadow-sm">
+        <div>
+          <Link to="">
+          <div className="relative flex gap-4 items-center border border-black/5 p-6 rounded-md bg-white shadow-sm">
           <div className="w-12 h-12 bg-purple-100 flex items-center justify-center rounded-md">
             <Package className="w-6 h-6 text-purple-600" />
           </div>
@@ -96,6 +110,8 @@ const DashboardHomePage = () => {
             <span className="text-sm font-heading">Brands</span>
             <span className="text-xl font-bold text-gray-800">{brands.length}</span>
           </div>
+        </div>
+          </Link>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">

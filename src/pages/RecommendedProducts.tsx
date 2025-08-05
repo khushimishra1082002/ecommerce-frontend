@@ -36,7 +36,8 @@ const RecommendedProducts = () => {
   }, [userId]);
 
   return (
-    <>
+  <>
+    {userId && data.length > 0 && (
       <div className="bg-white p-4 space-y-4 m-3">
         <div className="flex flex-col">
           <h2 className="font-heading text-lg font-bold ">
@@ -53,32 +54,13 @@ const RecommendedProducts = () => {
           spaceBetween={12}
           slidesPerView={5}
           breakpoints={{
-            240: {
-              slidesPerView: 1,
-              spaceBetween: 6,
-            },
-            340: {
-              slidesPerView: 2,
-              spaceBetween: 6,
-            },
-            440: {
-              slidesPerView: 2,
-              spaceBetween: 6,
-            },
-            640: {
-              slidesPerView: 3,
-              spaceBetween: 6,
-            },
-            768: {
-              slidesPerView: 4,
-              spaceBetween: 6,
-            },
-            1024: {
-              slidesPerView: 5,
-              spaceBetween: 6,
-            },
+            240: { slidesPerView: 1, spaceBetween: 6 },
+            340: { slidesPerView: 2, spaceBetween: 6 },
+            440: { slidesPerView: 2, spaceBetween: 6 },
+            640: { slidesPerView: 3, spaceBetween: 6 },
+            768: { slidesPerView: 4, spaceBetween: 6 },
+            1024: { slidesPerView: 5, spaceBetween: 6 },
           }}
-          className=""
         >
           <span
             slot="container-start"
@@ -86,46 +68,45 @@ const RecommendedProducts = () => {
           >
             <SwiperButtonThree />
           </span>
-          {data?.map((v, i) => {
-            return (
-              <SwiperSlide>
-                <div
-                  className="border rounded-lg  flex flex-col gap-3
-                   hover:shadow-md transition duration-200 py-1 shadow "
-                >
-                  <Link to={`${v._id}`} className="space-y-1">
-                    <div className="h-44 p-2">
-                      <img
-                        className="h-full m-auto object-contain"
-                        src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
-                        alt="banner"
-                      />
-                    </div>
-                   <div className="px-3 space-y-2">
+
+          {data.map((v, i) => (
+            <SwiperSlide key={v._id || i}>
+              <div className="border rounded-lg flex flex-col gap-3 hover:shadow-md transition duration-200 py-1 shadow">
+                <Link to={`${v._id}`} className="space-y-1">
+                  <div className="h-44 p-2">
+                    <img
+                      className="h-full m-auto object-contain"
+                      src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                      alt={v.name}
+                    />
+                  </div>
+
+                  <div className="px-3 space-y-2">
                     <div>
-                        <span
-                          className=" bg-red-500 rounded text-white p-1 text-xs font-body font-medium
-         "
-                        >
-                          {v.discount}% off
-                        </span>
-                      </div>
-                   
-                   
-                    <div className="flex flex-col gap-2">
-                        <h4 className="text-[12px] font-heading line-clamp-2">{v.name}</h4>
-                      <span className="text-base font-heading font-medium">Rs {v.price}</span>
+                      <span className="bg-red-500 rounded text-white p-1 text-xs font-body font-medium">
+                        {v.discount}% off
+                      </span>
                     </div>
-                   </div>
-                  </Link>
-                </div>
-              </SwiperSlide>
-            );
-          })}
+
+                    <div className="flex flex-col gap-2">
+                      <h4 className="text-[12px] font-heading line-clamp-2">
+                        {v.name}
+                      </h4>
+                      <span className="text-base font-heading font-medium">
+                        Rs {v.price}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
-    </>
-  );
+    )}
+  </>
+);
+
 };
 
 export default RecommendedProducts;

@@ -1,27 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
+import { RxCross2 } from "react-icons/rx";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import FormikControl from "../components/ReusableFormField/Input";
-import { RxCross2 } from "react-icons/rx";
-import { postDeliveryInfoData } from "../services/deliveryInfoService";
-import { useNavigate } from "react-router-dom";
-import {deliveryInfoValidationSchema} from "../Validations/deliveryInfovalidations"
+import {
+  postDeliveryInfoData,
+  getDeliveryInfoData,
+} from "../services/deliveryInfoService";
+import { deliveryInfoValidationSchema } from "../Validations/deliveryInfovalidations";
+import { DeliveryInfoDTO } from "../types/deliveryInformationDto";
+import { decodeToken } from "../utils/decodeToken";
 
-const DeliveryInformation = ({ closeModal }) => {
+const DeliveryInformation = ({ onComplete }) => {
   const [step, setStep] = useState(1);
-
+  const [initialValues, setInitialValues] = useState<DeliveryInfoDTO | null>(
+    null
+  );
   const navigate = useNavigate();
 
-  const initialValues = {
-    fullname: "",
-    email: "",
-    phoneNo: "",
-    address1: "",
-    address2: "",
-    city: "",
-    state: "",
-    zip: "",
-  };
+  const decoded = decodeToken();
+  console.log("decodeddd",decoded);
+  
+    const userId = decoded?.id;
+
+    console.log("userId",userId);
+    
+
+  useEffect(() => {
+    const fetchInfo = async () => {
+      try {
+        const data = await getDeliveryInfoData();
+
+        setInitialValues({
+          _id: data._id || "",
+          fullname: data.fullname || "",
+          email: data.email || "",
+          phoneNo: data.phoneNo || "",
+          address1: data.address1 || "",
+          address2: data.address2 || "",
+          city: data.city || "",
+          state: data.state || "",
+          zip: data.zip || "",
+        });
+      } catch (err) {
+        setInitialValues({
+          _id: "",
+          fullname: "",
+          email: "",
+          phoneNo: "",
+          address1: "",
+          address2: "",
+          city: "",
+          state: "",
+          zip: "",
+        });
+      }
+    };
+
+    fetchInfo();
+  }, []);
 
   const handleSubmit = async (values, actions) => {
     if (step < 2) {
@@ -29,21 +67,20 @@ const DeliveryInformation = ({ closeModal }) => {
     } else {
       try {
         const res = await postDeliveryInfoData(values);
-        console.log("res", res);
         alert("Post info successfully");
-        closeModal();
-        navigate("/orderSummaryPage");
+        onComplete();
+       
       } catch (error) {
-        console.error("Submission failed", error);
         alert("Something went wrong while submitting delivery info");
       }
     }
     actions.setTouched({});
   };
 
+  if (!initialValues) return <p>Loading delivery info...</p>;
+
   return (
-    <div className="flex flex-col gap-4">
-      {/* Header */}
+    <div className="flex flex-col gap-4 bg-white px-8 py-6 border border-black/10 rounded shadow">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-xl font-semibold font-heading">
@@ -53,19 +90,17 @@ const DeliveryInformation = ({ closeModal }) => {
             Step {step} of 2
           </span>
         </div>
-        <RxCross2 className="text-lg cursor-pointer" onClick={closeModal} />
+       
       </div>
 
-      {/* Formik Wrapper */}
       <Formik
         initialValues={initialValues}
         validationSchema={deliveryInfoValidationSchema[step - 1]}
         onSubmit={handleSubmit}
+        enableReinitialize
       >
         {(formik) => (
-
           <Form className="space-y-4">
-            {/* Step 1 */}
             {step === 1 && (
               <>
                 <FormikControl
@@ -91,11 +126,10 @@ const DeliveryInformation = ({ closeModal }) => {
                 />
               </>
             )}
-
-            {/* Step 2 */}
             {step === 2 && (
               <>
-                <FormikControl
+              <div className="grid grid-cols-2 gap-2">
+                  <FormikControl
                   control="input"
                   type="text"
                   label="Address 1"
@@ -130,10 +164,10 @@ const DeliveryInformation = ({ closeModal }) => {
                   name="zip"
                   placeholder="Enter zip code"
                 />
+                </div>
               </>
             )}
 
-            {/* Buttons */}
             <div className="flex justify-between gap-3 pt-4">
               {step > 1 && (
                 <button

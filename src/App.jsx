@@ -22,9 +22,11 @@ import ContactUs from "./pages/ContactUs.tsx";
 import MyOrders from "./pages/user/MyOrders.tsx";
 import OrderHistory from "./pages/user/OrderHistory.tsx";
 import Logout from "./components/Logout.tsx";
-import {DashboardBanner} from "./AdminPannel/Banner/DashboardBanner.tsx";
+import { DashboardBanner } from "./AdminPannel/Banner/DashboardBanner.tsx";
 import OrderTable from "./AdminPannel/DataTable/Orders/OrderTable";
 import { Poster } from "./AdminPannel/Poster/Poster.tsx";
+import Checkout from "./pages/Checkout.tsx";
+import Notifications from "./AdminPannel/Notifications.tsx";
 
 const App = () => {
   return (
@@ -35,7 +37,6 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route index element={<Home />} />
           <Route path="/:productId" element={<ProductDetail />} />
-          
           <Route path="/searchResult/:query" element={<SearchResult />} />
           <Route
             path="/selectCategoryResult/:categoryID"
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="/mainCartPage" element={<MainCartPage />} />
           <Route path="/myWishList" element={<Wishlist />} />
           <Route path="/orderSummaryPage" element={<OrderSummaryPage />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/paymentPage" element={<Paymentpage />} />
           <Route path="/userProfile" element={<UserProfilePage />} />
           <Route path="/contactus" element={<ContactUs />} />
@@ -61,8 +63,8 @@ const App = () => {
           <Route path="brandTable" element={<BrandTable />} />
           <Route path="banner" element={<DashboardBanner />} />
           <Route path="orderTable" element={<OrderTable />} />
-          <Route path="posterDashboard" element={<Poster/>}/>
-
+          <Route path="posterDashboard" element={<Poster />} />
+          <Route path="notifications" element={<Notifications />} />
         </Route>
         <Route path="IsLoggedIn" element={<IsLoggedIn />} />
       </Routes>
@@ -71,4 +73,3 @@ const App = () => {
 };
 
 export default App;
-

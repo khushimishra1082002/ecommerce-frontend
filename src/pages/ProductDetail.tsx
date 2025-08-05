@@ -7,7 +7,7 @@ import {
   postRecentlyViewedProductData,
 } from "../services/ProductService";
 import { AddProductInWishlistData } from "../services/wishlistService";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { decodeToken } from "../utils/decodeToken";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
@@ -16,6 +16,8 @@ import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
 
 const ProductDetail = () => {
+
+  const navigate = useNavigate()
 
   const { productId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
@@ -74,6 +76,7 @@ const ProductDetail = () => {
         quantity: 1,
       })
     );
+    navigate("/mainCartPage")
   };
 
   const handleWishlistProduct = async (productId) => {

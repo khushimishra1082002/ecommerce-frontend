@@ -14,7 +14,6 @@ import conf from "../config/Conf";
 import { FaCartShopping } from "react-icons/fa6";
 import { BsCart } from "react-icons/bs";
 
-
 const Cart = () => {
   const decoded = decodeToken();
   const userId = decoded?.id;
@@ -65,7 +64,8 @@ const Cart = () => {
               const product = v.productId;
               return (
                 <div key={v._id} className=" space-y-2">
-                  <div className="grid grid-cols-7 gap-4 h-44 border border-black/10   ">
+                  <div className="grid grid-cols-1 md:grid-cols-7 gap-4 
+                  lg:h-44 border border-black/10  p-5 lg:p-1  ">
                     <div className=" w-full col-span-2">
                       <img
                         className="w-40 max-h-40 m-auto object-contain py-2"
@@ -77,11 +77,11 @@ const Cart = () => {
                       <span className="text-green-500 font-body font-medium">
                         In stock
                       </span>
-                      <h4 className="font-heading text-[13px] line-clamp-2 leading-5  text-gray-800 ">
+                      <h4 className="font-heading font-medium text-[13px] line-clamp-2 leading-5  text-gray-800 ">
                         {product?.name}
                       </h4>
 
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         <div className="flex text-sm">
                           <div
                             onClick={() =>
@@ -117,7 +117,7 @@ const Cart = () => {
 
                         <div className="flex  items-center ">
                           <MdDelete className=" text-red-600" />
-                          <div className=" p-1 cursor-pointer">
+                          <div className=" cursor-pointer">
                             <span
                               onClick={() =>
                                 handleCartProductDelete(product._id)
@@ -130,13 +130,12 @@ const Cart = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="my-auto mx-auto">
+                    <div className="my-auto lg:mx-auto">
                       <div>
                         <span className="font-body">Rs {product?.price}</span>
                       </div>
                     </div>
                   </div>
-                 
                 </div>
               );
             })}

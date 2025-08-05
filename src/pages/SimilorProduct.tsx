@@ -26,14 +26,16 @@ const SimilorProduct = ({ productId }) => {
 
   return (
     <>
-      <div className=" bg-white space-y-4 px-4 py-6 m-3 shadow ">
+      {
+        data.length > 0 && 
+        <div className=" bg-white space-y-4 px-4 py-6 m-3 shadow ">
         <h2 className="font-heading text-lg font-semibold">Related Products</h2>
 
         <Swiper
           modules={[Navigation, Pagination, A11y]}
           spaceBetween={10}
           slidesPerView={5}
-          navigation
+         
           onSwiper={(swiper) => console.log(swiper)}
           onSlideChange={() => console.log("slide change")}
           className=""
@@ -93,6 +95,7 @@ const SimilorProduct = ({ productId }) => {
           })}
         </Swiper>
       </div>
+      }
     </>
   );
 };
