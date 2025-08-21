@@ -160,7 +160,7 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
           error={priceError}
         />
 
-        <ColorFilter
+        {/* <ColorFilter
           colorOptions={colorOptions}
           selectedColor={selectedColor}
           setSelectedColor={setSelectedColor}
@@ -170,7 +170,7 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
           sizeOptions={sizeOptions}
           selectedSize={selectedSize}
           setSelectedSize={setSelectedSize}
-        />
+        /> */}
 
         <GenderFilter
           genderOptions={genderOptions}
