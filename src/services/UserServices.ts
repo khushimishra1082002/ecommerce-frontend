@@ -1,5 +1,20 @@
 import api from "../utils/api";
 import conf from "../config/Conf";
+import { buildQueryFromFilters } from "../utils/buildQueryFromFilters";
+
+export const getAllUsersData = async () => {
+  try {
+    const response = await api.get(conf.getUsersUrl); 
+    console.log("response", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
 
 export const getSingleUserData = async (userId) => {
   try {
@@ -8,6 +23,24 @@ export const getSingleUserData = async (userId) => {
     return response.data;
   } catch (error) {
     console.error("Error", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const getFilterUserData = async (filters = {}) => {
+  try {
+    const queryString = buildQueryFromFilters(filters); 
+    const response = await api.get(
+      `${conf.getFilteredUsersUrl}?${queryString}`
+    );
+
+    console.log("response", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error ",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };

@@ -27,6 +27,13 @@ import OrderTable from "./AdminPannel/DataTable/Orders/OrderTable";
 import { Poster } from "./AdminPannel/Poster/Poster.tsx";
 import Checkout from "./pages/Checkout.tsx";
 import Notifications from "./AdminPannel/Notifications.tsx";
+import AdminLogin from "./AdminPannel/AdminLogin.tsx";
+import Settings from "./pages/Settings.tsx";
+import Help from "./AdminPannel/Help.tsx";
+import RoleTable from "./AdminPannel/Role/RoleTable.tsx";
+import PermissionTable from "./AdminPannel/Permission/PermissionTable.tsx";
+import UsersTable from "./AdminPannel/User/UsersTable.tsx";
+import AdminRoute from "./routes/AdminRoute.tsx";
 
 const App = () => {
   return (
@@ -54,7 +61,14 @@ const App = () => {
           <Route path="/logout" element={<Logout />} />
         </Route>
         {/*Admin Dashboard  */}
-        <Route path="adminDashboard" element={<DashboardMainPage />}>
+        <Route
+          path="adminDashboard"
+          element={
+            <AdminRoute>
+              <DashboardMainPage />
+            </AdminRoute>
+          }
+        >
           <Route path="adminDashboardHome" element={<DashboardHomePage />} />
           <Route index element={<DashboardHomePage />} />
           <Route path="productTable" element={<ProductTable />} />
@@ -65,8 +79,14 @@ const App = () => {
           <Route path="orderTable" element={<OrderTable />} />
           <Route path="posterDashboard" element={<Poster />} />
           <Route path="notifications" element={<Notifications />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="help" element={<Help />} />
+          <Route path="roleTable" element={<RoleTable />} />
+          <Route path="permissionTable" element={<PermissionTable />} />
+          <Route path="usersTable" element={<UsersTable />} />
         </Route>
         <Route path="IsLoggedIn" element={<IsLoggedIn />} />
+        <Route path="AdminLogin" element={<AdminLogin />} />
       </Routes>
     </>
   );

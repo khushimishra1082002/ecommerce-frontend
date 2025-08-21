@@ -16,7 +16,9 @@ import { MdPhotoLibrary } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { FaImage } from "react-icons/fa";
 import { IoNotificationsCircleSharp } from "react-icons/io5";
-
+import { UserCheck } from "lucide-react";
+import { Shield, Lock, Unlock, UserCog } from "lucide-react";
+import { FaUser } from "react-icons/fa";
 const DashboardSidebar = ({ onClose }) => {
   return (
     <div className="p-4 relative h-full">
@@ -98,6 +100,33 @@ const DashboardSidebar = ({ onClose }) => {
           </li>
         </Link>
 
+        <Link onClick={onClose} to="/adminDashboard/usersTable">
+          <li className="rounded py-2 px-4">
+            <div className="flex items-center gap-4">
+              <FaUser className="w-4 h-4 text-skin-accent_one" />
+              <span>Users</span>
+            </div>
+          </li>
+        </Link>
+
+        <Link onClick={onClose} to="/adminDashboard/roleTable">
+          <li className="rounded py-2 px-4">
+            <div className="flex items-center gap-4">
+              <UserCheck className="w-4 h-4 text-skin-accent_one" />
+              <span>Roles</span>
+            </div>
+          </li>
+        </Link>
+
+        <Link onClick={onClose} to="/adminDashboard/permissionTable">
+          <li className="rounded py-2 px-4">
+            <div className="flex items-center gap-4">
+              <Unlock className="w-4 h-4 text-skin-accent_one" />
+              <span>Permission</span>
+            </div>
+          </li>
+        </Link>
+
         <Link onClick={onClose} to="/adminDashboard/notifications">
           <li className="rounded py-2 px-4">
             <div className="flex items-center gap-4">
@@ -106,33 +135,6 @@ const DashboardSidebar = ({ onClose }) => {
             </div>
           </li>
         </Link>
-
-        <div className="border border-black/10 w-full my-6"></div>
-        <li onClick={onClose} className="rounded py-2 px-4">
-          <div className="flex items-center gap-4">
-            <HelpCircle className="w-4 h-4 text-skin-accent_one" />
-            <span>Help</span>
-          </div>
-        </li>
-        <li onClick={onClose} className="rounded py-2 px-4">
-          <div className="flex items-center gap-4">
-            <Settings className="w-4 h-4 text-skin-accent_one" />
-            <span>Settings</span>
-          </div>
-        </li>
-        <li onClick={onClose} className="rounded py-2 px-4 cursor-pointer">
-          <div className="flex items-center gap-4">
-            <LogOut
-              onClick={() => {
-                localStorage.removeItem("token");
-                alert("logout successful");
-                window.location.href = "/IsLoggedIn";
-              }}
-              className="w-4 h-4 text-skin-accent_one cursor-pointer"
-            />
-            <span>Logout</span>
-          </div>
-        </li>
       </ul>
     </div>
   );

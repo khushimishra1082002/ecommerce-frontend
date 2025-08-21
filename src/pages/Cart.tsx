@@ -11,10 +11,10 @@ import { decodeToken } from "../utils/decodeToken";
 import { DeleteProductFromCartData } from "../services/cartService";
 import { MdDelete } from "react-icons/md";
 import conf from "../config/Conf";
-import { FaCartShopping } from "react-icons/fa6";
 import { BsCart } from "react-icons/bs";
 
 const Cart = () => {
+  
   const decoded = decodeToken();
   const userId = decoded?.id;
 
