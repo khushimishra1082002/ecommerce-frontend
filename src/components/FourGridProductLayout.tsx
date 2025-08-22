@@ -8,10 +8,13 @@ const FourGridProductLayout = () => {
       title: "Top Deals on Footwear",
       filterQuery: { category: "Footwear"},
     },
-    {
-      title: "Mobiles Under ₹10,000",
-      filterQuery: { category: "Mobiles", maxPrice: 10000 },
-    },
+{
+  title: "New Fashion products",
+  filterQuery: {
+    category: "Fashion",
+  }
+}
+,
     {
       title: "20% Off or More",
       filterQuery: { discount: ["20"] }, 

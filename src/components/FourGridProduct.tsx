@@ -48,7 +48,8 @@ const FourGridProduct: React.FC<FourGridProductProps> = ({
                     alt={product?.subcategory?.name}
                   />
                 </div>
-                <span className="font-heading text-[13px] line-clamp-1 font-medium">
+                <span className="font-heading text-[13px] line-clamp-1 font-medium my-2
+                ">
                   {product.subcategory.name}
                 </span>
               </div>

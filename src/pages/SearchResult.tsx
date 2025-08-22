@@ -87,12 +87,12 @@ const SearchResult = () => {
   return (
     <>
       <div className=" bg-gray-100 gap-4 p-3 flex">
-        <div className="w-[28%] shadow">
+        {/* <div className="w-[28%] shadow">
           <Filter
             categoryID={selectedCategory?._id || ""}
             categoryName={categoryName}
           />
-        </div>
+        </div> */}
         <div className="bg-white shadow-sm w-full p-4 ">
           <div className="flex gap-1 items-center text-[12px]">
             <div className="">
@@ -124,7 +124,8 @@ const SearchResult = () => {
           </div>
 
           <div className="bg-black/5 w-full h-[1px]"></div>
-          <div className="grid grid-cols-4 gap-4 py-4 bg-gray-50 px-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5
+          gap-4 py-4 bg-gray-50 px-3">
             {sortedProducts.map((v, i) => {
               return (
                 <div className="bg-white shadow px-2 py-4">

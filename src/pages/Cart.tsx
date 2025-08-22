@@ -56,6 +56,7 @@ const Cart = () => {
       <div className=" p-4 shadow space-y-6 bg-white ">
         <h2 className=" font-heading text-lg font-semibold flex items-center gap-2 tracking-wider">
           <BsCart className="text-xl" /> 
+          My Shopping Cart
         </h2>
         <div className=" grid gap-4  ">
           {/* First */}

@@ -11,7 +11,7 @@ interface CartTotalProps {
 }
 
 const CartTotal: React.FC<CartTotalProps> = ({ showCheckoutButton = true }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const decoded = decodeToken();
   const userId = decoded?.id;
 
@@ -23,17 +23,11 @@ const CartTotal: React.FC<CartTotalProps> = ({ showCheckoutButton = true }) => {
   const totalTax = cart?.summary?.totalTax || 0;
   const finalTotal = cart?.summary?.finalTotal || 0;
 
-  
-
   useEffect(() => {
     if (userId) {
       dispatch(fetchcartProduct(userId));
     }
   }, [dispatch, userId]);
-
-  
-
-  
 
   return (
     <>
@@ -59,37 +53,37 @@ const CartTotal: React.FC<CartTotalProps> = ({ showCheckoutButton = true }) => {
                 -₹{totalDiscount}
               </span>
             </div>
-            <div className="flex justify-between items-center p-3 border-b border-b-slate-300/40">
+            {/* <div className="flex justify-between items-center p-3 border-b border-b-slate-300/40">
               <span className="text-black/70  font-heading text-sm">
                 Delivery Fee (SmartBazaar)
               </span>
               <span className="  font-bold text-green-700">FREE </span>
-            </div>
-            <div className="flex justify-between items-center p-3 border-b border-b-slate-300/40">
+            </div> */}
+            {/* <div className="flex justify-between items-center p-3 border-b border-b-slate-300/40">
               <span className="text-black/70  font-heading text-sm">
                 Delivery Fee (JioMart)
               </span>
               <span className="  font-bold text-green-700">FREE </span>
-            </div>
+            </div> */}
             <div className="flex flex-col gap-3">
               <div className="flex justify-between items-center p-3 border-b border-b-slate-300/40">
-                <span className="text-black/70  font-heading text-base font-bold">
+                <span className="text-black/70  font-heading text-base font-bold ">
                   Total
                 </span>
                 <span className="   text-black font-black">₹{finalTotal} </span>
               </div>
               {totalDiscount > 0 && (
-                <span className="w-full flex justify-end font-bold text-green-700">
+                <span className="w-full flex justify-end font-bold text-green-700 font-heading">
                   You Saved ₹{totalDiscount}
                 </span>
               )}
             </div>
             {showCheckoutButton && (
               <div>
-                <button onClick={() => navigate("/checkout")}
-                 
+                <button
+                  onClick={() => navigate("/checkout")}
                   className="btn border rounded text-white font-semibold
-               font-heading p-2 w-full bg-black my-2 text-base"
+               font-heading p-2 w-full bg-black my-4 text-base"
                 >
                   Proceed To Checkout
                 </button>
@@ -98,8 +92,6 @@ const CartTotal: React.FC<CartTotalProps> = ({ showCheckoutButton = true }) => {
           </div>
         </div>
       </div>
-
-      
     </>
   );
 };
