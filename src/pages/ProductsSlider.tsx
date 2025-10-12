@@ -133,7 +133,7 @@ const ProductSlider = ({ title, filterQuery }) => {
                 key={i}
                 className=" cursor-pointer flex flex-col gap-1 border border-black/10 px-[3px] py-1 rounded overflow-hidden"
               >
-                <Link to={`${v._id}`}>
+                <div>
                 <div className="relative">
                   <div className="w-full aspect-square flex justify-center items-center">
                     <img
@@ -171,7 +171,7 @@ const ProductSlider = ({ title, filterQuery }) => {
                   )}
                 </div>
 
-                </Link>
+                </div>
               </SwiperSlide>
             );
           })}
