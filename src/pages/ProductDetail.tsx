@@ -14,10 +14,10 @@ import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { addToCart, fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
+import { addToWishlist, fetchWishlistProduct } from "../ReduxToolkit/Slices/WishlistSlice";
 
 const ProductDetail = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { productId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
@@ -28,8 +28,8 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (userId) {
-      dispatch(fetchcartProduct(userId))
-    };
+      dispatch(fetchcartProduct(userId));
+    }
   }, [dispatch, userId]);
 
   useEffect(() => {
@@ -76,19 +76,32 @@ const ProductDetail = () => {
         quantity: 1,
       })
     );
-    navigate("/mainCartPage")
+    navigate("/mainCartPage");
   };
 
-  const handleWishlistProduct = async (productId) => {
-    try {
-      const res = await AddProductInWishlistData({ userId, productId });
-      alert("Product added to wishlist");
-      setData(res.data);
-    } catch (error) {
-      console.error("Error post product:", error);
-    }
-  };
+  // const handleWishlistProduct = async (productId) => {
+  //   try {
+  //     const res = await AddProductInWishlistData({ userId, productId });
+  //     alert("Product added to wishlist");
+  //     setData(res.data);
+  //   } catch (error) {
+  //     console.error("Error post product:", error);
+  //   }
+  // };
+const handleWishlistProduct = (productId) => {
+  if (!userId) return;
 
+  dispatch(addToWishlist({ userId, productId }))
+    .unwrap()
+    .then(() => {
+      alert("Product added to wishlist.");
+      // Redux ko refresh karo taki Header count update ho jaye
+      dispatch(fetchWishlistProduct(userId));
+    })
+    .catch((error) => {
+      alert("Failed to add product to wishlist.");
+      console.error("Wishlist error:", error);
+    });}
   return (
     <>
       <div className="bg-gray-50 p-2 shadow">
@@ -96,7 +109,7 @@ const ProductDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-white p-4 rounded-md">
             <div className="flex flex-col items-center">
               <img
-                className="w-full object-contain max-h-[60vh]"
+                className="w-full object-contain max-h-[55vh]"
                 src={`${conf.BaseURL}${conf.GetImageUrl}/${singleProduct?.image}`}
                 alt={singleProduct?.name}
               />
@@ -160,25 +173,26 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              <div className="border border-black/10 rounded">
-                <div className="p-4">
-                  <h3 className="font-body text-lg font-medium text-gray-800">
-                    Specifications
-                  </h3>
-                </div>
-                <div className="bg-black/10 h-[1px]" />
-                <div className="p-4 space-y-3">
-                  
-                  {Array.isArray(singleProduct?.attributes) &&
-                    singleProduct.attributes.map((attr, index) => (
-                      <div key={index} className="flex gap-4 items-start">
-                        <span className="font-body text-gray-700 text-sm">
-                          {attr.key}: {attr.value}
-                        </span>
-                      </div>
-                    ))}
-                </div>
-              </div>
+              {Array.isArray(singleProduct?.attributes) &&
+                singleProduct.attributes.length > 0 && (
+                  <div className="border border-black/10 rounded">
+                    <div className="p-4">
+                      <h3 className="font-body text-lg font-medium text-gray-800">
+                        Specifications
+                      </h3>
+                    </div>
+                    <div className="bg-black/10 h-[1px]" />
+                    <div className="p-4 space-y-3">
+                      {singleProduct.attributes.map((attr, index) => (
+                        <div key={index} className="flex gap-4 items-start">
+                          <span className="font-body text-gray-700 text-sm">
+                            {attr.key}: {attr.value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
         </div>

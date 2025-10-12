@@ -132,9 +132,11 @@ const UserProfilePage = () => {
                             <img
                               className="w-full h-full object-cover rounded-full shadow-md"
                               src={
-                                previewImage?.startsWith("http")
-                                  ? previewImage
-                                  : `${conf.BaseURL}${conf.GetImageUrl}${previewImage}`
+                                previewImage
+                                  ? previewImage.startsWith("http")
+                                    ? previewImage
+                                    : `${conf.BaseURL}${conf.GetImageUrl}${previewImage}`
+                                  : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" // 👈 fallback image ka path
                               }
                               alt="profile"
                             />

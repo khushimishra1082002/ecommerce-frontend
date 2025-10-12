@@ -93,7 +93,8 @@ const conf = {
   deleteMultiplePermissionUrl:"/permission/deleteMultiplePermission",
   getFilteredPermissionUrl:"/permission/getFilteredPermission",
   getSinglePermissionUrl:"/permission/getSinglePermission",
-  updatePermissionUrl:"/permission/updatePermission"
+  updatePermissionUrl:"/permission/updatePermission",
+  saveForLetterProductUrl:"/saveforletters/saveForLater"
 };
 
 export default conf;

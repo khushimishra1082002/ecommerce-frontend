@@ -27,6 +27,9 @@ interface SignupResponse {
 const SignUp: React.FC<SignUpProps> = ({ setShowSignUp  }) => {
   const navigate = useNavigate();
    const dispatch = useDispatch<AppDispatch>();
+   const [hidePassword, setHidePassword] = useState(true);
+
+  const togglePassword = () => setHidePassword(!hidePassword);
 
   const initialValues: SignupDTO = {
     fullname: "",
@@ -115,6 +118,8 @@ const SignUp: React.FC<SignUpProps> = ({ setShowSignUp  }) => {
                       label="Password"
                       name="password"
                       placeholder="Enter password"
+
+                       
                       valid={formik.errors.password && formik.touched.password}
                     />
 

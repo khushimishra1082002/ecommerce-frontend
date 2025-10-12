@@ -9,12 +9,14 @@ import {
 } from "../ReduxToolkit/Slices/CartSlice";
 import { decodeToken } from "../utils/decodeToken";
 import { DeleteProductFromCartData } from "../services/cartService";
+
+import {AddSaveForLetterData} from "../services/saveforLaterservice"
 import { MdDelete } from "react-icons/md";
 import conf from "../config/Conf";
 import { BsCart } from "react-icons/bs";
+import axios from "axios"
 
 const Cart = () => {
-  
   const decoded = decodeToken();
   const userId = decoded?.id;
 
@@ -25,7 +27,7 @@ const Cart = () => {
   const { cart, loading, error } = useSelector(
     (state: RootState) => state.cart
   );
-  console.log("cart", cart);
+  console.log("shubham", cart);
 
   useEffect(() => {
     if (userId) {
@@ -34,7 +36,7 @@ const Cart = () => {
   }, [dispatch]);
 
   const handleCartProductDelete = async (productId) => {
-    console.log(productId);
+    console.log("kkashdkahd",productId);
     const res = await DeleteProductFromCartData(userId, productId);
     alert("Product Deleted From Cart");
     console.log(res);
@@ -51,11 +53,34 @@ const Cart = () => {
     }
   };
 
+const handleSaveForLater = async (productId, quantity) => {
+  console.log("productId",productId);
+  
+  try {
+    if (!userId) return;
+
+    const res = await AddSaveForLetterData({ userId, productId, quantity });
+
+    if (res.success) {
+      dispatch(fetchcartProduct(userId)); // cart refresh
+      alert("Product saved for later!");
+    } else {
+      alert("Failed to save product.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Failed to save product.");
+  }
+};
+
+
+
+
   return (
     <>
       <div className=" p-4 shadow space-y-6 bg-white ">
         <h2 className=" font-heading text-lg font-semibold flex items-center gap-2 tracking-wider">
-          <BsCart className="text-xl" /> 
+          <BsCart className="text-xl" />
           My Shopping Cart
         </h2>
         <div className=" grid gap-4  ">
@@ -65,8 +90,10 @@ const Cart = () => {
               const product = v.productId;
               return (
                 <div key={v._id} className=" space-y-2">
-                  <div className="grid grid-cols-1 md:grid-cols-7 gap-4 
-                  lg:h-44 border border-black/10  p-5 lg:p-1  ">
+                  <div
+                    className="grid grid-cols-1 md:grid-cols-7 gap-4 
+                  lg:h-44 border border-black/10  p-5 lg:p-1  "
+                  >
                     <div className=" w-full col-span-2">
                       <img
                         className="w-40 max-h-40 m-auto object-contain py-2"
@@ -111,7 +138,12 @@ const Cart = () => {
                           </div>
                         </div>
                         <div className="border border-black/10 p-2">
-                          <button className="font-subHeading text-xs font-medium">
+                          <button
+                            className="font-subHeading text-xs font-medium"
+                            onClick={() =>
+                              handleSaveForLater(product._id, v.quantity)
+                            }
+                          >
                             Save for later
                           </button>
                         </div>
