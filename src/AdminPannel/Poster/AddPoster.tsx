@@ -51,7 +51,7 @@ const AddPoster: React.FC<AddPosterProps> = ({
       if (values.image && typeof values.image !== "string") {
         formData.append("image", values.image);
       } else {
-        alert("Image is required");
+        alert("Imagee is required");
         return;
       }
 
