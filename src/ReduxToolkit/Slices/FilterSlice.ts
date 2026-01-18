@@ -10,7 +10,7 @@ const initialState: FiltersState = {
   priceRange: { min: "", max: "" },
   size: [],
   colors: [],
-  inStock: null,
+  inStock: true,
   discount: [],
 };
 
@@ -23,6 +23,8 @@ const filterSlice = createSlice({
     },
     setSubcategories: (state, action: PayloadAction<string[]>) => {
       state.subcategories = action.payload;
+    console.log("state.subcategories",state.subcategories);
+
     },
     setGender: (state, action: PayloadAction<string[]>) => {
       state.gender = action.payload;

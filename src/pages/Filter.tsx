@@ -34,6 +34,10 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(
     []
   );
+
+
+  console.log("selectedSubcategories", selectedSubcategories);
+  
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   console.log("selectedBrands", selectedBrands);
 

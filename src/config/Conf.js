@@ -94,7 +94,9 @@ const conf = {
   getFilteredPermissionUrl:"/permission/getFilteredPermission",
   getSinglePermissionUrl:"/permission/getSinglePermission",
   updatePermissionUrl:"/permission/updatePermission",
-  saveForLetterProductUrl:"/saveforletters/saveForLater"
+  saveForLetterProductUrl:"/saveforletters/saveForLater",
+  getSaveForLaterProductUrl: "/saveforletters/getSavedForLater",
+  removeSaveForLaterProductUrl:"/saveforletters/saveForLaterProductRemove"
 };
 
 export default conf;

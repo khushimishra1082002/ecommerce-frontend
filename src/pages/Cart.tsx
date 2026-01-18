@@ -105,7 +105,8 @@ const handleSaveForLater = async (productId, quantity) => {
                       <span className="text-green-500 font-body font-medium">
                         In stock
                       </span>
-                      <h4 className="font-heading font-medium text-[13px] line-clamp-2 leading-5  text-gray-800 ">
+                      <h4 className="font-heading font-medium text-[13px]
+                       line-clamp-2 leading-5  text-gray-800 ">
                         {product?.name}
                       </h4>
 

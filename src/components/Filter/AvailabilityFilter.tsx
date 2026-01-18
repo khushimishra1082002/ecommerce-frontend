@@ -6,7 +6,7 @@ interface AvailabilityFilterProps {
 
 const AvailabilityFilter: React.FC<AvailabilityFilterProps> = ({ onChange }) => {
   const handleAvailabilityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.checked);
+    onChange(!e.target.checked);
   };
 
   return (

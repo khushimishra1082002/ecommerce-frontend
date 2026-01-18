@@ -124,7 +124,7 @@ const UserProfilePage = () => {
                     >
                       {/* Profile Image Section */}
                       <div className="flex flex-col sm:flex-col lg:flex-row items-center gap-6">
-                        <div className="relative w-36 h-36 rounded-full shadow group">
+                        <div className="relative w-24 h-24 rounded-full shadow group">
                           <label
                             htmlFor="profileImageInput"
                             className="cursor-pointer"

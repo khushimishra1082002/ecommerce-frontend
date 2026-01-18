@@ -7,6 +7,7 @@ import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { setCategory } from "../ReduxToolkit/Slices/FilterSlice";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
+import { buildQueryFromFilters } from "../utils/buildQueryFromFilters";
 
 const SelectCategoryResults = () => {
   const { categoryID } = useParams();
@@ -19,13 +20,17 @@ const SelectCategoryResults = () => {
 
   const [filteredProducts, setFilteredProducts] = useState<ProductDTO[]>([]);
 
+
+  
+
   const fetchFilterProduct = async () => {
     try {
-      const filterParams = {
-        ...filters,
-        category: categoryID,
-      };
-      console.log("filters",filters);
+      const filterParams = filters;
+
+
+      const query = buildQueryFromFilters(filterParams);
+console.log("FINAL QUERY:", query);
+      console.log("munmun",filters);
       
       const res = await getFilterProductsData(filterParams);
       console.log("Filtered Products:", res);

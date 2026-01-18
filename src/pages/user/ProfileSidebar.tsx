@@ -8,6 +8,7 @@ import {
   FaHeart,
   FaAddressCard,
   FaSignOutAlt,
+  FaBookmark
 } from "react-icons/fa";
 
 const ProfileSidebar = () => {
@@ -16,8 +17,12 @@ const ProfileSidebar = () => {
   const menuItems = [
     { icon: <FaUser />, label: "Profile", route: "/userProfile" },
     { icon: <FaBoxOpen />, label: "My Orders", route: "/myOrders" },
-    { icon: <FaHistory />, label: "Order History", route: "/OrderHistory" },
     { icon: <FaShoppingCart />, label: "My Cart", route: "/mainCartPage" },
+     {
+      icon: <FaBookmark />,
+      label: "Saved for Later",
+      route: "/saveForLetterProduct",
+    },
     { icon: <FaHeart />, label: "Wishlist", route: "/myWishList" },
     { icon: <FaSignOutAlt />, label: "Logout", route: "/logout" },
   ];

@@ -8,9 +8,13 @@ import "swiper/css/scrollbar";
 import { getSimilorProductData } from "../services/ProductService";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
+import { useNavigate } from "react-router-dom";
+
 
 const SimilorProduct = ({ productId }) => {
   const [data, setData] = useState<ProductDTO[]>([]);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchSimilorProduct = async () => {
@@ -31,7 +35,7 @@ const SimilorProduct = ({ productId }) => {
         <div className=" bg-white space-y-4 px-4 py-6 m-3 shadow ">
         <h2 className="font-heading text-lg font-semibold">Related Products</h2>
 
-        <Swiper
+        <Swiper 
           modules={[Navigation, Pagination, A11y]}
           spaceBetween={10}
           slidesPerView={5}
@@ -68,9 +72,9 @@ const SimilorProduct = ({ productId }) => {
         >
           {data.map((v, i) => {
             return (
-              <SwiperSlide
+              <SwiperSlide  onClick={() => navigate(`/${v._id}`)}
                 className="flex flex-col gap-1 border border-black/10 px-[3px] py-1
-           rounded overflow-hidden"
+           rounded overflow-hidden cursor-pointer"
               >
                 <div className="w-full aspect-square flex justify-center items-center">
                   <img

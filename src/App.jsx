@@ -20,7 +20,6 @@ import BrandTable from "./AdminPannel/DataTable/Brands/BrandTable.tsx";
 import UserProfilePage from "./pages/user/UserProfilePage.tsx";
 import ContactUs from "./pages/ContactUs.tsx";
 import MyOrders from "./pages/user/MyOrders.tsx";
-import OrderHistory from "./pages/user/OrderHistory.tsx";
 import Logout from "./components/Logout.tsx";
 import { DashboardBanner } from "./AdminPannel/Banner/DashboardBanner.tsx";
 import OrderTable from "./AdminPannel/DataTable/Orders/OrderTable";
@@ -34,6 +33,7 @@ import RoleTable from "./AdminPannel/Role/RoleTable.tsx";
 import PermissionTable from "./AdminPannel/Permission/PermissionTable.tsx";
 import UsersTable from "./AdminPannel/User/UsersTable.tsx";
 import AdminRoute from "./routes/AdminRoute.tsx";
+import SaveForLetterProduct from "./pages/SaveForLetterProduct.tsx";
 
 const App = () => {
   return (
@@ -57,7 +57,7 @@ const App = () => {
           <Route path="/userProfile" element={<UserProfilePage />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/myOrders" element={<MyOrders />} />
-          <Route path="/OrderHistory" element={<OrderHistory />} />
+          <Route path="/saveForLetterProduct" element={<SaveForLetterProduct />} />
           <Route path="/logout" element={<Logout />} />
         </Route>
         {/*Admin Dashboard  */}

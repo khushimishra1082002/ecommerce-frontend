@@ -8,7 +8,7 @@ import "swiper/css/scrollbar";
 import { FaStar } from "react-icons/fa6";
 import { getRecommendedProductData } from "../services/ProductService";
 import { decodeToken } from "../utils/decodeToken";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
@@ -16,6 +16,7 @@ import conf from "../config/Conf";
 const RecommendedProducts = () => {
   const decoded = decodeToken();
   const userId = decoded?.id;
+  const navigate  =  useNavigate()
 
   const [data, setData] = useState<ProductDTO[]>([]);
 
@@ -70,8 +71,9 @@ const RecommendedProducts = () => {
           </span>
 
           {data.map((v, i) => (
-            <SwiperSlide key={v._id || i}>
-              <div className="border rounded-lg flex flex-col gap-3 hover:shadow-md transition duration-200 py-1 shadow">
+            <SwiperSlide key={v._id || i} onClick={() => navigate(`/${v._id}`)}>
+              <div className="border rounded-lg flex flex-col gap-3 hover:shadow-md
+               transition duration-200 py-1 shadow cursor-pointer">
                 <Link to={`${v._id}`} className="space-y-1">
                   <div className="h-44 p-2">
                     <img
