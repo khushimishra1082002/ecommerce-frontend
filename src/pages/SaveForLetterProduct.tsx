@@ -14,29 +14,44 @@ const SaveForLetterProduct = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [savedProducts, setSavedProducts] = useState([]);
+  console.log("savedProducts",savedProducts);
+  
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!userId) return;
+ useEffect(() => {
+  if (!userId) return;
 
-    const fetchSavedProducts = async () => {
-      try {
-        const res = await getSaveForLaterData(userId);
-        if (res?.success) {
-          setSavedProducts(res.savedForLater);
-        }
-      } catch (error) {
-        console.error("Failed to load saved products", error);
-      } finally {
-        setLoading(false);
+  const fetchSavedProducts = async () => {
+    try {
+      const res = await getSaveForLaterData(userId);
+
+      if (res?.success) {
+        // ✅ FRONTEND FIX: null productId ko yahin hata do
+        const validProducts = res.savedForLater.filter(
+          (item) => item.productId !== null
+        );
+
+        setSavedProducts(validProducts);
       }
-    };
+    } catch (error) {
+      console.error("Failed to load saved products", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchSavedProducts();
-  }, [userId]);
+  fetchSavedProducts();
+}, [userId]);
+
 
   if (loading) return <p>Loading saved products...</p>;
-  if (savedProducts.length === 0) return <p>No products saved for later.</p>;
+  if (savedProducts.length === 0) return (
+    <div>
+      <div className="h-96 flex justify-center items-center">
+        <p >No products saved for later.</p>
+      </div>
+    </div>
+  );
 
   const handleMoveToCart = async (productId: string, quantity: number) => {
     if (!userId) return;
@@ -73,52 +88,50 @@ const SaveForLetterProduct = () => {
       </h2>
 
       <div className="space-y-4">
-        {savedProducts.map((item) => {
-          if (!item.productId) return null;
+       {savedProducts.map((item) => {
+  const product = item.productId; // ab guaranteed NOT null
+  const image = product?.image?.[0];
 
-          const product = item.productId;
-          const image = product?.image?.[0];
-          return (
-            <>
-              <div key={item._id} className="grid grid-cols-5 gap-12 p-6 ">
-                <div className="border border-black/10">
-                  <img
-                    src={`${conf.BaseURL}${conf.GetImageUrl}/${image}`}
-                   alt={product?.name || "Product"}
-                    className=" w-36 h-36 rounded m-auto"
-                  />
-                </div>
+  return (
+    <div key={item._id}>
+      <div className="grid grid-cols-5 gap-12 p-6">
+        <div className="border border-black/10">
+          <img
+            src={`${conf.BaseURL}${conf.GetImageUrl}/${image}`}
+            alt={product?.name || "Product"}
+            className="w-36 h-36 rounded m-auto"
+          />
+        </div>
 
-                <div className="col-span-3">
-                  <h3
-                    className="font-heading font-medium text-[14px]
-                       line-clamp-2 leading-5  text-gray-800"
-                  >
-                    {product?.name || "Product not available"}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Price: ₹{product?.price}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Quantity: {item?.quantity}
-                  </p>
-                </div>
+        <div className="col-span-3">
+          <h3 className="font-heading font-medium text-[14px] line-clamp-2">
+            {product?.name}
+          </h3>
+          <p className="text-sm text-gray-500">
+            Price: ₹{product?.price}
+          </p>
+          <p className="text-sm text-gray-500">
+            Quantity: {item.quantity}
+          </p>
+        </div>
 
-                <div>
-                  <button
-                    onClick={() =>
-                      handleMoveToCart(item.productId._id, item.quantity)
-                    }
-                    className=" bg-red-500 text-white p-2 rounded font-heading text-sm "
-                  >
-                    Move to Cart
-                  </button>
-                </div>
-              </div>
-              <div className="w-full h-[1px] bg-black/10"></div>
-            </>
-          );
-        })}
+        <div>
+          <button
+            onClick={() =>
+              handleMoveToCart(product._id, item.quantity)
+            }
+            className="bg-red-500 text-white p-2 rounded text-sm"
+          >
+            Move to Cart
+          </button>
+        </div>
+      </div>
+
+      <div className="w-full h-[1px] bg-black/10"></div>
+    </div>
+  );
+})}
+
       </div>
     </div>
   );
