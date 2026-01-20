@@ -9,6 +9,7 @@ import ProfileSidebar from "./ProfileSidebar";
 import { UserDTO } from "../../types/user";
 import conf from "../../config/Conf";
 import { FaCamera } from "react-icons/fa";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 const UserProfilePage = () => {
   const navigate = useNavigate();
@@ -135,7 +136,7 @@ const UserProfilePage = () => {
                                 previewImage
                                   ? previewImage.startsWith("http")
                                     ? previewImage
-                                    : `${conf.BaseURL}${conf.GetImageUrl}${previewImage}`
+                                    : getImageUrl(previewImage)
                                   : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" // 👈 fallback image ka path
                               }
                               alt="profile"

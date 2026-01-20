@@ -8,6 +8,7 @@ import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { fetchWishlistProduct } from "../ReduxToolkit/Slices/WishlistSlice";
 import { FaHeart } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { getImageUrl } from "../utils/getImageUrl";
 
 const Wishlist = () => {
   const navigate  = useNavigate()
@@ -82,7 +83,7 @@ const Wishlist = () => {
                   <div className="sm:col-span-1 flex justify-center items-center">
                     <img
                       className="w-24 h-24 object-contain rounded border border-gray-200"
-                      src={`${conf.BaseURL}${conf.GetImageUrl}/${product?.image[0]}`}
+                      src={getImageUrl(product?.image[0])}
                       alt={product?.name}
                     />
                   </div>

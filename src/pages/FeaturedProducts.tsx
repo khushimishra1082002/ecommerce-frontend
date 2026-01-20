@@ -15,6 +15,7 @@ import {
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
+import { getImageUrl } from "../utils/getImageUrl";
 
 const FeaturedProducts = () => {
   const [data, setData] = useState<ProductDTO[]>([]);
@@ -97,7 +98,7 @@ const FeaturedProducts = () => {
                       <div className="h-44">
                         <img
                           className="w-36 m-auto h-full object-contain"
-                          src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                            src={getImageUrl(v.image)}
                         />
                       </div>
                       <div className="p-1 flex flex-col gap-1">

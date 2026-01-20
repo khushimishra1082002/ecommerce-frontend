@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
+import { getImageUrl } from "../utils/getImageUrl";
 
 const RecommendedProducts = () => {
   const decoded = decodeToken();
@@ -78,7 +79,7 @@ const RecommendedProducts = () => {
                   <div className="h-44 p-2">
                     <img
                       className="h-full m-auto object-contain"
-                      src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                         src={getImageUrl(v.image)}
                       alt={v.name}
                     />
                   </div>

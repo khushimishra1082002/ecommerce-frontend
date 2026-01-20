@@ -4,6 +4,7 @@ import { IoIosArrowDropleftCircle } from "react-icons/io";
 import conf from "../config/Conf";
 import { ProductDTO } from "../types/product";
 import { getFilterProductsData } from "../services/ProductService";
+import { getImageUrl } from "../utils/getImageUrl";
 
 interface FourGridProductProps {
   title: string;
@@ -44,12 +45,14 @@ const FourGridProduct: React.FC<FourGridProductProps> = ({
                 <div className="">
                   <img
                     className="w-24 h-24 object-contain m-auto"
-                    src={`${conf.BaseURL}${conf.GetImageUrl}/${product.image}`}
+                    src={getImageUrl(product.image)}
                     alt={product?.subcategory?.name}
                   />
                 </div>
-                <span className="font-heading text-[13px] line-clamp-1 font-medium my-2
-                ">
+                <span
+                  className="font-heading text-[13px] line-clamp-1 font-medium my-2
+                "
+                >
                   {product.subcategory.name}
                 </span>
               </div>

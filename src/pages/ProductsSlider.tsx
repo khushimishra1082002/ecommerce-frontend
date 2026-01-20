@@ -19,6 +19,7 @@ import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
 import { fetchWishlistProduct } from "../ReduxToolkit/Slices/WishlistSlice";
 import { addToWishlist } from "../ReduxToolkit/Slices/WishlistSlice";
+import { getImageUrl } from "../utils/getImageUrl";
 
 const ProductSlider = ({ title, filterQuery }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -138,7 +139,7 @@ const ProductSlider = ({ title, filterQuery }) => {
                   <div className="w-full aspect-square flex justify-center items-center">
                     <img
                       className="h-40 m-auto w-full object-contain"
-                      src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                      src={getImageUrl(v.image)}
                       alt="product"
                     />
                   </div>

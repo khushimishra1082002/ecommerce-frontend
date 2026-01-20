@@ -9,6 +9,7 @@ import EditBanner from "./EditBanner";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BannerDTO } from "../../types/banner";
 import conf from "../../config/Conf";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 export const DashboardBanner: React.FC = () => {
   const [showAddBannerModel, setShowAddBannerModel] = useState<boolean>(false);
@@ -86,7 +87,7 @@ export const DashboardBanner: React.FC = () => {
         {data.map((banner) => (
           <div key={banner._id} className="border p-4 shadow rounded space-y-2">
             <img
-              src={`${conf.BaseURL}${conf.GetImageUrl}/${banner.image}`}
+              src={getImageUrl(banner.image)}
               alt="Banner"
               className="w-full h-52 object-cover"
             />

@@ -7,11 +7,13 @@ import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { addToCart } from "../ReduxToolkit/Slices/CartSlice";
 import { useNavigate } from "react-router-dom";
 import { removeSaveForLaterData } from "../services/saveforLaterservice";
+import { getImageUrl } from "../utils/getImageUrl";
 const SaveForLetterProduct = () => {
   const navigate = useNavigate();
   const decoded = decodeToken();
   const userId = decoded?.id;
   const dispatch = useDispatch<AppDispatch>();
+
 
   const [savedProducts, setSavedProducts] = useState([]);
   console.log("savedProducts",savedProducts);
@@ -97,7 +99,7 @@ const SaveForLetterProduct = () => {
       <div className="grid grid-cols-5 gap-12 p-6">
         <div className="border border-black/10">
           <img
-            src={`${conf.BaseURL}${conf.GetImageUrl}/${image}`}
+              src={getImageUrl(image)}
             alt={product?.name || "Product"}
             className="w-36 h-36 rounded m-auto"
           />

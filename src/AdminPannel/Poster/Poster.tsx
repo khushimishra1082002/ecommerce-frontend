@@ -11,6 +11,7 @@ import { PosterDTO } from "../../types/poster";
 import { getPosterData } from "../../services/PosterService";
 import { deletePosterData } from "../../services/PosterService";
 import conf from "../../config/Conf";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 export const Poster: React.FC = () => {
   const [showAddPosterModal, setshowAddPosterModal] = useState<boolean>(false);
@@ -88,7 +89,7 @@ export const Poster: React.FC = () => {
         {data.map((poster) => (
           <div key={poster._id} className="border p-4 shadow rounded space-y-2">
             <img
-              src={`${conf.BaseURL}${conf.GetImageUrl}/${poster.image}`}
+              src={getImageUrl(poster?.image)}
               alt="Banner"
               className="w-full h-52 object-cover"
             />

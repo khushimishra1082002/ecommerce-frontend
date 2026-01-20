@@ -15,6 +15,7 @@ import { MdDelete } from "react-icons/md";
 import conf from "../config/Conf";
 import { BsCart } from "react-icons/bs";
 import axios from "axios"
+import { getImageUrl } from "../utils/getImageUrl";
 
 const Cart = () => {
   const decoded = decodeToken();
@@ -97,7 +98,7 @@ const handleSaveForLater = async (productId, quantity) => {
                     <div className=" w-full col-span-2">
                       <img
                         className="w-40 max-h-40 m-auto object-contain py-2"
-                        src={`${conf.BaseURL}${conf.GetImageUrl}/${product?.image}`}
+                        src={getImageUrl(product?.image)}
                         alt="product"
                       />
                     </div>

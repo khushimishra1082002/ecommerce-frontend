@@ -10,12 +10,13 @@ import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { fetchAllCategory } from "../ReduxToolkit/Slices/CategorySlice";
 import conf from "../config/Conf";
 import { Link } from "react-router-dom";
+import { getImageUrl } from "../utils/getImageUrl";
 
 const Categories = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { category, loading, error } = useSelector(
-    (state: RootState) => state.allcategory
+    (state: RootState) => state.allcategory,
   );
   console.log("categoryiiiii", category);
 
@@ -71,7 +72,8 @@ const Categories = () => {
                   >
                     <img
                       className="w-12 md:w-14"
-                      src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                      // src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                      src={getImageUrl(v.image)}
                     />
 
                     <span className="text-[13px] font-heading font-medium tracking-wider">

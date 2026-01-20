@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import conf from "../config/Conf";
 import { BsCart } from "react-icons/bs";
+import { getImageUrl } from "../utils/getImageUrl";
 
 interface RecentlyViewedItem {
   _id: string;
@@ -106,7 +107,7 @@ const RecentlyViewedProducts = () => {
                     <div className="h-52 p-4">
                       <img
                         className="w-44 object-contain h-full"
-                        src={`${conf.BaseURL}${conf.GetImageUrl}/${v?.productId?.image?.[0]}`}
+                        src={getImageUrl(v?.productId?.image?.[0])}
                         alt="product"
                       />
                     </div>

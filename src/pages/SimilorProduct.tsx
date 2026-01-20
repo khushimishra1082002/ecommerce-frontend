@@ -9,7 +9,7 @@ import { getSimilorProductData } from "../services/ProductService";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
 import { useNavigate } from "react-router-dom";
-
+import { getImageUrl } from "../utils/getImageUrl";
 
 const SimilorProduct = ({ productId }) => {
   const [data, setData] = useState<ProductDTO[]>([]);
@@ -79,7 +79,7 @@ const SimilorProduct = ({ productId }) => {
                 <div className="w-full aspect-square flex justify-center items-center">
                   <img
                     className="w-44 object-contain h-full"
-                    src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
+                       src={getImageUrl(v.image)}
                     alt="banner"
                   />
                 </div>

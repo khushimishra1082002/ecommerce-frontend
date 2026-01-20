@@ -10,6 +10,7 @@ import SwiperButtonTwo from "../components/SwiperButtonTwo";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import conf from "../config/Conf";
 import { BsCart } from "react-icons/bs";
+import { getImageUrl } from "../utils/getImageUrl";
 
 type Product = {
   _id: string;
@@ -95,7 +96,7 @@ const TrendingProducts = () => {
               <div className="h-44 flex justify-center items-center ">
                 <img
                   className="w-40 object-contain h-full"
-                  src={`${conf.BaseURL}${conf.GetImageUrl}/${v?.image}`}
+                  src={getImageUrl(v?.image)}
                   alt={v?.name}
                 />
               </div>

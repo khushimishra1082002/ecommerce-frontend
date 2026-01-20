@@ -18,6 +18,7 @@ import {
   addToWishlist,
   fetchWishlistProduct,
 } from "../ReduxToolkit/Slices/WishlistSlice";
+import { getImageUrl } from "../utils/getImageUrl";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -143,7 +144,7 @@ const ProductDetail = () => {
             <div className="flex flex-col items-center">
               <img
                 className="w-full object-contain max-h-[55vh]"
-                src={`${conf.BaseURL}${conf.GetImageUrl}/${singleProduct?.image}`}
+                src={getImageUrl(singleProduct?.image)}
                 alt={singleProduct?.name}
               />
               <div className="w-full flex flex-col gap-2 my-4">

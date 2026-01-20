@@ -16,6 +16,7 @@ import {
   getSingleCategoryData,
 } from "../../../services/CategoryService";
 import conf from "../../../config/Conf";
+import { getImageUrl } from "../../../utils/getImageUrl";
 
 const CategoryTable = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -112,7 +113,7 @@ const CategoryTable = () => {
       name: "Image",
       selector: (row) => (
         <img
-          src={`${conf.BaseURL}${conf.GetImageUrl}/${row.image}`}
+          src={getImageUrl(row.image)}
           width={40}
           height={40}
           alt=""

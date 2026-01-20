@@ -9,6 +9,7 @@ import { MdFlight } from "react-icons/md";
 import { OrderDTO } from "../../types/order";
 import conf from "../../config/Conf";
 import { useNavigate } from "react-router-dom";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 const MyOrders = () => {
   const navigate = useNavigate();
@@ -111,7 +112,7 @@ const MyOrders = () => {
                         >
                           <div className="flex items-start sm:items-center gap-4">
                             <img
-                              src={`${conf.BaseURL}${conf.GetImageUrl}/${item?.productId?.image[0]}`}
+                              src={getImageUrl(item?.productId?.image[0])}
                               alt={item.productId.name}
                               className="w-16 h-16 object-cover rounded border"
                             />

@@ -8,6 +8,7 @@ import { categoryValidationSchema } from "../../../Validations/categoryValidatio
 import { fetchAllCategory } from "../../../ReduxToolkit/Slices/CategorySlice";
 import FormikControl from "../../../components/ReusableFormField/FormikControl";
 import { editCategoryData } from "../../../services/CategoryService";
+import { getImageUrl } from "../../../utils/getImageUrl";
 
 interface EditCategoryProps {
   closeEditCategoryModal: () => void;
@@ -18,7 +19,6 @@ const IsActive = [
   { value: true, label: "True" },
   { value: false, label: "False" },
 ];
-
 
 const EditCategory: React.FC<EditCategoryProps> = ({
   closeEditCategoryModal,
@@ -40,7 +40,7 @@ const EditCategory: React.FC<EditCategoryProps> = ({
 
   const onSubmit = async (
     values: CategoryFormDTO,
-    actions: FormikHelpers<CategoryFormDTO>
+    actions: FormikHelpers<CategoryFormDTO>,
   ) => {
     try {
       const formData = new FormData();
@@ -97,18 +97,20 @@ const EditCategory: React.FC<EditCategoryProps> = ({
           <Form className="space-y-4">
             <div className="grid grid-cols-1 gap-3">
               {/* Existing image preview */}
-              {editData?.image && (
-                <div className="mb-2">
+              <div className="">
+                {editData?.image && (
+                <div className="mb-2 space-y-3">
                   <label className="block font-medium mb-1">
                     Existing Image
                   </label>
                   <img
-                    src={`http://localhost:5000/api/upload/${editData.image}`}
+                    src={getImageUrl(editData.image)}
                     alt="Current category"
                     className="w-32 h-20 object-cover rounded"
                   />
                 </div>
               )}
+              </div>
 
               <FormikControl
                 control="input"
