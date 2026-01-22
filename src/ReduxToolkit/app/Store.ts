@@ -13,6 +13,7 @@ import wishlistReducer from "../Slices/WishlistSlice"
 import authReducer from "../Slices/AuthSlice"
 import bannerReducer from "../Slices/BannerSlice"
 import paymentReducer from "../Slices/PaymentSlice"
+import profileReducer from "../Slices/ProfileSlice"
 
 export const store = configureStore({
   reducer: {
@@ -29,7 +30,8 @@ export const store = configureStore({
     wishlists:wishlistReducer,
     auth:authReducer,
     banner:bannerReducer,
-    payment:paymentReducer
+    payment:paymentReducer,
+    profile:profileReducer
   },
 });
 

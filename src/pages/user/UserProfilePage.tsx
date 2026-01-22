@@ -18,6 +18,7 @@ const UserProfilePage = () => {
   const [formKey, setFormKey] = useState(0);
   const [data, setData] = useState<UserDTO | null>(null);
   console.log("data", data);
+  const [imageUploading, setImageUploading] = useState(false);
 
   const [previewImage, setPreviewImage] = useState("");
 
@@ -131,13 +132,15 @@ const UserProfilePage = () => {
                             className="cursor-pointer"
                           >
                             <img
-                              className="w-full h-full object-cover rounded-full shadow-md"
+                              className={`w-full h-full object-cover rounded-full shadow-md transition ${
+                                imageUploading ? "opacity-50" : "opacity-100"
+                              }`}
                               src={
                                 previewImage
-                                  ? previewImage.startsWith("http")
-                                    ? previewImage
-                                    : getImageUrl(previewImage)
-                                  : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" // 👈 fallback image ka path
+                                  ? previewImage.startsWith("data:")
+                                    ? previewImage // 👈 local preview (base64)
+                                    : getImageUrl(previewImage) // 👈 backend image
+                                  : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                               }
                               alt="profile"
                             />
@@ -157,37 +160,45 @@ const UserProfilePage = () => {
                             className="hidden"
                             onChange={async (e) => {
                               const file = e.currentTarget.files?.[0];
-                              if (file) {
-                                const reader = new FileReader();
+                              if (!file) return;
 
-                                reader.onloadend = () => {
-                                  if (typeof reader.result === "string") {
-                                    setPreviewImage(reader.result); // Update preview instantly
-                                  }
-                                };
-                                reader.readAsDataURL(file);
-
-                                // Immediately upload image
-                                const formData = new FormData();
-                                formData.append("image", file);
-
-                                try {
-                                  const response = await editUserData(
-                                    userId,
-                                    formData
-                                  ); // Only upload image
-                                  if (response.ok) {
-                                    alert("Profile image updated");
-                                    fetchSingleUser(); // refresh user info
-                                  } else {
-                                    alert("Failed to update image");
-                                  }
-                                } catch (error) {
-                                  console.error("Image upload error:", error);
-                                  alert(
-                                    "Something went wrong while uploading the image."
-                                  );
+                              // 1️⃣ instant preview
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                if (typeof reader.result === "string") {
+                                  setPreviewImage(reader.result);
                                 }
+                              };
+                              reader.readAsDataURL(file);
+
+                              // 2️⃣ upload
+                              const formData = new FormData();
+                              formData.append("image", file);
+
+                              try {
+                                setImageUploading(true);
+
+                                const response = await editUserData(
+                                  userId,
+                                  formData,
+                                );
+
+                                if (response.ok) {
+                                  alert("Profile image updated");
+
+                                  // 3️⃣ fetch AFTER upload success
+                                  const updatedUser =
+                                    await getSingleUserData(userId);
+                                  setData(updatedUser);
+                                  setPreviewImage(updatedUser.image);
+                                } else {
+                                  alert("Failed to update image");
+                                }
+                              } catch (error) {
+                                console.error(error);
+                                alert("Image upload failed");
+                              } finally {
+                                setImageUploading(false);
                               }
                             }}
                           />

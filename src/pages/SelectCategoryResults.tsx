@@ -8,6 +8,7 @@ import { setCategory } from "../ReduxToolkit/Slices/FilterSlice";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
 import { buildQueryFromFilters } from "../utils/buildQueryFromFilters";
+import {getImageUrl} from "../utils/getImageUrl"
 
 const SelectCategoryResults = () => {
   const { categoryID } = useParams();
@@ -15,23 +16,19 @@ const SelectCategoryResults = () => {
   const filters = useSelector((state: RootState) => state.filter);
   console.log(
     "Redux filters:",
-    useSelector((state: RootState) => state.filter)
+    useSelector((state: RootState) => state.filter),
   );
 
   const [filteredProducts, setFilteredProducts] = useState<ProductDTO[]>([]);
-
-
-  
 
   const fetchFilterProduct = async () => {
     try {
       const filterParams = filters;
 
-
       const query = buildQueryFromFilters(filterParams);
-console.log("FINAL QUERY:", query);
-      console.log("munmun",filters);
-      
+      console.log("FINAL QUERY:", query);
+      console.log("munmun", filters);
+
       const res = await getFilterProductsData(filterParams);
       console.log("Filtered Products:", res);
       setFilteredProducts(res);
@@ -63,7 +60,7 @@ console.log("FINAL QUERY:", query);
                 >
                   <div className="h-52 bg-gray-50 flex justify-center items-center">
                     <img
-                      src={`${conf.BaseURL}${conf.GetImageUrl}/${product?.image}`}
+                      src={getImageUrl(product?.image)}
                       className="w-36"
                       alt={product.name}
                     />

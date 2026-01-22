@@ -96,7 +96,9 @@ const conf = {
   updatePermissionUrl:"/permission/updatePermission",
   saveForLetterProductUrl:"/saveforletters/saveForLater",
   getSaveForLaterProductUrl: "/saveforletters/getSavedForLater",
-  removeSaveForLaterProductUrl:"/saveforletters/saveForLaterProductRemove"
+  removeSaveForLaterProductUrl:"/saveforletters/saveForLaterProductRemove",
+  myProfileUrl:"/profile/me",
+  updateProfileUrl:"/profile/updateProfile"
 };
 
 export default conf;

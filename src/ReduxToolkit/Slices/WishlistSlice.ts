@@ -15,7 +15,7 @@ export const fetchWishlistProduct = createAsyncThunk<WishlistDTO, string>(
   async (userId) => {
     const res = await getWishlistData(userId);
     return res;
-  }
+  },
 );
 
 export const addToWishlist = createAsyncThunk<
@@ -29,7 +29,14 @@ export const addToWishlist = createAsyncThunk<
 const wishlistSlice = createSlice({
   name: "wishlist",
   initialState,
-  reducers: {},
+  reducers: {
+    clearWishlist: (state) => {
+      state.wishlist = null;
+      state.loading = false;
+      state.error = null;
+    },
+  },
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchWishlistProduct.pending, (state) => {
@@ -41,7 +48,7 @@ const wishlistSlice = createSlice({
           state.loading = false;
           state.wishlist = action.payload;
           state.error = null;
-        }
+        },
       )
       .addCase(fetchWishlistProduct.rejected, (state, action) => {
         state.loading = false;
@@ -56,7 +63,7 @@ const wishlistSlice = createSlice({
           state.loading = false;
           state.wishlist = action.payload;
           state.error = null;
-        }
+        },
       )
       .addCase(addToWishlist.rejected, (state, action) => {
         state.loading = false;
@@ -65,4 +72,6 @@ const wishlistSlice = createSlice({
   },
 });
 
+export const { clearWishlist } = wishlistSlice.actions;
 export default wishlistSlice.reducer;
+

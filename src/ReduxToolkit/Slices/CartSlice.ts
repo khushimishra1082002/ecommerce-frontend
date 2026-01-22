@@ -16,7 +16,7 @@ export const fetchcartProduct = createAsyncThunk<CartDTO, string>(
   async (userId) => {
     const res = await getCartData(userId);
     return res;
-  }
+  },
 );
 
 export const addToCart = createAsyncThunk<
@@ -47,8 +47,13 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-     
+    clearCart: (state) => {
+      state.cart = null;
+      state.loading = false;
+      state.error = null;
+    },
   },
+
   extraReducers: (builder) => {
     builder
       // fetch cart
@@ -61,7 +66,7 @@ const cartSlice = createSlice({
           state.loading = false;
           state.cart = action.payload;
           state.error = null;
-        }
+        },
       )
       .addCase(fetchcartProduct.rejected, (state, action) => {
         state.loading = false;
@@ -92,7 +97,7 @@ const cartSlice = createSlice({
           state.loading = false;
           state.cart = action.payload;
           state.error = null;
-        }
+        },
       )
       .addCase(updateQuantity.rejected, (state, action) => {
         state.loading = false;
@@ -101,6 +106,6 @@ const cartSlice = createSlice({
   },
 });
 
-
+export const { clearCart } = cartSlice.actions;
 export default cartSlice.reducer;
 
