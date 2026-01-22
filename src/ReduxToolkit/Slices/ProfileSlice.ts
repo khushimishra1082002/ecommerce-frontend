@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk ,PayloadAction } from "@reduxjs/toolkit";
-import { getMyProfile, updateMyProfile } from "../../Services/ProfileService";
+import { getMyProfile, updateMyProfile } from "../../services/profileService";
 import {UserDTO} from "../../types/user"
 
 interface ProfileState {
