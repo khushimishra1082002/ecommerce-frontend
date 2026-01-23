@@ -1,10 +1,8 @@
-// src/ReduxToolkit/Slices/paymentSlice.js
-
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  paymentMethod: "COD", // 'cod' ya 'online'
-  paymentDetails: {}, // For online payment, e.g., card details (optional)
+  paymentMethod: "COD",
+  paymentDetails: {}, 
 };
 
 const paymentSlice = createSlice({

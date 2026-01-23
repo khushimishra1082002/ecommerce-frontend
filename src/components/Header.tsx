@@ -23,9 +23,13 @@ const Header = () => {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
+  console.log("token", token);
 
   const { user } = useSelector((state: RootState) => state.profile);
+
   const { cart } = useSelector((state: RootState) => state.cart);
+  console.log();
+
   const { wishlist } = useSelector((state: RootState) => state.wishlists);
 
   const userId = user?._id;
@@ -54,6 +58,12 @@ const Header = () => {
   };
 
   const cartCount = cart?.items?.length || 0;
+  console.log("cartCount", cartCount);
+
+  // const cartCount = Array.isArray(cart?.items)
+  //   ? cart.items.length
+  //   : 0;
+
   const wishlistCount = wishlist?.products?.length || 0;
 
   return (

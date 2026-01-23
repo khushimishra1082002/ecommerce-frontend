@@ -8,6 +8,11 @@ import FormikControl from "../components/ReusableFormField/Input";
 import conf from "../config/Conf";
 import axios from "axios";
 import { LoginUserData, SignUpUserData } from "../services/authService";
+import { useDispatch } from "react-redux";
+import { fetchProfile } from "../ReduxToolkit/Slices/ProfileSlice";
+import { fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
+import { fetchWishlistProduct } from "../ReduxToolkit/Slices/WishlistSlice";
+import { AppDispatch } from "../ReduxToolkit/app/Store";
 
 type LoginProps = {
   setShowSignUp: (value: boolean) => void;
@@ -15,20 +20,19 @@ type LoginProps = {
 
 const Login: React.FC<LoginProps> = ({ setShowSignUp }) => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch<AppDispatch>();
   const initialValues: LoginDTO = {
     email: "",
     password: "",
   };
 
- const handleGoToSignup = () => {
-    setShowSignUp(true); // Show Signup screen
+  const handleGoToSignup = () => {
+    setShowSignUp(true);
   };
-
 
   const onSubmit = async (
     values: LoginDTO,
-    onSubmitProps: FormikHelpers<LoginDTO>
+    onSubmitProps: FormikHelpers<LoginDTO>,
   ) => {
     try {
       const response = await LoginUserData(values);
@@ -59,15 +63,17 @@ const Login: React.FC<LoginProps> = ({ setShowSignUp }) => {
 
   return (
     <>
-      <div className=" flex flex-col  gap-4 w-11/12 md:w-8/12 m-auto
-       border border-black/10 p-8 rounded-md ">
+      <div
+        className=" flex flex-col  gap-4 w-11/12 md:w-8/12 m-auto
+       border border-black/10 p-8 rounded-md "
+      >
         <div className="flex flex-col">
           <h1 className="text-2xl font-semibold font-heading">Login now</h1>
           <span className="text-gray-500 font-heading text-[13px]">
             Login your account
           </span>
         </div>
-       
+
         <div className="w-full ">
           <Formik
             initialValues={initialValues}

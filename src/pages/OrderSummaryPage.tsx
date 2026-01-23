@@ -9,8 +9,13 @@ import OnlinePaymentForm from "./OnlinePaymentForm";
 import { placeOrderData } from "../services/OrderService";
 import conf from "../config/Conf";
 import { ClearCartData } from "../services/cartService";
+import { CreateOrderDTO } from "../types/order";
 
-const OrderSummaryPage = ({ onComplete }) => {
+interface OrderSummaryPageProps {
+  onComplete: () => void;
+}
+
+const OrderSummaryPage: React.FC<OrderSummaryPageProps> = ({ onComplete }) => {
   const decoded = decodeToken();
   const userId = decoded?.id;
   const navigate = useNavigate();
@@ -19,11 +24,11 @@ const OrderSummaryPage = ({ onComplete }) => {
 
   const { cart } = useSelector((state: RootState) => state.cart);
   const { deliveryInfo } = useSelector(
-    (state: RootState) => state.deliveryInfo
+    (state: RootState) => state.deliveryInfo,
   );
 
   const { paymentMethod, paymentDetails } = useSelector(
-    (state: RootState) => state.payment
+    (state: RootState) => state.payment,
   );
 
   useEffect(() => {
@@ -33,14 +38,65 @@ const OrderSummaryPage = ({ onComplete }) => {
     dispatch(fetchDeliveryInfo());
   }, [dispatch, userId]);
 
+  // const handlePlaceOrder = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const order = {
+  //       userId,
+  //       deliveryInfo,
+  //       items: cart?.items,
+  //       summary: cart?.summary,
+  //       paymentMethod,
+  //       paymentDetails,
+  //     };
+
+  //     const res = await placeOrderData(order);
+
+  //     alert("Order placed successfully!");
+  //     await ClearCartData(userId);
+  //     if (userId) {
+  //       dispatch(fetchcartProduct(userId));
+  //     }
+  //     onComplete();
+  //   } catch (err: any) {
+  //     console.error("Order failed:", err?.response?.data || err.message || err);
+  //     alert("Something went wrong while placing the order.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handlePlaceOrder = async () => {
+    if (!userId) {
+      alert("Please login first");
+      return;
+    }
+
+    if (!cart?.items || !cart.summary || !deliveryInfo) {
+      alert("Incomplete order data");
+      return;
+    }
+
     setLoading(true);
+
     try {
-      const order = {
+      const order: CreateOrderDTO = {
         userId,
-        deliveryInfo,
-        items: cart?.items,
-        summary: cart?.summary,
+        items: cart.items.map((item) => ({
+          productId: item.productId._id,
+          quantity: item.quantity,
+        })),
+        deliveryInfo: {
+          address: `${deliveryInfo.address1}, ${deliveryInfo.address2}`,
+          city: deliveryInfo.city,
+          pincode: deliveryInfo.zip,
+          phone: deliveryInfo.phoneNo,
+        },
+        summary: {
+          subtotal: cart.summary.totalPrice,
+          discount: cart.summary.totalDiscount,
+          shipping: cart.summary.totalTax,
+          total: cart.summary.finalTotal,
+        },
         paymentMethod,
         paymentDetails,
       };
@@ -49,9 +105,7 @@ const OrderSummaryPage = ({ onComplete }) => {
 
       alert("Order placed successfully!");
       await ClearCartData(userId);
-      if (userId) {
-        dispatch(fetchcartProduct(userId));
-      }
+      dispatch(fetchcartProduct(userId));
       onComplete();
     } catch (err: any) {
       console.error("Order failed:", err?.response?.data || err.message || err);

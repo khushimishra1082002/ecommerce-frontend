@@ -1,5 +1,6 @@
 import api from "../utils/api";
 import conf from "../config/Conf";
+import { DeliveryInfoFormDTO } from "../types/deliveryInformationDto";
 
 export const getDeliveryInfoData = async () => {
   try {
@@ -11,7 +12,7 @@ export const getDeliveryInfoData = async () => {
     });
     console.log("response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error info",
       error.response?.data || error.message
@@ -20,7 +21,7 @@ export const getDeliveryInfoData = async () => {
   }
 };
 
-export const postDeliveryInfoData = async (deliveryData) => {
+export const postDeliveryInfoData = async (deliveryData:DeliveryInfoFormDTO) => {
   try {
     const response = await api.post(conf.postDeliveryInfoUrl, deliveryData, {
       headers: {
@@ -29,7 +30,7 @@ export const postDeliveryInfoData = async (deliveryData) => {
     });
     console.log("response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error info",
       error.response?.data || error.message

@@ -18,6 +18,7 @@ export interface FiltersState {
   colors: string[];
   inStock: boolean | null;
   discount: string[];
+  
 
 }
 

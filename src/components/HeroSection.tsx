@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Navigation,
   Pagination,
@@ -11,35 +11,31 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-
 import SwiperButtonThree from "./SwiperButtonThree";
-import { BannerDTO } from "../types/banner";
 import conf from "../config/Conf";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { fetchAllBanners } from "../ReduxToolkit/Slices/BannerSlice";
+import Loader from "./Loader";
+import DisplayError from "./DisplayError";
 
 const HeroSection = () => {
   const dispatch = useDispatch<AppDispatch>();
+
   const { banners, loading, error } = useSelector(
     (state: RootState) => state.banner
   );
-
-  const [data, setData] = useState<BannerDTO[]>([]);
 
   useEffect(() => {
     dispatch(fetchAllBanners());
   }, [dispatch]);
 
-  useEffect(() => {
-    // Filter banners when Redux store updates
-    if (banners && banners.length > 0) {
-      const heroBanners = banners.filter(
-        (item) => item.location === "herosection"
-      );
-      setData(heroBanners);
-    }
-  }, [banners]);
+  const heroBanners = banners.filter(
+    (item) => item.location === "herosection"
+  );
+
+  if (loading) return <Loader />;
+  if (error) return <DisplayError message={error} />;
 
   return (
     <div className="overflow-hidden px-3">
@@ -57,7 +53,7 @@ const HeroSection = () => {
           <SwiperButtonThree />
         </span>
 
-        {data.map((v, i) => (
+        {heroBanners.map((v, i) => (
           <SwiperSlide key={i}>
             <div className="h-64">
               <img

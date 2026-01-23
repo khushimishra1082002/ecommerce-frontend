@@ -12,6 +12,7 @@ import { deliveryInfoValidationSchema } from "../Validations/deliveryInfovalidat
 import { DeliveryInfoDTO } from "../types/deliveryInformationDto";
 import { decodeToken } from "../utils/decodeToken";
 
+
 const DeliveryInformation = ({ onComplete }) => {
   const [step, setStep] = useState(1);
   const [initialValues, setInitialValues] = useState<DeliveryInfoDTO | null>(

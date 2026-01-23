@@ -7,7 +7,7 @@ export const getAllUsersData = async () => {
     const response = await api.get(conf.getUsersUrl); 
     console.log("response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error",
       error.response?.data || error.message
@@ -16,12 +16,12 @@ export const getAllUsersData = async () => {
   }
 };
 
-export const getSingleUserData = async (userId) => {
+export const getSingleUserData = async (userId:string) => {
   try {
     const response = await api.get(`${conf.getSingleUserUrl}/${userId}`);
     console.log("response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error", error.response?.data || error.message);
     throw error;
   }
@@ -36,7 +36,7 @@ export const getFilterUserData = async (filters = {}) => {
 
     console.log("response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error ",
       error.response?.data || error.message
@@ -45,7 +45,7 @@ export const getFilterUserData = async (filters = {}) => {
   }
 };
 
-export const editUserData = async (userId, formData) => {
+export const editUserData = async (userId:string, formData:FormData) => {
   try {
     const response = await api.put(
       `${conf.updateUserUrl}/${userId}`,
@@ -58,7 +58,7 @@ export const editUserData = async (userId, formData) => {
     );
     console.log("response", response.data);
     return { ok: true, data: response.data };
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error", error.response?.data || error.message);
     return {
       ok: false,
@@ -75,7 +75,7 @@ export const CreateUserData = async (formData: FormData) => {
       },
     });
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error", error.response?.data || error.message);
     throw error;
   }

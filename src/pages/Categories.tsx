@@ -8,9 +8,10 @@ import "swiper/css/scrollbar";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { fetchAllCategory } from "../ReduxToolkit/Slices/CategorySlice";
-import conf from "../config/Conf";
 import { Link } from "react-router-dom";
 import { getImageUrl } from "../utils/getImageUrl";
+import Loader from "../components/Loader";
+import DisplayError from "../components/DisplayError";
 
 const Categories = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,17 +19,23 @@ const Categories = () => {
   const { category, loading, error } = useSelector(
     (state: RootState) => state.allcategory,
   );
-  console.log("categoryiiiii", category);
 
   useEffect(() => {
     dispatch(fetchAllCategory());
   }, [dispatch]);
 
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <DisplayError message={error}/>;
+  }
+
   return (
     <>
       <div className="p-2 bg-white shadow overflow-hidden">
         <Swiper
-          // install Swiper modules
           modules={[Navigation, Pagination, Scrollbar, A11y]}
           spaceBetween={40}
           slidesPerView={10}
@@ -68,11 +75,10 @@ const Categories = () => {
                 <Link to={`/selectCategoryResult/${v._id}`}>
                   <div
                     className="w-24 h-24 rounded-md  
-                 flex flex-col justify-center items-center"
+                    flex flex-col justify-center items-center"
                   >
                     <img
                       className="w-12 md:w-14"
-                      // src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
                       src={getImageUrl(v.image)}
                     />
 

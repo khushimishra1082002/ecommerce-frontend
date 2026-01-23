@@ -7,25 +7,35 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { getPosterData } from "../services/PosterService";
 import { PosterDTO } from "../types/poster";
-import conf from "../config/Conf";
 import { getImageUrl } from "../utils/getImageUrl";
+import Loader from "../components/Loader";
+import DisplayError from "../components/DisplayError";
 
 const PosterCarosoul = () => {
- const [data, setData] = useState<PosterDTO[]>([]);
-
-  console.log("data", data);
+  const [data, setData] = useState<PosterDTO[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPosters = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const res = await getPosterData();
         setData(res);
       } catch (err) {
         console.error("Error fetching banners:", err);
+        setError("Failed to load banners");
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchPosters();
   }, []);
+
+  if (loading) return <Loader />;
+  if (error) return <DisplayError message={error} />;
 
   return (
     <>
@@ -34,11 +44,9 @@ const PosterCarosoul = () => {
           modules={[Navigation, Pagination, Scrollbar, A11y]}
           spaceBetween={14}
           slidesPerView={3}
-       
           onSlideChange={() => console.log("slide change")}
           onSwiper={(swiper) => console.log(swiper)}
-           breakpoints={{
-            
+          breakpoints={{
             240: {
               slidesPerView: 1,
               spaceBetween: 6,
@@ -51,7 +59,6 @@ const PosterCarosoul = () => {
               slidesPerView: 3,
               spaceBetween: 3,
             },
-           
           }}
           className=""
         >
@@ -61,7 +68,7 @@ const PosterCarosoul = () => {
                 <div className="h-72 relative">
                   <img
                     className="w-full h-full object-cover rounded-md"
-                       src={getImageUrl(v?.image)}
+                    src={getImageUrl(v?.image)}
                     alt={v.title || "Poster Image"}
                   />
                   <div

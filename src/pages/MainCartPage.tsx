@@ -16,7 +16,7 @@ const MainCartPage = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { cart, loading, error } = useSelector(
+  const { cart} = useSelector(
     (state: RootState) => state.cart
   );
   console.log("cart", cart);

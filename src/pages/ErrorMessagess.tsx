@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { ReactNode } from "react";
 
-const ErrorMessagess = ({props}) => {
-  return (
-    <>
-      <div className='font-body text-sm text-orange-600'>
-        {props.children}
-      </div>
-    </>
-  )
+interface ErrorMessagessProps {
+  children: ReactNode;
 }
 
-export default ErrorMessagess
+const ErrorMessagess: React.FC<ErrorMessagessProps> = ({ children }) => {
+  return (
+    <div className="font-body text-sm text-orange-600">
+      {children}
+    </div>
+  );
+};
+
+export default ErrorMessagess;

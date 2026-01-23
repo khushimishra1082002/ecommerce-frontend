@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { BrandDTO, BrandStateDTO } from "../../types/brand";
 import { getBrandData } from "../../services/BrandService";
 import { getAllBrandByCategoryData } from "../../services/BrandService";

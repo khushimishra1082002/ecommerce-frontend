@@ -6,8 +6,8 @@ interface DiscountOption {
 }
 
 interface DiscountFilterProps {
-     categoryID: string;
-  discountOptions: DiscountOption[];
+  categoryID?: string; // 👈 optional
+  discountOptions: { label: string; value: number }[];
   selectedDiscount: string[];
   setSelectedDiscount: React.Dispatch<React.SetStateAction<string[]>>;
   loading: boolean;
@@ -24,10 +24,9 @@ const DiscountFilter: React.FC<DiscountFilterProps> = ({
   const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     setSelectedDiscount((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
+      checked ? [...prev, value] : prev.filter((item) => item !== value),
     );
   };
-  
 
   return (
     <div className="space-y-2">

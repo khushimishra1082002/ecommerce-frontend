@@ -10,23 +10,43 @@ import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
 import { useNavigate } from "react-router-dom";
 import { getImageUrl } from "../utils/getImageUrl";
+import Loader from "../components/Loader";
+import DisplayError from "../components/DisplayError";
 
-const SimilorProduct = ({ productId }) => {
-  const [data, setData] = useState<ProductDTO[]>([]);
-  const navigate = useNavigate();
+interface SimilorProductProps {
+  productId?: string;
+}
 
+const SimilorProduct: React.FC<SimilorProductProps> = ({ productId }) => {
+ const [data, setData] = useState<ProductDTO[]>([]);
+const [loading, setLoading] = useState<boolean>(false);
+const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchSimilorProduct = async () => {
-      try {
-        const res = await getSimilorProductData(productId);
-        setData(res);
-      } catch (err) {
-        console.error("Error fetching product:", err);
-      }
-    };
-    fetchSimilorProduct();
-  }, [productId]);
+const navigate = useNavigate();
+
+useEffect(() => {
+  if (!productId) return;
+
+  const fetchSimilarProduct = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await getSimilorProductData(productId);
+      setData(res);
+    } catch (err: any) {
+      console.error("Error fetching product:", err);
+      setError("Failed to load similar products");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchSimilarProduct();
+}, [productId]);
+
+if (loading) return <Loader />;
+if (error) return <DisplayError message={error} />;
 
   return (
     <>

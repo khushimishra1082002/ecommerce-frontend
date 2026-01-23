@@ -68,6 +68,7 @@ const cartSlice = createSlice({
           state.error = null;
         },
       )
+
       .addCase(fetchcartProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to fetch cart";
@@ -107,5 +108,5 @@ const cartSlice = createSlice({
 });
 
 export const { clearCart } = cartSlice.actions;
-export default cartSlice.reducer;
 
+export default cartSlice.reducer;

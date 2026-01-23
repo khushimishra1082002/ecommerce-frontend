@@ -1,7 +1,7 @@
 import React from "react";
 
 interface BrandFilterProps {
-  filteredBrands: any[]; // ideally type this properly if you have brand type
+  filteredBrands: any[]; 
   selectedBrands: string[];
   setSelectedBrands: React.Dispatch<React.SetStateAction<string[]>>;
 }

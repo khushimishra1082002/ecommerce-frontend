@@ -1,13 +1,36 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PriceRange, FiltersState } from "../../types/filter";
 import { BrandDTO } from "../../types/brand";
+
+export interface PriceRange {
+  min: number | null;
+  max: number | null;
+}
+export interface FiltersState {
+  categories: string;
+  subcategories: string[];
+  gender: string[];
+  brands: string[];
+  priceRange: PriceRange;
+  size: string[];
+  colors: string[];
+  inStock: boolean;
+  discount: string[];
+
+  // Add these optional fields for API queries
+  category?: string; // optional selected category ID
+  q?: string;        // optional search query
+}
+
+
+
 
 const initialState: FiltersState = {
   categories: "",
   subcategories: [],
   gender: [],
   brands: [],
-  priceRange: { min: "", max: "" },
+ priceRange: { min: null, max: null },
+
   size: [],
   colors: [],
   inStock: true,
@@ -21,11 +44,10 @@ const filterSlice = createSlice({
     setCategory: (state, action: PayloadAction<string>) => {
       state.categories = action.payload;
     },
-    setSubcategories: (state, action: PayloadAction<string[]>) => {
-      state.subcategories = action.payload;
-    console.log("state.subcategories",state.subcategories);
-
-    },
+   setSubcategories: (state, action: PayloadAction<string[]>) => {
+  state.subcategories = action.payload;
+}
+,
     setGender: (state, action: PayloadAction<string[]>) => {
       state.gender = action.payload;
     },

@@ -16,21 +16,35 @@ import SwiperButtonThree from "../components/SwiperButtonThree";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
 import { getImageUrl } from "../utils/getImageUrl";
+import Loader from "../components/Loader";
+import DisplayError from "../components/DisplayError";
 
 const FeaturedProducts = () => {
-  const [data, setData] = useState<ProductDTO[]>([]);
+const [data, setData] = useState<ProductDTO[]>([]);
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchFeaturedProducts = async () => {
-      try {
-        const res = await getFeaturedProductData();
-        setData(res);
-      } catch (err) {
-        console.error("Error fetching product:", err);
-      }
-    };
-    fetchFeaturedProducts();
-  }, []);
+useEffect(() => {
+  const fetchFeaturedProducts = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await getFeaturedProductData();
+      setData(res);
+    } catch (err) {
+      console.error("Error fetching product:", err);
+      setError("Failed to load featured products");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchFeaturedProducts();
+}, []);
+
+if (loading) return <Loader />;
+if (error) return <DisplayError message={error} />;
 
   return (
     <div className="bg-white ">

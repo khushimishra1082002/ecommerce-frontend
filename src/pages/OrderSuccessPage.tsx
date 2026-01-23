@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle } from "lucide-react"; // or any icon you prefer
+import { CheckCircle } from "lucide-react";
 
 const OrderSuccessPage = () => {
   const navigate = useNavigate();

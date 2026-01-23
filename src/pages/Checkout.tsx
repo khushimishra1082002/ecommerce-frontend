@@ -94,45 +94,43 @@ const Checkout = () => {
         </div>
       </div>
       <AnimatePresence>
-  {showOrderSuccessModal && (
-    <motion.div
-      className="fixed inset-0 z-[9999] flex items-center justify-center px-4 backdrop-blur-sm bg-black/40"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      onClick={closeOrderSuccessModal} 
-    >
-      <motion.div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 relative"
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{
-          opacity: 1,
-          scale: 1,
-          transition: {
-            type: "spring",
-            stiffness: 260,
-            damping: 20,
-            duration: 0.6,
-          },
-        }}
-        exit={{ opacity: 0, scale: 0.5 }}
-        transition={{ duration: 0.3 }}
-        onClick={(e) => e.stopPropagation()} 
-      >
-       
-        <button
-          onClick={closeOrderSuccessModal}
-          className="absolute top-2 right-3 text-gray-400 hover:text-gray-700 text-2xl transition-transform transform hover:scale-110"
-        >
-          <RxCross2/>
-        </button>
-        <OrderSuccessPage/>
-
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
+        {showOrderSuccessModal && (
+          <motion.div
+            className="fixed inset-0 z-[9999] flex items-center justify-center px-4 backdrop-blur-sm bg-black/40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={closeOrderSuccessModal}
+          >
+            <motion.div
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 relative"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                transition: {
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 20,
+                  duration: 0.6,
+                },
+              }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={closeOrderSuccessModal}
+                className="absolute top-2 right-3 text-gray-400 hover:text-gray-700 text-2xl transition-transform transform hover:scale-110"
+              >
+                <RxCross2 />
+              </button>
+              <OrderSuccessPage />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

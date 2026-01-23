@@ -11,40 +11,50 @@ import SwiperButtonThree from "../components/SwiperButtonThree";
 import conf from "../config/Conf";
 import { BsCart } from "react-icons/bs";
 import { getImageUrl } from "../utils/getImageUrl";
+import Loader from "../components/Loader";
+import DisplayError from "../components/DisplayError";
 
 type Product = {
   _id: string;
   name: string;
   image: string;
   price: number;
-  // add other fields as needed
 };
 
 const TrendingProducts = () => {
   const [data, setData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTrendingProducts = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const res = await getTreandingProductData();
         setData(res);
-      } catch (err) {
-        console.error("Error fetching product:", err);
+      } catch (err: any) {
+        setError(
+          err.response?.data?.message || err.message || "Something went wrong",
+        );
+      } finally {
+        setLoading(false);
       }
     };
     fetchTrendingProducts();
   }, []);
 
+  if (loading) return <Loader />;
+  if (error) return <DisplayError message={error} />;
+
   return (
     <div className="bg-white p-4 m-3 space-y-4">
       <div className="">
-        <h2 className="font-heading text-lg font-bold ">
-        🔥 Trending Now
-      </h2>
-      <p className="text-sm text-gray-500 font-body  ">
-        Discover the most popular picks everyone’s loving this week.
-      </p>
+        <h2 className="font-heading text-lg font-bold ">🔥 Trending Now</h2>
+        <p className="text-sm text-gray-500 font-body  ">
+          Discover the most popular picks everyone’s loving this week.
+        </p>
       </div>
 
       <div className="bg-black/10 w-full h-[1px]"></div>

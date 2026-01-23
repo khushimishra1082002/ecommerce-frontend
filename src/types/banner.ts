@@ -4,8 +4,8 @@ export interface BannerDTO {
   link?: string;
   location: string;
   displayOrder: number;
-  startDate: string;  // or Date
-  endDate?: string;   // or Date
+  startDate: string;  
+  endDate?: string;   
   active: boolean;
 }
 

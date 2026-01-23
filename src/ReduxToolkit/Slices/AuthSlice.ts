@@ -16,7 +16,6 @@ const initialState: AuthState = {
   error: null,
 };
 
-// Signup Thunk
 export const signup = createAsyncThunk(
   "auth/signup",
   async (data: SignupDTO, thunkAPI) => {
@@ -24,12 +23,13 @@ export const signup = createAsyncThunk(
       const res = await SignUpUserData(data);
       return res;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || "Signup failed");
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Signup failed",
+      );
     }
-  }
+  },
 );
 
-// Login Thunk
 export const login = createAsyncThunk(
   "auth/login",
   async (data: LoginDTO, thunkAPI) => {
@@ -37,9 +37,11 @@ export const login = createAsyncThunk(
       const res = await LoginUserData(data);
       return res;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || "Login failed");
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Login failed",
+      );
     }
-  }
+  },
 );
 
 const authSlice = createSlice({
@@ -52,6 +54,7 @@ const authSlice = createSlice({
       localStorage.removeItem("token");
     },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(signup.pending, (state) => {
@@ -63,6 +66,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         localStorage.setItem("token", action.payload.token);
       })
+
       .addCase(signup.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -76,6 +80,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         localStorage.setItem("token", action.payload.token);
       })
+
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;

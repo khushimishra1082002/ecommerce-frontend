@@ -14,8 +14,14 @@ const initialValues = {
 
 interface OnlinePaymentFormProps {
   onComplete?: () => void;
+  onClose?: () => void;
+  handlePlaceOrder?: (paymentData: {
+    upiId: string;
+    cardNumber: string;
+    expiry: string;
+    cvv: string;
+  }) => Promise<void>;
 }
-
 
 const validationSchema = Yup.object({
   upiId: Yup.string()
@@ -35,18 +41,25 @@ const validationSchema = Yup.object({
     .required("CVV is required"),
 });
 
-const OnlinePaymentForm: React.FC<OnlinePaymentFormProps> = ({ onComplete }) => {
+const OnlinePaymentForm: React.FC<OnlinePaymentFormProps> = ({
+  onComplete,
+  onClose,
+  handlePlaceOrder,
+}) => {
   const dispatch = useDispatch();
-
   return (
     <div className="bg-gray-50 border border-gray-200 p-5 rounded">
-      <h2 className="text-md font-heading font-semibold mb-4">Enter Payment Details</h2>
+      <h2 className="text-md font-heading font-semibold mb-4">
+        Enter Payment Details
+      </h2>
       <Formik
         initialValues={initialValues}
-         validationSchema={validationSchema}
+        validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
           dispatch(setPaymentDetails(values));
-          if (onComplete) onComplete(); // ✅ Only dispatching, not placing order
+          if (handlePlaceOrder) await handlePlaceOrder(values);
+          if (onComplete) onComplete();
+          if (onClose) onClose();
           setSubmitting(false);
         }}
       >

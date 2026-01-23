@@ -7,6 +7,7 @@ import { fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
 import { fetchDeliveryInfo } from "../ReduxToolkit/Slices/DeliveryInfoSlice";
 import { placeOrderData } from "../services/OrderService";
 import OnlinePaymentForm from "./OnlinePaymentForm";
+import { CreateOrderDTO } from "../types/order";
 
 const PaymentPage = () => {
   const [showPaymentModel, setShowPaymentModel] = useState(false);
@@ -29,35 +30,83 @@ const PaymentPage = () => {
     }
   }, [dispatch, userId]);
 
- const handlePlaceOrder = async (paymentData: {
+//  const handlePlaceOrder = async (paymentData: {
+//   upiId: string;
+//   cardNumber: string;
+//   expiry: string;
+//   cvv: string;
+// }) => {
+//   try {
+//     const order = {
+//       userId,
+//       deliveryInfo,
+//       items: cart?.items,
+//       summary: cart?.summary,
+//       paymentMethod,
+//       paymentDetails: paymentData, 
+//     };
+
+//     console.log(" Order payload:", order);
+
+//     const res = await placeOrderData(order);
+//     console.log(" Order placed:", res.data || res);
+
+//     alert("Order placed successfully!");
+    
+//   } catch (err: any) {
+//     console.error(" Order failed:", err?.response?.data || err.message || err);
+//     alert("Something went wrong while placing order.");
+//   }
+// };
+
+const handlePlaceOrder = async (paymentData?: {
   upiId: string;
   cardNumber: string;
   expiry: string;
   cvv: string;
 }) => {
+  if (!userId) {
+    alert("Please login first");
+    return; // exit early if no userId
+  }
+
+  if (!cart?.items || !cart?.summary || !deliveryInfo) {
+    alert("Incomplete order data");
+    return;
+  }
+
   try {
-    const order = {
-      userId,
-      deliveryInfo,
-      items: cart?.items,
-      summary: cart?.summary,
+    const order: CreateOrderDTO = {
+      userId, // now guaranteed to be string
+      items: cart.items.map(item => ({
+        productId: item.productId._id,
+        quantity: item.quantity,
+      })),
+      deliveryInfo: {
+        address: `${deliveryInfo.address1}, ${deliveryInfo.address2}`,
+        city: deliveryInfo.city,
+        pincode: deliveryInfo.zip,
+        phone: deliveryInfo.phoneNo,
+      },
+      summary: {
+        subtotal: cart.summary.totalPrice,
+        discount: cart.summary.totalDiscount,
+        shipping: cart.summary.totalTax,
+        total: cart.summary.finalTotal,
+      },
       paymentMethod,
-      paymentDetails: paymentData, 
+      paymentDetails: paymentData || {}, // empty for COD
     };
 
-    console.log(" Order payload:", order);
-
+    console.log("Order payload:", order);
     const res = await placeOrderData(order);
-    console.log(" Order placed:", res.data || res);
 
     alert("Order placed successfully!");
-    
   } catch (err: any) {
-    console.error(" Order failed:", err?.response?.data || err.message || err);
+    console.error("Order failed:", err?.response?.data || err.message || err);
     alert("Something went wrong while placing order.");
   }
 };
-
 
   useEffect(() => {
     if (showPaymentModel) {

@@ -1,4 +1,3 @@
-// types/cart.ts
 export interface CartItemDTO {
   _id: string;
   quantity: number;
@@ -27,7 +26,7 @@ export interface CartDTO {
 }
 
 export interface CartStateDTO {
-  cart: CartDTO | null;
+  cart: CartDTO | null
   loading: boolean;
   error: string | null;
 }

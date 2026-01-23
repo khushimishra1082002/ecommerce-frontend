@@ -25,13 +25,13 @@ const SearchResult = () => {
   console.log("filterProducts", filterProducts);
 
   const { category, loading, error } = useSelector(
-    (state: RootState) => state.allcategory
+    (state: RootState) => state.allcategory,
   );
   console.log("category", category);
 
   const selectedCategory = category.find(
     (cat) =>
-      cat._id === query || cat.name.toLowerCase() === query?.toLowerCase()
+      cat._id === query || cat.name.toLowerCase() === query?.toLowerCase(),
   );
 
   const categoryName = selectedCategory?.name || "";
@@ -47,27 +47,25 @@ const SearchResult = () => {
   const fetchFilteredProducts = async () => {
     const updatedFilters = { ...filters };
 
-  
     const matchedCategory = category.find(
       (cat) =>
-        cat._id === query || cat.name.toLowerCase() === query?.toLowerCase()
+        cat._id === query || cat.name.toLowerCase() === query?.toLowerCase(),
     );
 
     if (matchedCategory) {
       updatedFilters.category = matchedCategory._id;
     } else {
-      updatedFilters.q = query; 
+      updatedFilters.q = query;
     }
 
     try {
-      const data = await getFilterProductsData(updatedFilters); 
+      const data = await getFilterProductsData(updatedFilters);
       setFilteredProducts(data);
     } catch (err) {
       console.error("Error fetching products:", err);
     }
   };
 
- 
   useEffect(() => {
     fetchFilteredProducts();
   }, [filters, query, category]);
@@ -79,9 +77,11 @@ const SearchResult = () => {
   } else if (sortOption === "highToLow") {
     sortedProducts.sort((a, b) => b.price - a.price);
   } else if (sortOption === "newest") {
-    sortedProducts.sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-    );
+    sortedProducts.sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateB - dateA; // newest first
+    });
   }
 
   return (
@@ -124,15 +124,16 @@ const SearchResult = () => {
           </div>
 
           <div className="bg-black/5 w-full h-[1px]"></div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5
-          gap-4 py-4 bg-gray-50 px-3">
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5
+          gap-4 py-4 bg-gray-50 px-3"
+          >
             {sortedProducts.map((v, i) => {
               return (
                 <div className="bg-white shadow px-2 py-4">
                   <img
                     className="w-44 h-44 m-auto object-contain"
                     src={`${conf.BaseURL}${conf.GetImageUrl}/${v.image}`}
-                   
                   />
                   <div className="p-2">
                     <h4

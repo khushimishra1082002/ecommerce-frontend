@@ -9,26 +9,24 @@ import {
 } from "../ReduxToolkit/Slices/CartSlice";
 import { decodeToken } from "../utils/decodeToken";
 import { DeleteProductFromCartData } from "../services/cartService";
-
-import {AddSaveForLetterData} from "../services/saveforLaterservice"
+import { AddSaveForLetterData } from "../services/saveforLaterservice";
 import { MdDelete } from "react-icons/md";
-import conf from "../config/Conf";
 import { BsCart } from "react-icons/bs";
-import axios from "axios"
 import { getImageUrl } from "../utils/getImageUrl";
+import DisplayError from "../components/DisplayError";
+import Loader from "../components/Loader";
 
 const Cart = () => {
   const decoded = decodeToken();
   const userId = decoded?.id;
-
   console.log("decodeUser", userId);
 
   const dispatch = useDispatch<AppDispatch>();
 
   const { cart, loading, error } = useSelector(
-    (state: RootState) => state.cart
+    (state: RootState) => state.cart,
   );
-  console.log("shubham", cart);
+  console.log("cart", cart);
 
   useEffect(() => {
     if (userId) {
@@ -36,8 +34,16 @@ const Cart = () => {
     }
   }, [dispatch]);
 
-  const handleCartProductDelete = async (productId) => {
-    console.log("kkashdkahd",productId);
+  if(loading){
+    return <Loader/>
+  }
+
+  if(error){
+    return <DisplayError message={error}/>
+  }
+
+  const handleCartProductDelete = async (productId: string) => {
+    console.log("productId", productId);
     const res = await DeleteProductFromCartData(userId, productId);
     alert("Product Deleted From Cart");
     console.log(res);
@@ -46,7 +52,7 @@ const Cart = () => {
     }
   };
 
-  const handleChangeQuantity = (productId, quantity) => {
+  const handleChangeQuantity = (productId: string, quantity: number) => {
     console.log("productId", productId);
     console.log("quantity", quantity);
     if (userId) {
@@ -54,28 +60,29 @@ const Cart = () => {
     }
   };
 
-const handleSaveForLater = async (productId, quantity) => {
-  console.log("productId",productId);
-  
-  try {
-    if (!userId) return;
+  const handleSaveForLater = async (productId: string, quantity: number) => {
+    console.log("productId", productId);
 
-    const res = await AddSaveForLetterData({ userId, productId, quantity });
+    try {
+      if (!userId) return;
 
-    if (res.success) {
-      dispatch(fetchcartProduct(userId)); // cart refresh
-      alert("Product saved for later!");
-    } else {
+      const res = await AddSaveForLetterData({ userId, productId, quantity });
+
+      if (res.success) {
+        dispatch(fetchcartProduct(userId));
+        alert("Product saved for later!");
+      } else {
+        alert("Failed to save product.");
+      }
+    } catch (err) {
+      console.error(err);
       alert("Failed to save product.");
     }
-  } catch (err) {
-    console.error(err);
-    alert("Failed to save product.");
-  }
-};
+  };
 
-
-
+  const getProductId = (product: any): string => {
+    return typeof product === "string" ? product : product._id;
+  };
 
   return (
     <>
@@ -106,8 +113,10 @@ const handleSaveForLater = async (productId, quantity) => {
                       <span className="text-green-500 font-body font-medium">
                         In stock
                       </span>
-                      <h4 className="font-heading font-medium text-[13px]
-                       line-clamp-2 leading-5  text-gray-800 ">
+                      <h4
+                        className="font-heading font-medium text-[13px]
+                       line-clamp-2 leading-5  text-gray-800 "
+                      >
                         {product?.name}
                       </h4>
 
@@ -116,8 +125,8 @@ const handleSaveForLater = async (productId, quantity) => {
                           <div
                             onClick={() =>
                               handleChangeQuantity(
-                                v.productId._id || v.productId,
-                                v.quantity + 1
+                                getProductId(v.productId),
+                                v.quantity + 1,
                               )
                             }
                             className="flex justify-center items-center border border-black/10 px-3 p-2"
@@ -130,8 +139,8 @@ const handleSaveForLater = async (productId, quantity) => {
                           <div
                             onClick={() =>
                               handleChangeQuantity(
-                                v.productId._id || v.productId,
-                                v.quantity - 1
+                                getProductId(v.productId),
+                                v.quantity - 1,
                               )
                             }
                             className="flex justify-center items-center border border-black/10 px-3 p-2"

@@ -1,6 +1,11 @@
+import React, { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
-const AdminRoute = ({ children }) => {
+interface AdminRouteProps {
+  children: ReactNode;
+}
+
+const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
@@ -8,11 +13,11 @@ const AdminRoute = ({ children }) => {
     return <Navigate to="/AdminLogin" replace />;
   }
 
-  if (role?.toLowerCase() !== "admin") {  // normalize case
-    return <Navigate to="/" replace />; 
+  if (role?.toLowerCase() !== "admin") {
+    return <Navigate to="/" replace />;
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default AdminRoute;

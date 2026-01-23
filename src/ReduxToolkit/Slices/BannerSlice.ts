@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { getAllCategoryData } from "../../services/CategoryService";
 import { BannerDTO, BannerStateDTO } from "../../types/banner";
 import { getBannerData } from "../../services/BannerServices";
 

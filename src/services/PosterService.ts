@@ -6,7 +6,7 @@ export const getPosterData = async () => {
     const response = await api.get(conf.GetAllPoster); 
     console.log("Posters", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error fetching Posters",
       error.response?.data || error.message
@@ -15,12 +15,12 @@ export const getPosterData = async () => {
   }
 };
 
-export const deletePosterData = async (posterId) => {
+export const deletePosterData = async (posterId:string) => {
   try {
     const response = await api.delete(`${conf.deletePosterUrl}/${posterId}`);
     console.log("response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error fetching poster",
       error.response?.data || error.message
@@ -37,7 +37,7 @@ export const CreatePosterData = async (formData: FormData) => {
       },
     });
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error adding poster:",
       error.response?.data || error.message

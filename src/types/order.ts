@@ -1,19 +1,17 @@
-
 export interface PopulatedProduct {
   _id: string;
   name: string;
   price: number;
-  image: string[]; 
+  image: string[];
 }
-
-// Each item in an order
 export interface OrderItemDTO {
   productId: PopulatedProduct; 
   quantity: number;
 }
 
- export interface OrderStateDTO {
-orders: OrderDTO[];
+
+export interface OrderStateDTO {
+  orders: OrderDTO[];
   loading: boolean;
   error: string | null;
 }
@@ -38,3 +36,28 @@ export interface OrderDTO {
   status: string;
   createdAt: string;
 }
+
+export interface OrderItemCreateDTO {
+  productId: string; // just the ID
+  quantity: number;
+}
+
+export interface CreateOrderDTO {
+  userId: string;
+  items: OrderItemCreateDTO[]; // use ID only
+  deliveryInfo: {
+    address: string;
+    city: string;
+    pincode: string;
+    phone: string;
+  };
+  summary: {
+    subtotal: number;
+    discount: number;
+    shipping: number;
+    total: number;
+  };
+  paymentMethod: string;
+  paymentDetails?: any;
+}
+

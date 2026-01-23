@@ -10,37 +10,35 @@ import { UserDTO } from "../../types/user";
 import conf from "../../config/Conf";
 import { FaCamera } from "react-icons/fa";
 import { getImageUrl } from "../../utils/getImageUrl";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchProfile,
+  updateProfile,
+} from "../../ReduxToolkit/Slices/ProfileSlice";
+import { RootState, AppDispatch } from "../../ReduxToolkit/app/Store";
 
 const UserProfilePage = () => {
-  const navigate = useNavigate();
-  const decoded = decodeToken();
-  const userId = decoded?.id;
+  const dispatch = useDispatch<AppDispatch>();
   const [formKey, setFormKey] = useState(0);
-  const [data, setData] = useState<UserDTO | null>(null);
-  console.log("data", data);
-  const [imageUploading, setImageUploading] = useState(false);
+
+  const { user: data, status } = useSelector(
+    (state: RootState) => state.profile,
+  );
 
   const [previewImage, setPreviewImage] = useState("");
+  const [imageUploading, setImageUploading] = useState(false);
 
-  console.log("previewImage", previewImage);
-
-  const fetchSingleUser = async () => {
-    try {
-      const res = await getSingleUserData(userId);
-      console.log("Full response:", res);
-
-      setData(res);
-      setPreviewImage(res?.image);
-    } catch (err) {
-      console.error("Error fetching user:", err);
-    }
-  };
-
+  /* 🔹 Fetch profile on page load */
   useEffect(() => {
-    if (userId) {
-      fetchSingleUser();
+    dispatch(fetchProfile());
+  }, [dispatch]);
+
+  /* 🔹 Sync preview image with redux data */
+  useEffect(() => {
+    if (data?.image) {
+      setPreviewImage(data.image);
     }
-  }, [userId]);
+  }, [data]);
 
   const initialValues = {
     fullname: data?.fullname || "",
@@ -69,42 +67,32 @@ const UserProfilePage = () => {
     }),
   });
 
-  const onSubmit = async (values, actions) => {
+  const onSubmit = async (values: any, actions: any) => {
     try {
       const formData = new FormData();
       formData.append("fullname", values.fullname);
-      formData.append("email", values.email ?? "");
+      formData.append("email", values.email);
       formData.append("phoneNo", values.phoneNo);
       formData.append("address", JSON.stringify(values.address));
+
       if (values.image) {
         formData.append("image", values.image);
       }
 
-      console.log(values.image);
+      await dispatch(updateProfile(formData)).unwrap();
 
-      const response = await editUserData(userId, formData);
-
-      console.log("response", response);
-
-      if (response.ok) {
-        alert("Profile updated successfully");
-        actions.resetForm();
-        setFormKey((prev) => prev + 1);
-        fetchSingleUser();
-      } else {
-        alert(response.message || "Update failed");
-      }
-      // navigate("/userProfile");
-    } catch (error) {
-      console.error(error);
-      alert(error.message || "Error occurred");
-    } finally {
+      alert("Profile updated successfully");
+      dispatch(fetchProfile());
+      actions.setSubmitting(false);
+    } catch (error: any) {
+      alert(error || "Profile update failed");
       actions.setSubmitting(false);
     }
   };
 
-  // console.log(`${conf.BaseURL}${conf.GetImageUrl}${previewImage}`);
-
+  if (status === "loading") {
+    return <div className="p-10 text-center">Loading profile...</div>;
+  }
   return (
     <div className="bg-gray-50 md:px-12 py-6  gap-5 ">
       <div className=" p-8 bg-white shadow  ">
@@ -178,24 +166,13 @@ const UserProfilePage = () => {
                               try {
                                 setImageUploading(true);
 
-                                const response = await editUserData(
-                                  userId,
-                                  formData,
-                                );
+                                await dispatch(
+                                  updateProfile(formData),
+                                ).unwrap();
 
-                                if (response.ok) {
-                                  alert("Profile image updated");
-
-                                  // 3️⃣ fetch AFTER upload success
-                                  const updatedUser =
-                                    await getSingleUserData(userId);
-                                  setData(updatedUser);
-                                  setPreviewImage(updatedUser.image);
-                                } else {
-                                  alert("Failed to update image");
-                                }
+                                alert("Profile image updated");
+                                dispatch(fetchProfile());
                               } catch (error) {
-                                console.error(error);
                                 alert("Image upload failed");
                               } finally {
                                 setImageUploading(false);

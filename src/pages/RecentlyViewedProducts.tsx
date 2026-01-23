@@ -12,9 +12,11 @@ import SwiperButtonThree from "../components/SwiperButtonThree";
 import conf from "../config/Conf";
 import { BsCart } from "react-icons/bs";
 import { getImageUrl } from "../utils/getImageUrl";
+import Loader from "../components/Loader";
+import DisplayError from "../components/DisplayError";
 
 interface RecentlyViewedItem {
-  _id: string;
+  _id?: string;
   productId: {
     _id: string;
     image: string[];
@@ -25,24 +27,35 @@ interface RecentlyViewedItem {
 
 const RecentlyViewedProducts = () => {
   const [data, setData] = useState<RecentlyViewedItem[]>([]);
-  console.log("bbhhh", data);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const decoded = decodeToken();
   const userId = decoded?.id;
 
   useEffect(() => {
+    if (!userId) return;
+
     const fetchRecentlyViewedProduct = async () => {
       try {
+        setLoading(true);
+        setError(null);
+
         const res = await getRecentlyViewedProductData(userId);
         setData(res);
       } catch (err) {
         console.error("Error fetching product:", err);
+        setError("Failed to load recently viewed products");
+      } finally {
+        setLoading(false);
       }
     };
-    if (userId) {
-      fetchRecentlyViewedProduct();
-    }
+
+    fetchRecentlyViewedProduct();
   }, [userId]);
+
+  if (loading) return <Loader />;
+  if (error) return <DisplayError message={error} />;
 
   return (
     <>

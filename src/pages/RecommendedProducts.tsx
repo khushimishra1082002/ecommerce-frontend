@@ -13,29 +13,45 @@ import SwiperButtonThree from "../components/SwiperButtonThree";
 import { ProductDTO } from "../types/product";
 import conf from "../config/Conf";
 import { getImageUrl } from "../utils/getImageUrl";
+import Loader from "../components/Loader";
+import DisplayError from "../components/DisplayError";
 
 const RecommendedProducts = () => {
-  const decoded = decodeToken();
-  const userId = decoded?.id;
-  const navigate  =  useNavigate()
+ const decoded = decodeToken();
+const userId = decoded?.id;
+const navigate = useNavigate();
 
-  const [data, setData] = useState<ProductDTO[]>([]);
+const [data, setData] = useState<ProductDTO[]>([]);
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState<string | null>(null);
 
-  console.log("data", data);
+useEffect(() => {
+  if (!userId) {
+    setData([]); // no user, no recommendations
+    return;
+  }
 
-  useEffect(() => {
-    const fetchRecommendedProduct = async () => {
-      try {
-        const res = await getRecommendedProductData(userId);
-        console.log("Recommended Products Response:", res);
-        setData(res);
-      } catch (err) {
-        console.error("Error fetching product:", err);
-      }
-    };
+  const fetchRecommendedProduct = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-    if (userId) fetchRecommendedProduct();
-  }, [userId]);
+      const res = await getRecommendedProductData(userId); // userId is string now
+      setData(res);
+    } catch (err) {
+      console.error("Error fetching product:", err);
+      setError("Failed to load recommended products");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchRecommendedProduct();
+}, [userId]);
+
+
+if (loading) return <Loader />;
+if (error) return <DisplayError message={error} />;
 
   return (
   <>

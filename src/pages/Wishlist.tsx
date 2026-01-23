@@ -9,16 +9,18 @@ import { fetchWishlistProduct } from "../ReduxToolkit/Slices/WishlistSlice";
 import { FaHeart } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { getImageUrl } from "../utils/getImageUrl";
+import Loader from "../components/Loader";
+import DisplayError from "../components/DisplayError";
 
 const Wishlist = () => {
-  const navigate  = useNavigate()
+  const navigate = useNavigate();
   const decoded = decodeToken();
   const userId = decoded?.id;
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { wishlist, loading } = useSelector(
-    (state: RootState) => state.wishlists
+  const { wishlist, loading, error } = useSelector(
+    (state: RootState) => state.wishlists,
   );
 
   useEffect(() => {
@@ -27,13 +29,19 @@ const Wishlist = () => {
     }
   }, [userId, dispatch]);
 
+  if (loading) return <Loader />;
+  if (error) return <DisplayError message={error} />;
+
   const handleWishlistProductDelete = async (productId: string) => {
+    if (!userId) {
+      alert("Please login first");
+      return;
+    }
+
     try {
       await DeleteProductFromWishlistData(userId, productId);
-      alert("Product Deleted From wishlist");
-      if (userId) {
-        dispatch(fetchWishlistProduct(userId));
-      }
+      alert("Product Deleted From Wishlist");
+      dispatch(fetchWishlistProduct(userId));
     } catch (error) {
       console.error("Error deleting wishlist product:", error);
     }
@@ -131,13 +139,13 @@ const Wishlist = () => {
             <p className="text-sm text-gray-500 mt-2 font-body">
               Looks like you haven’t added anything yet.
             </p>
-             <button
-            onClick={() => navigate("/")}
-            className="bg-black text-sm font-heading my-2
+            <button
+              onClick={() => navigate("/")}
+              className="bg-black text-sm font-heading my-2
              text-white font-medium py-2 px-4 rounded-lg"
-          >
-            Continue Shopping
-          </button>
+            >
+              Continue Shopping
+            </button>
           </div>
         )}
       </div>

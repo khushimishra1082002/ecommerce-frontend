@@ -1,12 +1,12 @@
 import api from "../utils/api";
 import conf from "../config/Conf"
 
-export const getPriceRangeData = async (categoryID) => {
+export const getPriceRangeData = async (categoryID:string) => {
   try {
     const response = await api.get(`${conf.GetPriceRangeUrl}/${categoryID}`);
     console.log("Response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error price range", error.response?.data || error.message);
     throw error;
   }
@@ -19,7 +19,7 @@ export const CreatePriceRangeData = async ({ label, min, max, category }) => {
     });
     console.log("response", response);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error price range", error.response?.data || error.message);
     throw error;
   }

@@ -8,14 +8,14 @@ export interface ProductDTO {
 
 
 export interface WishlistProductDTO {
-  productId: string; // Just the ID
+  productId: string; 
   addedAt?: string;
 }
 
 
 export interface WishlistItem {
   _id?:string
-  productId: ProductDTO; // full populated product
+  productId: ProductDTO; 
 }
 
 

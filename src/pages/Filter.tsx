@@ -32,12 +32,11 @@ interface FilterProps {
 const Filter: React.FC<FilterProps> = ({ categoryID }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(
-    []
+    [],
   );
 
-
   console.log("selectedSubcategories", selectedSubcategories);
-  
+
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   console.log("selectedBrands", selectedBrands);
 
@@ -77,30 +76,60 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
   }, [dispatch, categoryID]);
 
   useEffect(() => {
-  const fetchBrands = async () => {
-    try {
-      if (selectedSubcategories.length === 0) {
-        setFilteredBrands(brands);
-        dispatch(setBrands(brands.map((b) => b._id))); // ✅ send only brand IDs
-      } else {
-        const filtered = await getAllBrandByMultipleSubcategoryData(
-          selectedSubcategories
-        );
-        setFilteredBrands(filtered);
-        const validBrandIds = filtered.map((b) => b._id);
-        setSelectedBrands((prev) =>
-          prev.filter((id) => validBrandIds.includes(id))
-        );
-        dispatch(setBrands(filtered.map((b) => b._id))); // ✅ send only brand IDs
+    const fetchBrands = async () => {
+      try {
+        if (selectedSubcategories.length === 0) {
+          setFilteredBrands(brands);
+          dispatch(setBrands(brands.map((b) => b._id))); // ✅ send only brand IDs
+        } else {
+          const filtered = await getAllBrandByMultipleSubcategoryData(
+            selectedSubcategories,
+          );
+          setFilteredBrands(filtered);
+          const validBrandIds = filtered.map((b) => b._id);
+          setSelectedBrands((prev) =>
+            prev.filter((id) => validBrandIds.includes(id)),
+          );
+          dispatch(setBrands(filtered.map((b) => b._id))); // ✅ send only brand IDs
+        }
+      } catch (error) {
+        console.error("Error fetching filtered brands:", error);
       }
-    } catch (error) {
-      console.error("Error fetching filtered brands:", error);
-    }
-  };
+    };
 
-  fetchBrands();
-}, [selectedSubcategories, brands, dispatch]);
+    fetchBrands();
+  }, [selectedSubcategories, brands, dispatch]);
 
+  // useEffect(() => {
+  //   dispatch(setCategory(categoryID));
+  //   dispatch(setSubcategories(selectedSubcategories));
+  //   dispatch(setGender(selectedGender));
+  //   dispatch(setSize(selectedSize));
+  //   dispatch(setDiscount(selectedDiscount));
+  //    dispatch(setBrands(selectedBrands));
+
+  //   const selectedPrices = priceRanges.filter((p) =>
+  //     selectedPriceLabels.includes(p.label)
+  //   );
+
+  //   if (selectedPrices.length > 0) {
+  //     const min = Math.min(...selectedPrices.map((p) => p.min));
+  //     const max = Math.max(...selectedPrices.map((p) => p.max));
+  //     dispatch(setPriceRange({ min, max }));
+  //   } else {
+  //     dispatch(setPriceRange({ min: "", max: "" }));
+  //   }
+  // }, [
+  //   categoryID,
+  //   selectedSubcategories,
+  //   selectedBrands,
+  //   selectedGender,
+  //   selectedSize,
+  //   selectedPriceLabels,
+  //   selectedDiscount,
+  //   priceRanges,
+  //   dispatch,
+  // ]);
 
   useEffect(() => {
     dispatch(setCategory(categoryID));
@@ -108,18 +137,29 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
     dispatch(setGender(selectedGender));
     dispatch(setSize(selectedSize));
     dispatch(setDiscount(selectedDiscount));
-     dispatch(setBrands(selectedBrands));
+    dispatch(setBrands(selectedBrands));
 
     const selectedPrices = priceRanges.filter((p) =>
-      selectedPriceLabels.includes(p.label)
+      selectedPriceLabels.includes(p.label),
     );
 
     if (selectedPrices.length > 0) {
-      const min = Math.min(...selectedPrices.map((p) => p.min));
-      const max = Math.max(...selectedPrices.map((p) => p.max));
-      dispatch(setPriceRange({ min, max }));
+      const mins = selectedPrices
+        .map((p) => p.min)
+        .filter((v): v is number => v !== undefined);
+
+      const maxs = selectedPrices
+        .map((p) => p.max)
+        .filter((v): v is number => v !== undefined);
+
+      dispatch(
+        setPriceRange({
+          min: Math.min(...mins),
+          max: Math.max(...maxs),
+        }),
+      );
     } else {
-      dispatch(setPriceRange({ min: "", max: "" }));
+      dispatch(setPriceRange({ min: null, max: null }));
     }
   }, [
     categoryID,
@@ -132,7 +172,6 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
     priceRanges,
     dispatch,
   ]);
-
 
   return (
     <div className="bg-skin-white_shade shadow h-full">
@@ -152,7 +191,7 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
           setSelectedBrands={setSelectedBrands}
         />
 
-        <PriceFilter
+        <PriceFilter  categoryID={categoryID}
           priceRanges={priceRanges.map((p) => ({
             ...p,
             max: p.max ?? 0,
@@ -183,6 +222,7 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
         />
 
         <DiscountFilter
+          categoryID={categoryID} // ✅ correct
           discountOptions={discountOptions?.options || []}
           selectedDiscount={selectedDiscount}
           setSelectedDiscount={setSelectedDiscount}
@@ -190,9 +230,9 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
           error={discountError}
         />
 
-        <AvailabilityFilter onChange={(inStock: boolean) => dispatch(setAvailability(inStock))} />
-
-       
+        <AvailabilityFilter
+          onChange={(inStock: boolean) => dispatch(setAvailability(inStock))}
+        />
       </div>
     </div>
   );

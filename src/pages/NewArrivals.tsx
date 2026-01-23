@@ -1,34 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { getNewArrivalsProductData } from "../services/ProductService";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { Navigation, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
 import { Link } from "react-router-dom";
 import SwiperButtonThree from "../components/SwiperButtonThree";
 import { ProductDTO } from "../types/product";
-import conf from "../config/Conf";
 import { getImageUrl } from "../utils/getImageUrl";
+import Loader from "../components/Loader";
+import DisplayError from "../components/DisplayError";
+
 const NewArrivals = () => {
   const [data, setData] = useState<ProductDTO[]>([]);
-
-  console.log("data", data);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchnewArivalsProduct = async () => {
+    const fetchNewArrivalsProduct = async () => {
       try {
+        setLoading(true);
+        setError(null);
+
         const res = await getNewArrivalsProductData();
         setData(res);
       } catch (err) {
-        console.error("Error fetching product:", err);
+        console.error("Error fetching new arrivals:", err);
+        setError("Failed to load new arrivals");
+      } finally {
+        setLoading(false);
       }
     };
-    fetchnewArivalsProduct();
+
+    fetchNewArrivalsProduct();
   }, []);
 
-  return (
+  if (loading) return <Loader />;
+  if (error) return <DisplayError message={error} />;
+
+   return (
     <>
       <div className="bg-white p-4 space-y-4 m-3">
         <div className="">
@@ -42,7 +52,7 @@ const NewArrivals = () => {
 
         <div className="space-y-8 p-4 bg-white my-3">
           <Swiper
-            modules={[Navigation, Pagination, Scrollbar, A11y]}
+            modules={[Navigation, A11y]}
             spaceBetween={16}
             slidesPerView={5}
             onSlideChange={() => console.log("slide change")}

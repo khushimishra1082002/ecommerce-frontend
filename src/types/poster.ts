@@ -1,6 +1,6 @@
 export interface PosterDTO {
   _id: string;
-  image: File | string;
+  image:  string;
   title: string;
   subtitle?: string;
   description?: string;

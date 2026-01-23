@@ -1,7 +1,5 @@
-import React, { useState ,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
-import { FiSearch } from "react-icons/fi";
-import { getFilterProductsData } from "../services/ProductService";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Searchbar = () => {
@@ -14,7 +12,7 @@ const Searchbar = () => {
     navigate(`/searchResult/${search}`);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSearch();
     }

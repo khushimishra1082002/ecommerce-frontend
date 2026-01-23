@@ -19,6 +19,8 @@ import {
   fetchWishlistProduct,
 } from "../ReduxToolkit/Slices/WishlistSlice";
 import { getImageUrl } from "../utils/getImageUrl";
+import Loader from "../components/Loader";
+import DisplayError from "../components/DisplayError";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -28,9 +30,7 @@ const ProductDetail = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { wishlist, loading } = useSelector(
-    (state: RootState) => state.wishlists
-  );
+  const { wishlist } = useSelector((state: RootState) => state.wishlists);
 
   useEffect(() => {
     if (userId) {
@@ -41,7 +41,8 @@ const ProductDetail = () => {
   const { productId } = useParams();
 
   const [singleProduct, setSingleProduct] = useState<ProductDTO | null>(null);
-  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (userId) {
@@ -50,14 +51,23 @@ const ProductDetail = () => {
   }, [dispatch, userId]);
 
   useEffect(() => {
+    if (!productId) return;
+
     const fetchProduct = async () => {
       try {
+        setLoading(true);
+        setError(null);
+
         const res = await getSingleProductData(productId);
         setSingleProduct(res);
       } catch (err) {
         console.error("Error fetching product:", err);
+        setError("Failed to load product details");
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchProduct();
   }, [productId]);
 
@@ -91,20 +101,11 @@ const ProductDetail = () => {
         userId: userId as string,
         productId: productId as string,
         quantity: 1,
-      })
+      }),
     );
     navigate("/mainCartPage");
   };
 
-  // const handleWishlistProduct = async (productId) => {
-  //   try {
-  //     const res = await AddProductInWishlistData({ userId, productId });
-  //     alert("Product added to wishlist");
-  //     setData(res.data);
-  //   } catch (error) {
-  //     console.error("Error post product:", error);
-  //   }
-  // };
   const handleWishlistProduct = (productId: string) => {
     if (!userId) {
       alert("Please login first");
@@ -112,7 +113,7 @@ const ProductDetail = () => {
     }
 
     const alreadyInWishlist = wishlist?.products?.some(
-      (item: any) => item?.productId?._id === productId
+      (item: any) => item?.productId?._id === productId,
     );
 
     if (alreadyInWishlist) {
@@ -133,8 +134,11 @@ const ProductDetail = () => {
   };
 
   const alreadyInWishlist = wishlist?.products?.some(
-    (item: any) => item?.productId?._id === singleProduct?._id
+    (item: any) => item?.productId?._id === singleProduct?._id,
   );
+
+  if (loading) return <Loader />;
+  if (error) return <DisplayError message={error} />;
 
   return (
     <>
@@ -157,8 +161,11 @@ const ProductDetail = () => {
                 </button>
 
                 <button
-                  disabled={alreadyInWishlist}
-                  onClick={() => handleWishlistProduct(singleProduct?._id)}
+                  disabled={alreadyInWishlist || !singleProduct?._id} // optional extra safety
+                  onClick={() => {
+                    if (singleProduct?._id)
+                      handleWishlistProduct(singleProduct._id);
+                  }}
                   className={`w-full px-2 py-2 border rounded flex justify-center items-center gap-1 text-sm
     ${alreadyInWishlist ? "bg-gray-100 cursor-not-allowed" : "border-blue-500"}
   `}

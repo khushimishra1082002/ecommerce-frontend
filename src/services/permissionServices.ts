@@ -11,9 +11,9 @@ interface CreatePermissionResponse {
 export const getPermissionData = async () => {
   try {
     const response = await api.get(conf.getPermissionsUrl);
-    console.log("response dd", response.data);
+    console.log("response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error fetching roles",
       error.response?.data || error.message
@@ -31,7 +31,7 @@ export const getFilterPermissionData = async (filters = {}) => {
 
     console.log("response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error ",
       error.response?.data || error.message
@@ -40,12 +40,12 @@ export const getFilterPermissionData = async (filters = {}) => {
   }
 };
 
-export const getSinglePermissionData = async (id) => {
+export const getSinglePermissionData = async (id:string) => {
   try {
     const response = await api.get(`${conf.getSinglePermissionUrl}/${id}`);
     console.log("response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error",
       error.response?.data || error.message
@@ -69,12 +69,12 @@ export const createPermissionData = async (
   }
 };
 
-export const deletePermissionData = async (id) => {
+export const deletePermissionData = async (id:string) => {
   try {
     const response = await api.delete(`${conf.deletePermissionUrl}/${id}`);
     console.log("response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error",
       error.response?.data || error.message
@@ -83,26 +83,26 @@ export const deletePermissionData = async (id) => {
   }
 };
 
-export const deleteMultiplePermissionData = async (ids) => {
+export const deleteMultiplePermissionData = async (ids:[]) => {
   try {
     const response = await api.delete(conf.deleteMultiplePermissionUrl, {
       data: { ids }, 
     });
     console.log("Response", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error", error.response?.data || error.message);
     throw error;
   }
 };
 
 
-export const editPermissionData = async (id, formData) => {
+export const editPermissionData = async (id:string, formData:PermissionDTO) => {
   try {
     const response = await api.put(`${conf.updatePermissionUrl}/${id}`, formData,);
     console.log("response", response.data);
     return { ok: true, data: response.data };
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error ", error.response?.data || error.message);
     return { ok: false, message: error.response?.data?.message || error.message };
   }

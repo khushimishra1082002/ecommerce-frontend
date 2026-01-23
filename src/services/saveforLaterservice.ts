@@ -8,21 +8,21 @@ export const AddSaveForLetterData = async ({ userId, productId, quantity }) => {
       userId,
       quantity,
     });
-    console.log("tttttttttttt", response);
+    console.log("response", response);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error add product", error.response?.data || error.message);
     throw error;
   }
 };
 
-export const getSaveForLaterData = async (userId) => {
+export const getSaveForLaterData = async (userId:string) => {
   try {
     const response = await api.get(
       `${conf.getSaveForLaterProductUrl}/${userId}`
     );
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error fetching saved for later products",
       error.response?.data || error.message
@@ -31,13 +31,13 @@ export const getSaveForLaterData = async (userId) => {
   }
 };
 
-export const removeSaveForLaterData = async (userId, productId) => {
+export const removeSaveForLaterData = async (userId:string, productId:string) => {
   try {
     const response = await api.delete(
       `${conf.removeSaveForLaterProductUrl}/${userId}/${productId}`
     );
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error(
       "Error removing saved for later product",
       error.response?.data || error.message

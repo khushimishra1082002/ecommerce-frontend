@@ -1,12 +1,12 @@
 import api from "../utils/api";
 import conf from "../config/Conf";
 
-export const getCartData = async (userId) => {
+export const getCartData = async (userId:string) => {
   try {
     const response = await api.get(`${conf.GetCartProductUrl}/${userId}`);
     console.log("cart", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error fetching cart", error.response?.data || error.message);
     throw error;
   }
@@ -21,7 +21,7 @@ export const AddProductInCartData = async ({ userId, productId, quantity }) => {
     });
     console.log("response", response);
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error("Error add product", error.response?.data || error.message);
     throw error;
   }
