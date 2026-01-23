@@ -1,46 +1,53 @@
 import api from "../utils/api";
 import conf from "../config/Conf";
 
-export const AddSaveForLetterData = async ({ userId, productId, quantity }) => {
+interface AddSaveForLaterPayload {
+  userId: string;
+  productId: string;
+  quantity: number;
+}
+
+export const addSaveForLaterData = async (payload: AddSaveForLaterPayload) => {
   try {
-    const response = await api.post(conf.saveForLetterProductUrl, {
-      productId,
-      userId,
-      quantity,
-    });
-    console.log("response", response);
+    const response = await api.post(conf.saveForLetterProductUrl, payload);
     return response.data;
-  } catch (error:any) {
-    console.error("Error add product", error.response?.data || error.message);
-    throw error;
+  } catch (err: any) {
+    console.error(
+      "Error adding save for later product",
+      err.response?.data || err.message,
+    );
+    throw err;
   }
 };
 
-export const getSaveForLaterData = async (userId:string) => {
+export const getSaveForLaterData = async (userId: string) => {
   try {
     const response = await api.get(
-      `${conf.getSaveForLaterProductUrl}/${userId}`
+      `${conf.getSaveForLaterProductUrl}/${userId}`,
     );
     return response.data;
-  } catch (error:any) {
+  } catch (error: any) {
     console.error(
       "Error fetching saved for later products",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
 };
 
-export const removeSaveForLaterData = async (userId:string, productId:string) => {
+export const removeSaveForLaterData = async (
+  userId: string,
+  productId: string,
+) => {
   try {
     const response = await api.delete(
-      `${conf.removeSaveForLaterProductUrl}/${userId}/${productId}`
+      `${conf.removeSaveForLaterProductUrl}/${userId}/${productId}`,
     );
     return response.data;
-  } catch (error:any) {
+  } catch (error: any) {
     console.error(
       "Error removing saved for later product",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }

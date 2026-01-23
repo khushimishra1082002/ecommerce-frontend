@@ -9,12 +9,12 @@ import {
 } from "../ReduxToolkit/Slices/CartSlice";
 import { decodeToken } from "../utils/decodeToken";
 import { DeleteProductFromCartData } from "../services/cartService";
-import { AddSaveForLetterData } from "../services/saveforLaterservice";
 import { MdDelete } from "react-icons/md";
 import { BsCart } from "react-icons/bs";
 import { getImageUrl } from "../utils/getImageUrl";
 import DisplayError from "../components/DisplayError";
 import Loader from "../components/Loader";
+import { addSaveForLaterData } from "../services/saveforLaterservice";
 
 const Cart = () => {
   const decoded = decodeToken();
@@ -34,22 +34,24 @@ const Cart = () => {
     }
   }, [dispatch]);
 
-  if(loading){
-    return <Loader/>
+  if (loading) {
+    return <Loader />;
   }
 
-  if(error){
-    return <DisplayError message={error}/>
+  if (error) {
+    return <DisplayError message={error} />;
   }
 
   const handleCartProductDelete = async (productId: string) => {
-    console.log("productId", productId);
+    if (!userId) {
+      console.error("User not logged in");
+      return;
+    }
+
     const res = await DeleteProductFromCartData(userId, productId);
     alert("Product Deleted From Cart");
-    console.log(res);
-    if (userId) {
-      await dispatch(fetchcartProduct(userId));
-    }
+
+    await dispatch(fetchcartProduct(userId));
   };
 
   const handleChangeQuantity = (productId: string, quantity: number) => {
@@ -66,7 +68,7 @@ const Cart = () => {
     try {
       if (!userId) return;
 
-      const res = await AddSaveForLetterData({ userId, productId, quantity });
+      const res = await addSaveForLaterData({ userId, productId, quantity });
 
       if (res.success) {
         dispatch(fetchcartProduct(userId));

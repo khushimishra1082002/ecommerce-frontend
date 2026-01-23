@@ -39,7 +39,6 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
 
   const { wishlist } = useSelector((state: RootState) => state.wishlists);
 
-  // 🔹 Fetch filtered products
   useEffect(() => {
     const fetchFilteredProducts = async () => {
       try {
@@ -93,7 +92,6 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
   return (
     <>
       <div className="bg-white space-y-4 px-4 py-6 m-3">
-        {/* Swiper with slides + buttons */}
         <Swiper
           modules={[Navigation, A11y]}
           spaceBetween={10}
@@ -140,10 +138,6 @@ const ProductSlider: React.FC<ProductSliderProps> = ({
           </span>
 
           {products.map((v, i) => {
-            // const isWishlisted = wishlist?.products?.some((p) => {
-            //   const id = p?.productId?._id || p?.productId || p?._id;
-            //   return id === v._id;
-            // });
             const isWishlisted = !!wishlist?.products?.some((p) => {
               const id = p?.productId?._id || p?.productId || p?._id;
               return id === v._id;

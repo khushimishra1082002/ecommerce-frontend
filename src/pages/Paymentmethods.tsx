@@ -3,9 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../ReduxToolkit/app/Store";
 import { decodeToken } from "../utils/decodeToken";
 import { useNavigate } from "react-router-dom";
-import { fetchcartProduct } from "../ReduxToolkit/Slices/CartSlice";
-import { fetchDeliveryInfo } from "../ReduxToolkit/Slices/DeliveryInfoSlice";
-import { placeOrderData } from "../services/OrderService";
 import OnlinePaymentForm from "./OnlinePaymentForm";
 import { setPaymentMethod } from "../ReduxToolkit/Slices/PaymentSlice";
 
@@ -13,10 +10,8 @@ interface PaymentMethodProps {
   onComplete: () => void;
 }
 
-const Paymentmethods:React.FC<PaymentMethodProps>  = ({ onComplete }) => {
-
+const Paymentmethods: React.FC<PaymentMethodProps> = ({ onComplete }) => {
   const decoded = decodeToken();
-  const userId = decoded?.id;
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -32,34 +27,6 @@ const Paymentmethods:React.FC<PaymentMethodProps>  = ({ onComplete }) => {
     dispatch(setPaymentMethod(method));
     alert("Payment method selected successfully");
   };
-
-  // useEffect(() => {
-  //   if (userId) {
-  //     dispatch(fetchcartProduct(userId));
-  //     dispatch(fetchDeliveryInfo());
-  //   }
-  // }, [dispatch, userId]);
-
-  // const handlePlaceOrder = async (paymentData) => {
-  //   try {
-  //     const order = {
-  //       userId,
-  //       deliveryInfo,
-  //       items: cart?.items,
-  //       summary: cart?.summary,
-  //       paymentMethod,
-  //       paymentDetails: paymentData,
-  //     };
-
-  //     const res = await placeOrderData(order);
-  //     alert("Order placed successfully!");
-  //     onComplete(); // move to Order Summary
-
-  //   } catch (err: any) {
-  //     console.error("Order failed:", err?.response?.data || err.message || err);
-  //     alert("Something went wrong while placing the order.");
-  //   }
-  // };
 
   return (
     <div className="bg-white p-6 rounded shadow space-y-6">

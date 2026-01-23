@@ -6,7 +6,7 @@ interface DiscountOption {
 }
 
 interface DiscountFilterProps {
-  categoryID?: string; // 👈 optional
+  categoryID?: string; 
   discountOptions: { label: string; value: number }[];
   selectedDiscount: string[];
   setSelectedDiscount: React.Dispatch<React.SetStateAction<string[]>>;

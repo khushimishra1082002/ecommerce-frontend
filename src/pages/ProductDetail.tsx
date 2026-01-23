@@ -125,7 +125,7 @@ const ProductDetail = () => {
       .unwrap()
       .then(() => {
         alert("Product added to wishlist.");
-        dispatch(fetchWishlistProduct(userId)); // refresh header count
+        dispatch(fetchWishlistProduct(userId));
       })
       .catch((error) => {
         console.error("Wishlist error:", error);
@@ -161,13 +161,13 @@ const ProductDetail = () => {
                 </button>
 
                 <button
-                  disabled={alreadyInWishlist || !singleProduct?._id} // optional extra safety
+                  disabled={alreadyInWishlist || !singleProduct?._id} 
                   onClick={() => {
                     if (singleProduct?._id)
                       handleWishlistProduct(singleProduct._id);
                   }}
                   className={`w-full px-2 py-2 border rounded flex justify-center items-center gap-1 text-sm
-    ${alreadyInWishlist ? "bg-gray-100 cursor-not-allowed" : "border-blue-500"}
+                 ${alreadyInWishlist ? "bg-gray-100 cursor-not-allowed" : "border-blue-500"}
   `}
                 >
                   <FaHeart className="text-red-600" />

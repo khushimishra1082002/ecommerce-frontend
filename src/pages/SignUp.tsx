@@ -39,7 +39,7 @@ const SignUp: React.FC<SignUpProps> = ({ setShowSignUp  }) => {
   };
 
   const handleBackToLogin = () => {
-    setShowSignUp(false); // Go to Login screen
+    setShowSignUp(false); 
   };
 
   const onSubmit = async (

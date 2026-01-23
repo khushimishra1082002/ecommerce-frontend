@@ -10,6 +10,7 @@ import { placeOrderData } from "../services/OrderService";
 import conf from "../config/Conf";
 import { ClearCartData } from "../services/cartService";
 import { CreateOrderDTO } from "../types/order";
+import { getImageUrl } from "../utils/getImageUrl";
 
 interface OrderSummaryPageProps {
   onComplete: () => void;
@@ -38,33 +39,6 @@ const OrderSummaryPage: React.FC<OrderSummaryPageProps> = ({ onComplete }) => {
     dispatch(fetchDeliveryInfo());
   }, [dispatch, userId]);
 
-  // const handlePlaceOrder = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const order = {
-  //       userId,
-  //       deliveryInfo,
-  //       items: cart?.items,
-  //       summary: cart?.summary,
-  //       paymentMethod,
-  //       paymentDetails,
-  //     };
-
-  //     const res = await placeOrderData(order);
-
-  //     alert("Order placed successfully!");
-  //     await ClearCartData(userId);
-  //     if (userId) {
-  //       dispatch(fetchcartProduct(userId));
-  //     }
-  //     onComplete();
-  //   } catch (err: any) {
-  //     console.error("Order failed:", err?.response?.data || err.message || err);
-  //     alert("Something went wrong while placing the order.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handlePlaceOrder = async () => {
     if (!userId) {
       alert("Please login first");
@@ -120,23 +94,20 @@ const OrderSummaryPage: React.FC<OrderSummaryPageProps> = ({ onComplete }) => {
       <div className="space-y-3 bg-white p-4 shadow rounded">
         {/* Order Summary */}
         <div>
-          <h3 className="font-heading text-lg font-medium">Order Summary</h3>
+          <h3 className="font-subHeading text-lg font-medium">Order Summary</h3>
           {cart?.items.map((item) => (
             <div
               key={item._id}
               className="grid grid-cols-5 place-items-center gap-2 border-b"
             >
-              <div
-                className="
-               aspect-square "
-              >
+              <div className="aspect-square w-24 flex items-center justify-center p-2">
                 <img
-                  className=" w-24
-                       object-contain"
-                  src={`${conf.BaseURL}${conf.GetImageUrl}/${item?.productId.image}`}
+                  src={getImageUrl(item?.productId.image)}
                   alt="product"
+                  className="h-full w-full object-contain"
                 />
               </div>
+
               <div className="col-span-3 ">
                 <span className="font-heading text-[13px] line-clamp-3">
                   {item.productId.name} (x{item.quantity})

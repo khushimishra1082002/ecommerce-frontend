@@ -15,7 +15,7 @@ interface Product {
 }
 
 interface SavedForLaterItem {
-  _id: string; // saved-for-later entry ID
+  _id: string; 
   productId: Product | null;
   quantity: number;
 }
@@ -29,7 +29,7 @@ const SaveForLetterProduct: React.FC = () => {
   const [savedProducts, setSavedProducts] = useState<SavedForLaterItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch saved products
+  
   useEffect(() => {
     if (!userId) return;
 
@@ -38,7 +38,7 @@ const SaveForLetterProduct: React.FC = () => {
         const res = await getSaveForLaterData(userId);
 
         if (res?.success) {
-          // Filter out entries where productId is null
+       
           const validProducts = res.savedForLater.filter(
             (item: SavedForLaterItem) => item.productId !== null
           );
@@ -54,7 +54,7 @@ const SaveForLetterProduct: React.FC = () => {
     fetchSavedProducts();
   }, [userId]);
 
-  // Loading and empty states
+  
   if (loading) return <p>Loading saved products...</p>;
   if (savedProducts.length === 0)
     return (
@@ -63,12 +63,12 @@ const SaveForLetterProduct: React.FC = () => {
       </div>
     );
 
-  // Move product to cart
+ 
   const handleMoveToCart = async (productId: string, quantity: number) => {
     if (!userId) return;
 
     try {
-      // 1️⃣ Add to cart
+  
       await dispatch(
         addToCart({
           userId,
@@ -77,15 +77,15 @@ const SaveForLetterProduct: React.FC = () => {
         })
       ).unwrap();
 
-      // 2️⃣ Remove from Save For Later (backend)
+     
       await removeSaveForLaterData(userId, productId);
 
-      // 3️⃣ Update frontend state
+    
       setSavedProducts((prev) =>
         prev.filter((item) => item.productId?._id !== productId)
       );
 
-      // 4️⃣ Navigate to cart page
+    
       navigate("/mainCartPage");
     } catch (error) {
       console.error("Move to cart failed", error);
@@ -100,14 +100,14 @@ const SaveForLetterProduct: React.FC = () => {
 
       <div className="space-y-4">
         {savedProducts.map((item: SavedForLaterItem) => {
-          if (!item.productId) return null; // safety check
+          if (!item.productId) return null; 
           const product = item.productId;
-          const image = product.image?.[0] || ""; // handle empty image array
+          const image = product.image?.[0] || ""; 
 
           return (
             <div key={item._id}>
-              <div className="grid grid-cols-5 gap-12 p-6">
-                <div className="border border-black/10">
+              <div className="grid grid-cols-1 md:grid-cols-5 md:gap-12 p-6 gap-4">
+                <div className="border border-black/10 p-4">
                   <img
                     src={getImageUrl(image)}
                     alt={product.name}

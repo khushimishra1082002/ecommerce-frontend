@@ -80,7 +80,7 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
       try {
         if (selectedSubcategories.length === 0) {
           setFilteredBrands(brands);
-          dispatch(setBrands(brands.map((b) => b._id))); // ✅ send only brand IDs
+          dispatch(setBrands(brands.map((b) => b._id)));
         } else {
           const filtered = await getAllBrandByMultipleSubcategoryData(
             selectedSubcategories,
@@ -90,7 +90,7 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
           setSelectedBrands((prev) =>
             prev.filter((id) => validBrandIds.includes(id)),
           );
-          dispatch(setBrands(filtered.map((b) => b._id))); // ✅ send only brand IDs
+          dispatch(setBrands(filtered.map((b) => b._id)));
         }
       } catch (error) {
         console.error("Error fetching filtered brands:", error);
@@ -99,37 +99,6 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
 
     fetchBrands();
   }, [selectedSubcategories, brands, dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(setCategory(categoryID));
-  //   dispatch(setSubcategories(selectedSubcategories));
-  //   dispatch(setGender(selectedGender));
-  //   dispatch(setSize(selectedSize));
-  //   dispatch(setDiscount(selectedDiscount));
-  //    dispatch(setBrands(selectedBrands));
-
-  //   const selectedPrices = priceRanges.filter((p) =>
-  //     selectedPriceLabels.includes(p.label)
-  //   );
-
-  //   if (selectedPrices.length > 0) {
-  //     const min = Math.min(...selectedPrices.map((p) => p.min));
-  //     const max = Math.max(...selectedPrices.map((p) => p.max));
-  //     dispatch(setPriceRange({ min, max }));
-  //   } else {
-  //     dispatch(setPriceRange({ min: "", max: "" }));
-  //   }
-  // }, [
-  //   categoryID,
-  //   selectedSubcategories,
-  //   selectedBrands,
-  //   selectedGender,
-  //   selectedSize,
-  //   selectedPriceLabels,
-  //   selectedDiscount,
-  //   priceRanges,
-  //   dispatch,
-  // ]);
 
   useEffect(() => {
     dispatch(setCategory(categoryID));
@@ -191,7 +160,8 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
           setSelectedBrands={setSelectedBrands}
         />
 
-        <PriceFilter  categoryID={categoryID}
+        <PriceFilter
+          categoryID={categoryID}
           priceRanges={priceRanges.map((p) => ({
             ...p,
             max: p.max ?? 0,
@@ -222,7 +192,7 @@ const Filter: React.FC<FilterProps> = ({ categoryID }) => {
         />
 
         <DiscountFilter
-          categoryID={categoryID} // ✅ correct
+          categoryID={categoryID}
           discountOptions={discountOptions?.options || []}
           selectedDiscount={selectedDiscount}
           setSelectedDiscount={setSelectedDiscount}

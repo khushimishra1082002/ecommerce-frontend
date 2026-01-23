@@ -11,22 +11,28 @@ import {
 import { deliveryInfoValidationSchema } from "../Validations/deliveryInfovalidations";
 import { DeliveryInfoDTO } from "../types/deliveryInformationDto";
 import { decodeToken } from "../utils/decodeToken";
+import { DeliveryInfoFormDTO } from "../types/deliveryInformationDto";
+import { FormikHelpers } from "formik";
 
+interface DeliveryInformationProps {
+  onComplete: () => void;
+}
 
-const DeliveryInformation = ({ onComplete }) => {
+const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
+  onComplete,
+}) => {
   const [step, setStep] = useState(1);
-  const [initialValues, setInitialValues] = useState<DeliveryInfoDTO | null>(
-    null
-  );
+  const [initialValues, setInitialValues] =
+    useState<DeliveryInfoFormDTO | null>(null);
+
   const navigate = useNavigate();
 
   const decoded = decodeToken();
-  console.log("decodeddd",decoded);
-  
-    const userId = decoded?.id;
+  console.log("decodeddd", decoded);
 
-    console.log("userId",userId);
-    
+  const userId = decoded?.id;
+
+  console.log("userId", userId);
 
   useEffect(() => {
     const fetchInfo = async () => {
@@ -34,7 +40,6 @@ const DeliveryInformation = ({ onComplete }) => {
         const data = await getDeliveryInfoData();
 
         setInitialValues({
-          _id: data._id || "",
           fullname: data.fullname || "",
           email: data.email || "",
           phoneNo: data.phoneNo || "",
@@ -46,7 +51,6 @@ const DeliveryInformation = ({ onComplete }) => {
         });
       } catch (err) {
         setInitialValues({
-          _id: "",
           fullname: "",
           email: "",
           phoneNo: "",
@@ -62,20 +66,25 @@ const DeliveryInformation = ({ onComplete }) => {
     fetchInfo();
   }, []);
 
-  const handleSubmit = async (values, actions) => {
+  const handleSubmit = async (
+    values: DeliveryInfoFormDTO,
+    actions: FormikHelpers<DeliveryInfoFormDTO>,
+  ) => {
     if (step < 2) {
       setStep(step + 1);
-    } else {
-      try {
-        const res = await postDeliveryInfoData(values);
-        alert("Post info successfully");
-        onComplete();
-       
-      } catch (error) {
-        alert("Something went wrong while submitting delivery info");
-      }
+      actions.setTouched({});
+      return;
     }
-    actions.setTouched({});
+
+    try {
+      await postDeliveryInfoData(values);
+      alert("Post info successfully");
+      onComplete();
+    } catch {
+      alert("Something went wrong while submitting delivery info");
+    } finally {
+      actions.setSubmitting(false);
+    }
   };
 
   if (!initialValues) return <p>Loading delivery info...</p>;
@@ -91,10 +100,9 @@ const DeliveryInformation = ({ onComplete }) => {
             Step {step} of 2
           </span>
         </div>
-       
       </div>
 
-      <Formik
+      <Formik<DeliveryInfoFormDTO>
         initialValues={initialValues}
         validationSchema={deliveryInfoValidationSchema[step - 1]}
         onSubmit={handleSubmit}
@@ -129,42 +137,42 @@ const DeliveryInformation = ({ onComplete }) => {
             )}
             {step === 2 && (
               <>
-              <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   <FormikControl
-                  control="input"
-                  type="text"
-                  label="Address 1"
-                  name="address1"
-                  placeholder="Enter address"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Address 2"
-                  name="address2"
-                  placeholder="Enter address"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="City"
-                  name="city"
-                  placeholder="Enter city"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="State"
-                  name="state"
-                  placeholder="Enter state"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Zip Code"
-                  name="zip"
-                  placeholder="Enter zip code"
-                />
+                    control="input"
+                    type="text"
+                    label="Address 1"
+                    name="address1"
+                    placeholder="Enter address"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Address 2"
+                    name="address2"
+                    placeholder="Enter address"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="City"
+                    name="city"
+                    placeholder="Enter city"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="State"
+                    name="state"
+                    placeholder="Enter state"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Zip Code"
+                    name="zip"
+                    placeholder="Enter zip code"
+                  />
                 </div>
               </>
             )}

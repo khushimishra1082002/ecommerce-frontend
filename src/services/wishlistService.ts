@@ -6,13 +6,12 @@ interface AddWishlistPayload {
   productId: string;
 }
 
-
-export const getWishlistData = async (userId:string) => {
+export const getWishlistData = async (userId: string) => {
   try {
     const response = await api.get(`${conf.GetWishlistProductUrl}/${userId}`);
     console.log("response", response.data);
     return response.data;
-  } catch (error:any) {
+  } catch (error: any) {
     console.error("Error wishlist", error.response?.data || error.message);
     throw error;
   }
@@ -35,14 +34,18 @@ export const AddProductInWishlistData = async ({
   }
 };
 
-
-export const DeleteProductFromWishlistData = async (userId:string,productId:string) =>{
-     try {
-    const response = await api.delete(`${conf.DeleteProductFromWishlistUrl}/${userId}/${productId}`);
+export const DeleteProductFromWishlistData = async (
+  userId: string,
+  productId: string,
+) => {
+  try {
+    const response = await api.delete(
+      `${conf.DeleteProductFromWishlistUrl}/${userId}/${productId}`,
+    );
     console.log("response", response.data);
     return response.data;
-  } catch (error:any) {
+  } catch (error: any) {
     console.error("Error ", error.response?.data || error.message);
     throw error;
   }
-}
+};

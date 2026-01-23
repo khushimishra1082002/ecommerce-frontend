@@ -1,26 +1,35 @@
 import api from "../utils/api";
-import conf from "../config/Conf"
+import conf from "../config/Conf";
 
-export const getPriceRangeData = async (categoryID:string) => {
+interface CreatePriceRangePayload {
+  label: string;
+  min: number;
+  max: number;
+  category: string;
+}
+
+export const getPriceRangeData = async (categoryID: string) => {
   try {
     const response = await api.get(`${conf.GetPriceRangeUrl}/${categoryID}`);
     console.log("Response", response.data);
     return response.data;
-  } catch (error:any) {
+  } catch (error: any) {
     console.error("Error price range", error.response?.data || error.message);
     throw error;
   }
 };
 
-export const CreatePriceRangeData = async ({ label, min, max, category }) => {
+export const createPriceRangeData = async (
+  payload: CreatePriceRangePayload,
+) => {
   try {
-    const response = await api.post(conf.CreatePriceRangeUrl, {
-      label, min, max, category
-    });
-    console.log("response", response);
+    const response = await api.post(conf.CreatePriceRangeUrl, payload);
     return response.data;
-  } catch (error:any) {
-    console.error("Error price range", error.response?.data || error.message);
-    throw error;
+  } catch (err: any) {
+    console.error(
+      "Error adding save for later product",
+      err.response?.data || err.message,
+    );
+    throw err;
   }
 };

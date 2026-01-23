@@ -27,7 +27,7 @@ const [error, setError] = useState<string | null>(null);
 
 useEffect(() => {
   if (!userId) {
-    setData([]); // no user, no recommendations
+    setData([]); 
     return;
   }
 
@@ -36,7 +36,7 @@ useEffect(() => {
       setLoading(true);
       setError(null);
 
-      const res = await getRecommendedProductData(userId); // userId is string now
+      const res = await getRecommendedProductData(userId); 
       setData(res);
     } catch (err) {
       console.error("Error fetching product:", err);

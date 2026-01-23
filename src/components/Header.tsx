@@ -60,10 +60,6 @@ const Header = () => {
   const cartCount = cart?.items?.length || 0;
   console.log("cartCount", cartCount);
 
-  // const cartCount = Array.isArray(cart?.items)
-  //   ? cart.items.length
-  //   : 0;
-
   const wishlistCount = wishlist?.products?.length || 0;
 
   return (
@@ -186,7 +182,8 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="lg:hidden mt-4 bg-white shadow-lg rounded-xl p-4 space-y-5">
             {/* Search */}
-            <Searchbar />
+            <Searchbar onSearch={() => setIsMobileMenuOpen(false)} />
+
 
             {/* USER SECTION */}
             {user ? (

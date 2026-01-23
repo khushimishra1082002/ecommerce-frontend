@@ -47,7 +47,6 @@ const Wishlist = () => {
     }
   };
 
-  // If not logged in
   if (!userId) {
     return (
       <div className="text-center py-10 bg-white w-full">

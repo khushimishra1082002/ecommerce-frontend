@@ -9,8 +9,6 @@ import { getRecentlyViewedProductData } from "../services/ProductService";
 import { decodeToken } from "../utils/decodeToken";
 import { Link } from "react-router-dom";
 import SwiperButtonThree from "../components/SwiperButtonThree";
-import conf from "../config/Conf";
-import { BsCart } from "react-icons/bs";
 import { getImageUrl } from "../utils/getImageUrl";
 import Loader from "../components/Loader";
 import DisplayError from "../components/DisplayError";
