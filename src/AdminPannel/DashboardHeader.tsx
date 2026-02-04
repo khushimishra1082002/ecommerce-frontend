@@ -10,40 +10,39 @@ import { logout } from "../ReduxToolkit/Slices/AuthSlice";
 import { IoMdLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
+import { logoutProfile } from "../ReduxToolkit/Slices/ProfileSlice";
 
 const DashboardHeader = ({ onMenuClick }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const getPageTitle = (pathname) => {
-  switch (pathname) {
-    case "/adminDashboard":
-      return "Dashboard";
-    case "/adminDashboard/productTable":
-      return "Products";
-    case "/adminDashboard/categoryTable":
-      return "Categories";
-    case "/adminDashboard/subcategoryTable":
-      return "Subcategories";
-    case "/adminDashboard/brandTable":
-      return "Brands";
-    case "/adminDashboard/banner":
-      return "Banner";
-    case "/adminDashboard/posterDashboard":
-      return "Poster";
-    case "/adminDashboard/orderTable":
-      return "Orders";
-    case "/adminDashboard/notifications":
-      return "Notifications";
-    default:
-      return "Dashboard";
-  }
-};
+    switch (pathname) {
+      case "/adminDashboard":
+        return "Dashboard";
+      case "/adminDashboard/productTable":
+        return "Products";
+      case "/adminDashboard/categoryTable":
+        return "Categories";
+      case "/adminDashboard/subcategoryTable":
+        return "Subcategories";
+      case "/adminDashboard/brandTable":
+        return "Brands";
+      case "/adminDashboard/banner":
+        return "Banner";
+      case "/adminDashboard/posterDashboard":
+        return "Poster";
+      case "/adminDashboard/orderTable":
+        return "Orders";
+      case "/adminDashboard/notifications":
+        return "Notifications";
+      default:
+        return "Dashboard";
+    }
+  };
 
-const location = useLocation();
+  const location = useLocation();
   const pageTitle = getPageTitle(location.pathname);
   return (
-
     <div
       className="shadow p-4 h-14 flex items-center justify-between
      w-full sticky top-0 z-20 bg-white"
@@ -104,7 +103,8 @@ const location = useLocation();
             <button
               onClick={() => {
                 dispatch(logout());
-                window.location.href = "/IsLoggedIn";
+                dispatch(logoutProfile());
+                window.location.href = "/AdminLogin"
               }}
               className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100
               font-medium flex gap-1 items-center"

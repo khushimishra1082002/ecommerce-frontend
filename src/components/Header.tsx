@@ -15,6 +15,7 @@ import { fetchProfile } from "../ReduxToolkit/Slices/ProfileSlice";
 import { logout } from "../ReduxToolkit/Slices/AuthSlice";
 import { clearCart } from "../ReduxToolkit/Slices/CartSlice";
 import { clearWishlist } from "../ReduxToolkit/Slices/WishlistSlice";
+import { logoutProfile } from "../ReduxToolkit/Slices/ProfileSlice";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -51,14 +52,17 @@ const Header = () => {
   }, [userId, dispatch]);
 
   const handleLogout = () => {
-    localStorage.clear();
+  localStorage.clear();
 
-    dispatch(logout());
-    dispatch(clearCart());
-    dispatch(clearWishlist());
+  dispatch(logout());          
+  dispatch(logoutProfile());   
 
-    navigate("/IsLoggedIn");
-  };
+  dispatch(clearCart());
+  dispatch(clearWishlist());
+
+  navigate("/IsLoggedIn");
+};
+
 
   const cartCount = cart?.items?.length || 0;
   console.log("cartCount", cartCount);

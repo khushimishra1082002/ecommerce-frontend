@@ -49,7 +49,8 @@ const profileSlice = createSlice({
     setUser: (state, action: PayloadAction<UserDTO>) => {
       state.user = action.payload;
     },
-    logout: () => initialState,
+logoutProfile:
+     () => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -76,5 +77,5 @@ const profileSlice = createSlice({
   },
 });
 
-export const { setUser, logout } = profileSlice.actions;
+export const { setUser, logoutProfile } = profileSlice.actions;
 export default profileSlice.reducer;
