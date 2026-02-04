@@ -170,9 +170,9 @@ const App = () => {
           <Route
             path="adminDashboard"
             element={
-               <AdminRoute>
+                <AdminRoute>
                 <DashboardMainPage />
-              </AdminRoute>
+               </AdminRoute>
             }
           >
             <Route index element={<DashboardHomePage />} />

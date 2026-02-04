@@ -2,10 +2,18 @@ import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import { MdRefresh } from "react-icons/md";
-import { getRolesData } from "../../services/roleService";
-import { editUserData, getAllUsersData, getFilterUserData } from "../../services/UserServices";
+import { deleteRoleData, getRolesData } from "../../services/roleService";
+import {
+  deleteUserData,
+  editUserData,
+  getAllUsersData,
+  getFilterUserData,
+  getSingleUserData,
+} from "../../services/UserServices";
 import AddUser from "./AddUser";
-
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import EditUser from "../User/EditUser";
 
 const UsersTable = () => {
   const [showAddUserModal, setshowAddUserModal] = useState(false);
@@ -15,6 +23,8 @@ const UsersTable = () => {
   const [RolesData, setRolesData] = useState([]);
   const [editingUserId, setEditingUserId] = useState(null);
   const [selectedRole, setSelectedRole] = useState("");
+  const [showEditUserModel, setshowEditUserModel] = useState(false);
+  const [editData, setEditData] = useState();
 
   // Fetch all roles
   const fetchRoles = async () => {
@@ -49,6 +59,32 @@ const UsersTable = () => {
       fetchUsers();
     } catch (err) {
       console.error("Error updating role:", err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    console.log("id", id);
+    try {
+      const res = await deleteUserData(id);
+      if (res) {
+        alert("User Deleted Successfully");
+        fetchUsers();
+      }
+    } catch (error) {
+      console.error("Delete failed:", error);
+      alert("Failed to delete user. Please try again.");
+    }
+  };
+
+  const handleEdit = async (id) => {
+    try {
+      const res = await getSingleUserData(id);
+      if (res) {
+        setEditData(res);
+        setshowEditUserModel(true);
+      }
+    } catch (error) {
+      console.error("Error fetching user for edit:", error);
     }
   };
 
@@ -125,24 +161,50 @@ const UsersTable = () => {
       ),
       width: "250px",
     },
+    {
+      name: "ACTIONS",
+      cell: (row) => (
+        <div className="flex gap-1">
+          <button
+            onClick={() => handleEdit(row._id)}
+            className="btn bg-blue-600 text-white p-1 rounded"
+            title="Edit"
+          >
+            <FaEdit />
+          </button>
+          <button
+            onClick={() => handleDelete(row._id)}
+            className="btn bg-orange-600 text-white p-1 rounded"
+            title="Delete"
+          >
+            <MdDelete />
+          </button>
+        </div>
+      ),
+      width: "160px",
+    },
   ];
 
   const handleSearch = async (query) => {
-      setQuery(query);
-  
-      if (query.trim() === "") {
-         fetchRoles()
-        setfilteredUser([]);
-        return;
-      }
-  
-      try {
-        const res = await getFilterUserData({ q: query });
-        setfilteredUser(res);
-      } catch (err) {
-        console.error("Error searching Role", err);
-      }
-    };
+    setQuery(query);
+
+    if (query.trim() === "") {
+      fetchRoles();
+      setfilteredUser([]);
+      return;
+    }
+
+    try {
+      const res = await getFilterUserData({ q: query });
+      setfilteredUser(res);
+    } catch (err) {
+      console.error("Error searching Role", err);
+    }
+  };
+
+  const closeEditUserModal = () => {
+    setshowEditUserModel(false);
+  };
 
   return (
     <>
@@ -153,7 +215,7 @@ const UsersTable = () => {
             <div className="flex gap-3 items-center">
               <div className="relative">
                 <FaSearch className="absolute top-1/2 left-2 -translate-y-1/2 text-sm text-gray-500" />
-                   <input
+                <input
                   className="border-none rounded-sm font-heading text-sm bg-skin-secondary w-96 pl-8 px-2
                   h-10 text-[13px]"
                   type="text"
@@ -205,8 +267,17 @@ const UsersTable = () => {
           </div>
         </div>
       )}
-
-    
+      {showEditUserModel && editData && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 px-4">
+          <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+            <EditUser
+              closeEditUserModal={closeEditUserModal}
+              editData={editData}
+              fetchUsers={fetchUsers}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };

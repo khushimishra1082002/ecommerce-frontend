@@ -45,6 +45,19 @@ export const getFilterUserData = async (filters = {}) => {
   }
 };
 
+export const deleteUserData = async (id:string) => {
+  try {
+    const response = await api.delete(`${conf.deleteUserUrl}/${id}`);
+    console.log("response", response.data);
+    return response.data;
+  } catch (error:any) {
+    console.error(
+      "Error",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
 export const editUserData = async (userId:string, formData:FormData) => {
   try {
     const response = await api.put(

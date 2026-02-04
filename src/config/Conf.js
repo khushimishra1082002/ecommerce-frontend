@@ -67,6 +67,7 @@ const conf = {
   createUserUrl: "/users/createUser",
   getSingleUserUrl: "/users/getSingleUser",
   updateUserUrl: "/users/updateUser",
+  deleteUserUrl:"/users/deleteUser",
   getUserOrdersUrl: "/order/getUserOrders",
   createBannerUrl: "/banner/createBanner",
   deleteBannerUrl: "/banner/deleteBanner",
