@@ -15,6 +15,23 @@ export const getPosterData = async () => {
   }
 };
 
+export const getSinglePosterData = async (posterId: string) => {
+  try {
+    const response = await api.get(
+      `${conf.singlePosterUrl}/${posterId}`
+    );
+
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "Error fetching single poster:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+
 export const deletePosterData = async (posterId:string) => {
   try {
     const response = await api.delete(`${conf.deletePosterUrl}/${posterId}`);
@@ -40,6 +57,31 @@ export const CreatePosterData = async (formData: FormData) => {
   } catch (error:any) {
     console.error(
       "Error adding poster:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+export const updatePosterData = async (
+  posterId: string,
+  formData: FormData
+) => {
+  try {
+    const response = await api.put(
+      `${conf.upatePosterUrl}/${posterId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "Error updating poster:",
       error.response?.data || error.message
     );
     throw error;

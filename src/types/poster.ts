@@ -7,7 +7,7 @@ export interface PosterDTO {
   link?: string;
   location: string;
   displayOrder: number;
-  startDate: string;
-  endDate?: string;
+ startDate: string | null;  
+ endDate: string | null; 
   active: boolean;
 }

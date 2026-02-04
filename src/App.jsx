@@ -98,7 +98,7 @@
 import React, { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import ScrollTop from "./components/ScrollTop";
-import AdminRoute from "./routes/AdminRoute";
+import AdminRoute from "./routes/AdminRoute.tsx"
 import FullPageLoader from "./components/FullPageLoader";
 
 
@@ -170,7 +170,7 @@ const App = () => {
           <Route
             path="adminDashboard"
             element={
-              <AdminRoute>
+               <AdminRoute>
                 <DashboardMainPage />
               </AdminRoute>
             }

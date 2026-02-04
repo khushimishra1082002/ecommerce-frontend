@@ -5,10 +5,11 @@ import FormikControl from "../../components/ReusableFormField/FormikControl";
 import { RolesDTo } from "../../types/role";
 import { createRoleData } from "../../services/roleService";
 import { getPermissionData } from "../../services/permissionServices";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 interface CreateRoleProps {
   closeCreateRoleModel: () => void;
-  fetchRoles: () => void; 
+  fetchRoles: () => void;
 }
 
 const initialValues: RolesDTo = {
@@ -17,25 +18,24 @@ const initialValues: RolesDTo = {
   permissions: [],
 };
 
-const CreateRole: React.FC<CreateRoleProps> = ({ closeCreateRoleModel,fetchRoles }) => {
+const CreateRole: React.FC<CreateRoleProps> = ({
+  closeCreateRoleModel,
+  fetchRoles,
+}) => {
   const [permissionsList, setPermissionsList] = useState<any[]>([]);
-
+  const [openModule, setOpenModule] = useState<string>("");
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
         const res = await getPermissionData();
 
-       
         if (Array.isArray(res)) {
           setPermissionsList(res);
-        } 
-        
-        else if (Array.isArray(res?.data)) {
+        } else if (Array.isArray(res?.data)) {
           setPermissionsList(res.data);
         } else {
           setPermissionsList([]);
         }
-
       } catch (error) {
         console.error("Error fetching permissions:", error);
         setPermissionsList([]);
@@ -44,38 +44,43 @@ const CreateRole: React.FC<CreateRoleProps> = ({ closeCreateRoleModel,fetchRoles
     fetchPermissions();
   }, []);
 
-const onSubmit = async (
-  values: RolesDTo,
-  actions: FormikHelpers<RolesDTo>
-) => {
-  try {
-    const payload = {
-      ...values,
-      permissions: values.permissions,
-    };
+  // Step 1: create a grouped object
+  const groupedPermissions = permissionsList.reduce(
+    (acc: Record<string, any[]>, perm) => {
+      if (!acc[perm.module]) acc[perm.module] = [];
+      acc[perm.module].push(perm);
+      return acc;
+    },
+    {},
+  );
 
-    const response = await createRoleData(payload);
+  const onSubmit = async (
+    values: RolesDTo,
+    actions: FormikHelpers<RolesDTo>,
+  ) => {
+    try {
+      const payload = {
+        ...values,
+        permissions: values.permissions,
+      };
 
-if (response.success) {
+      const response = await createRoleData(payload);
 
-  alert(response.message || "Role added successfully ");
-  await fetchRoles();
-  actions.resetForm();
-  closeCreateRoleModel();
-
-} else {
-  alert(response.message || "Something went wrong ");
-}
-
-  } catch (error: any) {
-    console.error("Error submitting role:", error);
-    alert(error.response?.data?.message || "Submission failed ");
-  } finally {
-    actions.setSubmitting(false);
-  }
-};
-
-
+      if (response.success) {
+        alert(response.message || "Role added successfully ");
+        await fetchRoles();
+        actions.resetForm();
+        closeCreateRoleModel();
+      } else {
+        alert(response.message || "Something went wrong ");
+      }
+    } catch (error: any) {
+      console.error("Error submitting role:", error);
+      alert(error.response?.data?.message || "Submission failed ");
+    } finally {
+      actions.setSubmitting(false);
+    }
+  };
 
   return (
     <div className="relative bg-white p-5 rounded shadow">
@@ -92,7 +97,7 @@ if (response.success) {
             if (current.includes(permId)) {
               formik.setFieldValue(
                 "permissions",
-                current.filter((p) => p !== permId)
+                current.filter((p) => p !== permId),
               );
             } else {
               formik.setFieldValue("permissions", [...current, permId]);
@@ -119,7 +124,7 @@ if (response.success) {
               />
 
               {/* Permissions */}
-              <div className="space-y-3">
+              {/* <div className="space-y-3">
                 <h3 className="font-medium mb-2 font-heading text-sm">
                   Assign Permissions
                 </h3>
@@ -149,7 +154,88 @@ if (response.success) {
                     No permissions found
                   </p>
                 )}
-              </div>
+              </div> */}
+
+              {Object.entries(groupedPermissions).map(([module, perms]) => (
+                <div key={module} className="border rounded p-2 mb-2 font-body">
+                  <h3
+                    className="flex justify-between items-center cursor-pointer 
+                     bg-gray-100 px-3 py-2 rounded text-sm"
+                    onClick={() =>
+                      setOpenModule((prev) => (prev === module ? "" : module))
+                    }
+                  >
+                    <span>{module}</span>
+                    {openModule === module ? (
+                      <FiChevronUp className="text-gray-600" />
+                    ) : (
+                      <FiChevronDown className="text-gray-600" />
+                    )}
+                  </h3>
+
+                  {openModule === module && (
+                    <div className="pl-6 mt-2 space-y-1">
+                      {/* Select/Deselect All with checkbox */}
+                      <label className="flex items-center gap-2 text-sm font-medium mb-1">
+                        <input
+                          type="checkbox"
+                          checked={perms.every((p) =>
+                            formik.values.permissions.includes(p._id),
+                          )}
+                          onChange={() => {
+                            const permIds = perms.map((p) => p._id);
+                            const allSelected = permIds.every((id) =>
+                              formik.values.permissions.includes(id),
+                            );
+
+                            if (allSelected) {
+                              // Deselect all in this module
+                              formik.setFieldValue(
+                                "permissions",
+                                formik.values.permissions.filter(
+                                  (id) => !permIds.includes(id),
+                                ),
+                              );
+                            } else {
+                              // Select all in this module
+                              formik.setFieldValue("permissions", [
+                                ...new Set([
+                                  ...formik.values.permissions,
+                                  ...permIds,
+                                ]),
+                              ]);
+                            }
+                          }}
+                        />
+                        <span>
+                          {perms.every((p) =>
+                            formik.values.permissions.includes(p._id),
+                          )
+                            ? "Deselect All"
+                            : "Select All"}
+                        </span>
+                      </label>
+
+                      {/* Individual permissions */}
+                      {perms.map((perm) => (
+                        <label
+                          key={perm._id}
+                          className="flex items-center gap-2 text-sm"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={formik.values.permissions.includes(
+                              perm._id,
+                            )}
+                            onChange={() => togglePermission(perm._id)}
+                          />
+                          {perm.name}
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
 
               {/* Submit */}
               <div>

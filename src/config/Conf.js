@@ -78,6 +78,8 @@ const conf = {
   updateOrderStatusUrl: "/order/updateOrderStatus",
   deletePosterUrl: "/poster/deletePoster",
   createPosterUrl: "/poster/createPoster",
+  upatePosterUrl:"/poster/updatePoster",
+  singlePosterUrl:"/poster/getSinglePoster",
   imageUploadUrl: "upload",
   ClearCartUrl: "/cart/clearCart",
   getRolesUrl: "/role/getRoles",
@@ -98,7 +100,8 @@ const conf = {
   getSaveForLaterProductUrl: "/saveforletters/getSavedForLater",
   removeSaveForLaterProductUrl:"/saveforletters/saveForLaterProductRemove",
   myProfileUrl:"/profile/me",
-  updateProfileUrl:"/profile/updateProfile"
+  updateProfileUrl:"/profile/updateProfile",
+  adminLoginUrl:"/admin/login"
 };
 
 export default conf;

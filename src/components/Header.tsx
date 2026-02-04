@@ -24,6 +24,9 @@ const Header = () => {
 
   const token = localStorage.getItem("token");
   console.log("token", token);
+  const role = localStorage.getItem("role")?.toLowerCase();
+  console.log("roles",role);
+  
 
   const { user } = useSelector((state: RootState) => state.profile);
 

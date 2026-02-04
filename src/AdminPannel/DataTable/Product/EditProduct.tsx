@@ -14,6 +14,7 @@ import { getAllSubcategoryByCategoryData } from "../../../services/SubcategorySe
 import { getAllBrandBySubcategoryData } from "../../../services/BrandService";
 import { SubcategoryDTO } from "../../../types/subcategory";
 import { BrandDTO } from "../../../types/brand";
+import { getImageUrl } from "../../../utils/getImageUrl";
 
 interface EditProductProps {
   closeEditProductModal: () => void;
@@ -46,6 +47,8 @@ const EditProduct: React.FC<EditProductProps> = ({
 
   const [brands, setBrands] = useState<BrandDTO[]>([]);
 
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+
   const dispatch = useDispatch<AppDispatch>();
   const [formKey, setFormKey] = useState(0);
   // console.log("one", editData.brand.name);
@@ -71,30 +74,36 @@ const EditProduct: React.FC<EditProductProps> = ({
     colors: editData?.colors || [],
     gender: Array.isArray(editData?.gender)
       ? editData.gender.map((g: any) =>
-          typeof g === "string" ? { label: g, value: g } : g
+          typeof g === "string" ? { label: g, value: g } : g,
         )
       : [],
 
     size: Array.isArray(editData?.size)
       ? editData.size.map((s: any) =>
-          typeof s === "string" ? { label: s, value: s } : s
+          typeof s === "string" ? { label: s, value: s } : s,
         )
       : [],
 
     attributes: Array.isArray(editData?.attributes)
       ? editData.attributes
       : typeof editData?.attributes === "string"
-      ? JSON.parse(editData.attributes)
-      : [],
+        ? JSON.parse(editData.attributes)
+        : [],
   };
 
   useEffect(() => {
     dispatch(fetchAllCategory());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (editData?.image?.length) {
+      setExistingImages(editData.image);
+    }
+  }, [editData]);
+
   const onSubmit = async (
     values: ProductFormDTO,
-    actions: FormikHelpers<ProductFormDTO>
+    actions: FormikHelpers<ProductFormDTO>,
   ) => {
     console.log("values", values);
 
@@ -128,7 +137,7 @@ const EditProduct: React.FC<EditProductProps> = ({
       // Color
       formData.append(
         "colors",
-        Array.isArray(values.colors) ? values.colors.join(",") : values.colors
+        Array.isArray(values.colors) ? values.colors.join(",") : values.colors,
       );
 
       // Attributes
@@ -137,13 +146,20 @@ const EditProduct: React.FC<EditProductProps> = ({
       console.log("Attributes JSON:", JSON.stringify(values.attributes));
       console.log("Colors:", values.colors);
 
-      if (values.image && values.image.length > 0) {
-        values.image.forEach((file) => {
-          formData.append("image", file);
-        });
-      }
+      // if (values.image && values.image.length > 0) {
+      //   values.image.forEach((file) => {
+      //     formData.append("image", file);
+      //   });
+      // }
 
-      console.log(values.image);
+      // console.log(values.image);
+
+    
+      formData.append("existingImages", JSON.stringify(existingImages));
+// NEW uploaded images
+      values.image.forEach((file) => {
+        formData.append("image", file);
+      });
 
       const response = await editProductData(editData._id, formData);
 
@@ -217,23 +233,53 @@ const EditProduct: React.FC<EditProductProps> = ({
           }, [formik.values.subcategory]);
 
           const selectedCategory = category.find(
-            (cat: any) => cat._id === formik.values.category
+            (cat: any) => cat._id === formik.values.category,
           );
 
           const isFashionOrFootwear =
             selectedCategory?.name === "Fashion" ||
             selectedCategory?.name === "Footwear";
 
+          const hasColor = Array.isArray(formik.values.colors)
+            ? formik.values.colors.length > 0
+            : Boolean(formik.values.colors);
+
+          const hasSize =
+            Array.isArray(formik.values.size) && formik.values.size.length > 0;
+
+          const hasGender =
+            Array.isArray(formik.values.gender) &&
+            formik.values.gender.length > 0;
+
           return (
             <Form className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Product Name"
-                  name="name"
-                  placeholder="Enter product name"
-                />
+                {existingImages.length > 0 && (
+                  <div className="flex gap-3 flex-wrap mb-2">
+                    {existingImages.map((img, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={getImageUrl(img)}
+                          alt="product"
+                          className="w-20 h-20 object-cover rounded border"
+                        />
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setExistingImages((prev) =>
+                              prev.filter((_, i) => i !== index),
+                            )
+                          }
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                        >
+                          <RxCross2 size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <FormikControl
                   control="images"
                   label="Select Images"
@@ -241,6 +287,15 @@ const EditProduct: React.FC<EditProductProps> = ({
                   key={formKey}
                   valid={formik.errors.image && formik.touched.image}
                 />
+
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label="Product Name"
+                  name="name"
+                  placeholder="Enter product name"
+                />
+
                 <FormikControl
                   control="input"
                   type="number"
@@ -306,7 +361,7 @@ const EditProduct: React.FC<EditProductProps> = ({
                   </>
                 )}
 
-                {isFashionOrFootwear && (
+                {/* {isFashionOrFootwear && (
                   <>
                     <FormikControl
                       control="reactmultiselect"
@@ -335,16 +390,57 @@ const EditProduct: React.FC<EditProductProps> = ({
                       ]}
                     />
                   </>
+                )} */}
+
+                {hasGender && (
+                  <FormikControl
+                    control="reactmultiselect"
+                    label="Gender"
+                    name="gender"
+                    options={[
+                      { label: "Men", value: "Men" },
+                      { label: "Women", value: "Women" },
+                      { label: "Boy", value: "Boy" },
+                      { label: "Girl", value: "Girl" },
+                      { label: "Unisex", value: "Unisex" },
+                    ]}
+                  />
                 )}
 
-                {/* Optional: color can be available for all */}
+                {hasSize && (
+                  <FormikControl
+                    control="reactmultiselect"
+                    label="Size"
+                    name="size"
+                    options={[
+                      { label: "XS", value: "XS" },
+                      { label: "S", value: "S" },
+                      { label: "M", value: "M" },
+                      { label: "L", value: "L" },
+                      { label: "XL", value: "XL" },
+                      { label: "XXL", value: "XXL" },
+                    ]}
+                  />
+                )}
+
+                {/* Optional: color can be available for all
                 <FormikControl
                   control="input"
                   type="text"
                   label="Color"
                   name="colors"
                   placeholder="Enter product colour"
-                />
+                /> */}
+
+                {hasColor && (
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Color"
+                    name="colors"
+                    placeholder="Enter product colour"
+                  />
+                )}
 
                 <FormikControl
                   control="select"

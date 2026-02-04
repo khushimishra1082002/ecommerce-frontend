@@ -4,7 +4,7 @@ import { RxCross2 } from "react-icons/rx";
 import FormikControl from "../../components/ReusableFormField/FormikControl";
 import { CreateBannerData } from "../../services/BannerServices";
 import { PosterDTO } from "../../types/poster";
-import { bannerValidationSchema } from "../../Validations/bannerValidations";
+import { posterValidationSchema } from "../../Validations/posterValidation";
 import { CreatePosterData } from "../../services/PosterService";
 
 interface AddPosterProps {
@@ -34,7 +34,7 @@ const AddPoster: React.FC<AddPosterProps> = ({
 
   const onSubmit = async (
     values: PosterDTO,
-    actions: FormikHelpers<PosterDTO>
+    actions: FormikHelpers<PosterDTO>,
   ) => {
     try {
       const formData = new FormData();
@@ -57,16 +57,16 @@ const AddPoster: React.FC<AddPosterProps> = ({
 
       const response = await CreatePosterData(formData);
 
-      console.log("rddd", response);
-
-      if (response.ok) {
+      if (response) {
         alert("Poster added successfully");
+
         actions.resetForm();
         setFormKey((prevKey) => prevKey + 1);
-        closeAddPosterModal();
-        refreshPosters();
+
+        refreshPosters(); 
+        closeAddPosterModal(); 
       } else {
-        alert(response.message || "Something went wrong");
+        alert("Something went wrong");
       }
     } catch (error: any) {
       console.error("Error adding banner", error);
@@ -88,7 +88,7 @@ const AddPoster: React.FC<AddPosterProps> = ({
 
       <Formik
         initialValues={initialValues}
-        validationSchema={bannerValidationSchema}
+        validationSchema={posterValidationSchema}
         onSubmit={onSubmit}
         key={formKey}
       >
@@ -119,10 +119,9 @@ const AddPoster: React.FC<AddPosterProps> = ({
                 name="location"
                 options={[
                   { value: "herosection", label: "Hero Section" },
-                  { value: "footer", label: "Footer" },
-                  { value: "sidebar", label: "Sidebar" },
+                  { value: "homepage_top", label: "Homepage Top" },
                 ]}
-                valid={formik.errors.location && formik.touched.location}
+                valid={formik.errors?.location && formik.touched?.location}
               />
 
               {/* Display Order */}

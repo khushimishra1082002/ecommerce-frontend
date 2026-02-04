@@ -8,6 +8,7 @@ import FormikControl from "../components/ReusableFormField/Input";
 import conf from "../config/Conf";
 import axios from "axios";
 import { LoginUserData, SignUpUserData } from "../services/authService";
+import { LoginAdminData } from "../services/adminService";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -19,32 +20,25 @@ const AdminLogin = () => {
 
   const onSubmit = async (
     values: LoginDTO,
-    onSubmitProps: FormikHelpers<LoginDTO>
+    onSubmitProps: FormikHelpers<LoginDTO>,
   ) => {
     try {
-      const response = await LoginUserData(values);
-      console.log("Login Response:", response);
+      const response = await LoginAdminData(values);
 
-      if (response && response.message === "Login successfully") {
-        if (response.token) {
-          localStorage.setItem("token", response.token);
-          console.log("Token saved:", response.token);
-        }
+      if (response && response.message) {
+        alert(response.message);
 
-        if (response.user?.role) {
-          localStorage.setItem("role", response.user.role);
-          console.log("Role saved:", response.user.role);
-        }
-
-        onSubmitProps.resetForm();
-        
-
-       
-        if (response.user?.role?.toLowerCase() === "admin") {
-          alert("Login Successful")
+        if (response.message === "Admin login successfully") {
+          if (response.token) {
+            localStorage.setItem("token", response.token);
+            console.log("Token saved:", response.token);
+             localStorage.setItem("role", response.user.role);
+              console.log("role", response.user.role);
+          } else {
+            console.warn("No token found in response");
+          }
+          onSubmitProps.resetForm();
           navigate("/adminDashboard");
-        } else {
-          navigate("/"); 
         }
       } else {
         alert("Unexpected response format.");
@@ -56,14 +50,13 @@ const AdminLogin = () => {
       onSubmitProps.setSubmitting(false);
     }
   };
-
   return (
     <>
       <div className="relative h-[100vh] w-full">
         {/* Background image */}
         <img
           className="w-full h-full object-cover"
-          src="https://e0.pxfuel.com/wallpapers/754/1015/desktop-wallpaper-admin-login.jpg"
+          src="https://img.freepik.com/free-vector/circles-background-dark-tones_60389-166.jpg?semt=ais_hybrid&w=740&q=80"
           alt="Admin Login Background"
         />
 
@@ -163,7 +156,6 @@ const AdminLogin = () => {
               </Formik>
             </div>
           </div>
-          
         </div>
       </div>
 

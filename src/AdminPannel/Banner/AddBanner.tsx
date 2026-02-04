@@ -30,7 +30,7 @@ const AddBanner: React.FC<AddBannerProps> = ({
 
   const onSubmit = async (
     values: BannerDTO,
-    actions: FormikHelpers<BannerDTO>
+    actions: FormikHelpers<BannerDTO>,
   ) => {
     try {
       const formData = new FormData();
@@ -50,12 +50,12 @@ const AddBanner: React.FC<AddBannerProps> = ({
 
       const response = await CreateBannerData(formData);
 
-      if (response.ok) {
+      if (response) {
         alert("Banner added successfully");
         actions.resetForm();
-        setFormKey((prevKey) => prevKey + 1);
+        setFormKey((prev) => prev + 1);
         closeAddBannerModel();
-        refreshBanners();
+        refreshBanners(); 
       } else {
         alert(response.message || "Something went wrong");
       }

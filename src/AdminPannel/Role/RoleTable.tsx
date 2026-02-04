@@ -104,11 +104,18 @@ const fetchRoles = async () => {
       grow: 0,
       width: "70px",
     },
-    {
-      name: " Role Name",
-      selector: (row) => row.name,
-      width: "170px",
-    },
+   {
+  name: "Role Name",
+  selector: (row) =>
+    row.name
+      .split(" ")
+      .map(
+        (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      )
+      .join(" "),
+  width: "170px",
+},
+
 
     {
       name: "Permission",

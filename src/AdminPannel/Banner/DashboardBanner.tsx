@@ -11,10 +11,12 @@ import { BannerDTO } from "../../types/banner";
 import conf from "../../config/Conf";
 import { getImageUrl } from "../../utils/getImageUrl";
 
-export const DashboardBanner: React.FC = () => {
+ const DashboardBanner: React.FC = () => {
   const [showAddBannerModel, setShowAddBannerModel] = useState<boolean>(false);
   const [showEditBannerModel, setShowEditBannerModel] = useState<boolean>(false);
   const [data, setData] = useState<BannerDTO[]>([]);
+  console.log("Banner data", data);
+  
   const [editData, setEditData] = useState<BannerDTO | null>(null);
 
   const fetchBanners = async () => {
@@ -152,3 +154,5 @@ export const DashboardBanner: React.FC = () => {
     </>
   );
 };
+
+export default DashboardBanner

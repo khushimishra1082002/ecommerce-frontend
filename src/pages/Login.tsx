@@ -44,6 +44,8 @@ const Login: React.FC<LoginProps> = ({ setShowSignUp }) => {
           if (response.token) {
             localStorage.setItem("token", response.token);
             console.log("Token saved:", response.token);
+             localStorage.setItem("role", response.user.role);
+              console.log("role", response.user.role);
           } else {
             console.warn("No token found in response");
           }

@@ -6,7 +6,8 @@ import { AppDispatch } from "../../ReduxToolkit/app/Store";
 import FormikControl from "../../components/ReusableFormField/FormikControl";
 import { editBannerData } from "../../services/BannerServices";
 import { BannerDTO } from "../../types/banner";
-import {bannerValidationSchema} from  '../../Validations/bannerValidations'
+import { bannerValidationSchema } from "../../Validations/bannerValidations";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 interface EditBannerProps {
   closeEditBannerModel: () => void;
@@ -19,7 +20,6 @@ const EditBanner: React.FC<EditBannerProps> = ({
   editData,
   fetchBanners,
 }) => {
-  
   const [formKey, setFormKey] = useState(0);
 
   const initialValues: BannerDTO = {
@@ -39,7 +39,7 @@ const EditBanner: React.FC<EditBannerProps> = ({
 
   const onSubmit = async (
     values: BannerDTO,
-    actions: FormikHelpers<BannerDTO>
+    actions: FormikHelpers<BannerDTO>,
   ) => {
     try {
       console.log("fetchBanners is:", fetchBanners);
@@ -93,6 +93,18 @@ const EditBanner: React.FC<EditBannerProps> = ({
         {(formik) => (
           <Form className="space-y-4">
             <div className="grid grid-cols-1 gap-3">
+              {typeof formik.values.image === "string" &&
+                formik.values.image && (
+                  <div className="mb-2">
+                    <p className="text-sm mb-1">Current Banner Image</p>
+                    <img
+                      src={getImageUrl(formik.values.image)}
+                      alt="Banner"
+                      className="h-32 rounded border object-cover"
+                    />
+                  </div>
+                )}
+
               {/* Image Upload */}
               <FormikControl
                 control="image"

@@ -8,15 +8,17 @@ import AddPoster from "./AddPoster";
 import EditPoster from "./EditPoster";
 import { AiOutlinePlus } from "react-icons/ai";
 import { PosterDTO } from "../../types/poster";
-import { getPosterData } from "../../services/PosterService";
+import { getPosterData, getSinglePosterData } from "../../services/PosterService";
 import { deletePosterData } from "../../services/PosterService";
 import conf from "../../config/Conf";
 import { getImageUrl } from "../../utils/getImageUrl";
 
-export const Poster: React.FC = () => {
+ const Poster: React.FC = () => {
   const [showAddPosterModal, setshowAddPosterModal] = useState<boolean>(false);
   const [showEditPosterModel, setshowEditPosterModel] =
     useState<boolean>(false);
+    console.log("Poster Data:", showEditPosterModel);
+    
   const [data, setData] = useState<PosterDTO[]>([]);
   const [editData, setEditData] = useState<PosterDTO | null>(null);
 
@@ -35,27 +37,27 @@ export const Poster: React.FC = () => {
     }, []);
   
 
-  const handleDelete = async (bannerId: string) => {
+  const handleDelete = async (posterId: string) => {
     try {
-      const res = await deletePosterData(bannerId);
+      const res = await deletePosterData(posterId);
       if (res) {
-        alert("Banner Deleted Successfully");
-        // fetchPosters();
+        alert("Poster Deleted Successfully");
+        fetchPosters();
       }
     } catch (error) {
       console.error("Delete failed:", error);
-      alert("Failed to delete banner. Please try again.");
+      alert("Failed to delete poster. Please try again.");
     }
   };
 
-  const handleEdit = async (bannerId: string) => {
-    // try {
-    //   const res: PosterDTO = await getSingleBannerData(bannerId);
-    //   setEditData(res);
-    //   setshowEditPosterModel(true);
-    // } catch (error) {
-    //   console.error("Error fetching banner for edit:", error);
-    // }
+  const handleEdit = async (posterId: string) => {
+    try {
+      const res: PosterDTO = await getSinglePosterData(posterId);
+      setEditData(res);
+      setshowEditPosterModel(true);
+    } catch (error) {
+      console.error("Error fetching poster for edit:", error);
+    }
   };
 
   const closeAddPosterModal = () => {
@@ -134,7 +136,7 @@ export const Poster: React.FC = () => {
           <div className="bg-white rounded-md shadow-md w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
             <AddPoster
               closeAddPosterModal={closeAddPosterModal}
-              refreshPosters={fetchPosters}
+             refreshPosters={fetchPosters} 
             />
           </div>
         </div>
@@ -154,3 +156,5 @@ export const Poster: React.FC = () => {
     </>
   );
 };
+
+export default Poster

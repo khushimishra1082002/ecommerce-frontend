@@ -100,7 +100,7 @@ const OrderTable = () => {
     },
     {
       name: "Total",
-      selector: (row: any) => `₹${row.summary.finalTotal}`,
+      selector: (row: any) => `₹${row.summary?.finalTotal}`,
       width: "120px",
     },
     {

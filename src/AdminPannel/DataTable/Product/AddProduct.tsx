@@ -74,7 +74,7 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
 
   const onSubmit = async (
     values: ProductFormDTO,
-    actions: FormikHelpers<ProductFormDTO>
+    actions: FormikHelpers<ProductFormDTO>,
   ) => {
     try {
       console.log("Formik values:", values);
@@ -95,16 +95,16 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
       formData.append("isActive", String(values.isActive));
       // Append arrays
       values.gender?.forEach((g) =>
-        formData.append("gender", typeof g === "string" ? g : g.value)
+        formData.append("gender", typeof g === "string" ? g : g.value),
       );
 
       values.size?.forEach((s) =>
-        formData.append("size", typeof s === "string" ? s : s.value)
+        formData.append("size", typeof s === "string" ? s : s.value),
       );
 
       formData.append(
         "colors",
-        Array.isArray(values.colors) ? values.colors.join(",") : values.colors
+        Array.isArray(values.colors) ? values.colors.join(",") : values.colors,
       );
 
       formData.append("attributes", JSON.stringify(values.attributes));
@@ -189,7 +189,7 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
           }, [formik.values.subcategory]);
 
           const selectedCategory = category.find(
-            (cat: any) => cat._id === formik.values.category
+            (cat: any) => cat._id === formik.values.category,
           );
 
           const isFashionOrFootwear =
@@ -309,14 +309,15 @@ const AddProduct: React.FC<AddProductProps> = ({ closeAddProductModal }) => {
                   </>
                 )}
 
-               
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Color"
-                  name="colors"
-                  placeholder="Enter product colour"
-                />
+                {isFashionOrFootwear && (
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Color"
+                    name="colors"
+                    placeholder="Enter product colour"
+                  />
+                )}
 
                 <FormikControl
                   control="select"
